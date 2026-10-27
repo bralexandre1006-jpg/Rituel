@@ -125,7 +125,9 @@ svg{display:block}
 .row-title{font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.24;overflow-wrap:anywhere;transition:color .3s}
 .row-title span{text-decoration:line-through;text-decoration-thickness:2.5px;text-decoration-color:transparent;transition:text-decoration-color .45s var(--ease)}
 .row.done .row-title{color:var(--ink3)}
-.row.done .row-title span{text-decoration-color:var(--ink3)}
+.swipe.gone{pointer-events:none}
+.swipe.gone .row{transform:scale(.96);opacity:0;transition:transform .35s var(--ease),opacity .3s}
+
 .row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:15px;font-weight:800;color:var(--ink2);margin-top:4px}
 .row-meta em{font-style:normal;display:inline-flex;align-items:center;gap:4px}
 .row-meta svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
@@ -265,7 +267,7 @@ svg{display:block}
 .notes-field:focus-within{box-shadow:0 0 0 2.5px var(--ink)}
 .dt-kind{display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:11px;background:var(--soft);font-size:14px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
 .dt-title{font-size:30px;font-weight:900;letter-spacing:-.035em;line-height:1.15;overflow-wrap:anywhere;margin:2px 4px 0}
-.dt-title.done{color:var(--ink3);text-decoration:line-through;text-decoration-thickness:3px}
+.dt-title.done{color:var(--ink3)}
 .dt-meta{margin:12px 4px 0;gap:12px;font-size:16px}
 .dt-meta:empty{display:none}
 .dt-saved{height:0;overflow:visible;text-align:right;font-size:13px;font-weight:900;color:var(--ink3);padding-right:8px;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
@@ -399,7 +401,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 2.3</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 2.4</div><h1 class="title">Réglages</h1></header>
 
       <div class="label first">Notifications</div>
       <div class="line-row">
@@ -479,7 +481,7 @@ button.line-row:active{transform:scale(.98)}
       <div class="label">Données</div>
       <button class="line-row" data-act="clearlog"><span>Effacer l'historique</span></button>
       <button class="line-row danger" data-act="reset"><span>Tout réinitialiser</span></button>
-      <p class="foot">Rituel · version 2.3</p>
+      <p class="foot">Rituel · version 2.4</p>
     </section>
   </main>
 
@@ -935,24 +937,22 @@ function renderToday(){
   $('#todayDate').textContent = greeting() + ' · ' + new Date().toLocaleDateString('fr-BE',{weekday:'long',day:'numeric',month:'long'});
   renderHero(p);
   let h = '', i = 0;
-  if(p.rs.length){
-    const sorted = [...p.rs].sort((a,b) => doneOn(a.id,p.t) - doneOn(b.id,p.t));
-    h += sec('Rituels', `${p.rDone}/${p.rs.length}`) + '<div class="list">' + sorted.map(r => {
+  const rLeft = p.rs.filter(r => !doneOn(r.id,p.t)), tLeft = p.ts.filter(x => !x.done), lLeft = p.loose.filter(x => !x.done);
+  if(rLeft.length){
+    h += sec('Rituels', rLeft.length) + '<div class="list">' + rLeft.map(r => {
       const s = ritualStreak(r);
-      return rowHTML(r,'today',i++,doneOn(r.id,p.t), timeMeta(r) + (s ? `<em>${IC.flame}${s} j</em>` : ''));
+      return rowHTML(r,'today',i++,false, timeMeta(r) + (s ? `<em>${IC.flame}${s} j</em>` : ''));
     }).join('') + '</div>';
   }
-  if(p.ts.length){
-    const sorted = [...p.ts].sort((a,b) => a.done - b.done);
-    h += sec('Tâches du jour', `${p.ts.filter(x=>x.done).length}/${p.ts.length}`) + '<div class="list">' + sorted.map(x => {
-      const late = !x.done && x.date < p.t;
-      return rowHTML(x,'today',i++,x.done, (late ? `<em class="red">${IC.cal}${dateLabel(x.date)}</em>` : '') + impMeta(x) + timeMeta(x));
+  if(tLeft.length){
+    h += sec('Tâches du jour', tLeft.length) + '<div class="list">' + tLeft.map(x => {
+      const late = x.date < p.t;
+      return rowHTML(x,'today',i++,false, (late ? `<em class="red">${IC.cal}${dateLabel(x.date)}</em>` : '') + impMeta(x) + timeMeta(x));
     }).join('') + '</div>';
   }
-  if(p.loose.length){
-    const sorted = [...p.loose].sort((a,b) => a.done - b.done);
-    h += sec('Quand tu veux', p.loose.filter(x=>!x.done).length) + '<div class="list">' + sorted.map(x =>
-      rowHTML(x,'today',i++,x.done, impMeta(x) + timeMeta(x))).join('') + '</div>';
+  if(lLeft.length){
+    h += sec('Quand tu veux', lLeft.length) + '<div class="list">' + lLeft.map(x =>
+      rowHTML(x,'today',i++,false, impMeta(x) + timeMeta(x))).join('') + '</div>';
   }
   $('#todayList').innerHTML = h || bare();
 }
@@ -1521,11 +1521,21 @@ function onToggle(wrap){
   else { Sound.play('uncheck'); haptic(); }
   save(); queueSync();
   const p = progress(); renderHero(p);
+  let win = false;
   if(on && p.total && p.done === p.total && S.settings.lastWin !== p.t){
-    S.settings.lastWin = p.t; save(); setTimeout(celebrate, 380);
+    S.settings.lastWin = p.t; save(); win = true; setTimeout(celebrate, 380);
   }
-  if(wrap.closest('#v-tasks') && on) setTimeout(() => collapse(wrap, flipRender), 400);
-  else setTimeout(flipRender, 420);
+  if(on){
+    setTimeout(() => wrap.classList.add('gone'), 260);
+    setTimeout(() => collapse(wrap, flipRender), 520);
+    if(!win) toast(it.type === 'ritual' ? 'Rituel fait' : 'Tâche faite', () => undoDone(id));
+  } else setTimeout(flipRender, 420);
+}
+function undoDone(id){
+  const it = S.items.find(x => x.id === id); if(!it) return;
+  if(it.type === 'ritual'){ if(doneOn(id, today())) toggleRitual(id); }
+  else if(it.done) toggleTask(id);
+  save(); queueSync(); flipRender(); Sound.play('uncheck'); haptic();
 }
 
 /* ================= SWIPE ================= */
