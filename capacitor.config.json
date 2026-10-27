@@ -1,0 +1,14 @@
+{
+  "appId": "be.brun.rituel",
+  "appName": "Rituel",
+  "webDir": "www",
+  "backgroundColor": "#F3F2EE",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true
+    }
+  }
+}
