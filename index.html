@@ -331,22 +331,35 @@ button.line-row:active{transform:scale(.98)}
 .qinput:placeholder-shown+.qbtn{transform:scale(.4) rotate(-90deg);opacity:0;width:0;margin-left:-8px;pointer-events:none}
 .qbtn:active{transform:scale(.88)}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:206px;padding:18px 16px 16px;border-radius:28px;
+.tiles{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);gap:10px}
+#v-today{display:flex;flex-direction:column;padding-top:calc(var(--sat) + 18px)}
+#v-today>*{flex:none}
+#v-today .tiles{flex:1 1 auto;min-height:150px}
+#v-today .head{margin-bottom:14px}
+#v-today .title{font-size:44px}
+#v-today .hero{padding:16px 18px;gap:16px;border-radius:28px}
+#v-today .ring,#v-today .ring svg{width:66px;height:66px}
+#v-today .ring b{font-size:18px}
+#v-today .hero-big{font-size:28px}
+#v-today .hero-sub{font-size:15px;margin-top:3px}
+#v-today .pill{margin-top:7px;height:27px}
+#v-today .wd{padding:7px 0 8px;gap:4px}
+#v-today .wd svg{width:22px;height:22px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:0;height:100%;padding:14px 14px 12px 16px;border-radius:26px;
   background:var(--card);box-shadow:0 1px 0 var(--line);overflow:hidden;transition:transform .35s var(--soft-spring)}
 .tile:active{transform:scale(.96)}
 .view.active .tile{animation:rowIn .6s .16s var(--soft-spring) both}
 .view.active .tile+.tile{animation-delay:.22s}
 .tile-top{display:flex;justify-content:space-between;align-items:center;width:100%}
-.tile-ico{width:42px;height:42px;border-radius:14px;background:var(--soft);display:grid;place-items:center}
-.tile-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tile-ico{width:36px;height:36px;border-radius:12px;background:var(--soft);display:grid;place-items:center}
+.tile-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .tile-go{width:22px;height:22px;fill:none;stroke:var(--ink3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.tile-n{font-size:44px;font-weight:900;letter-spacing:-.05em;line-height:1;margin-top:14px}
-.tile-l{font-size:16px;font-weight:900;color:var(--ink2);margin-top:4px}
-.tile-bar{width:100%;height:6px;border-radius:3px;background:var(--soft);margin-top:12px;overflow:hidden}
+.tile-n{font-size:40px;font-weight:900;letter-spacing:-.05em;line-height:1;margin-top:8px}
+.tile-l{font-size:15px;font-weight:900;color:var(--ink2);margin-top:3px}
+.tile-bar{flex:none;width:100%;height:6px;border-radius:3px;background:var(--soft);margin-top:10px;overflow:hidden}
 .tile-bar i{display:block;height:100%;border-radius:3px;background:var(--ink);transition:width .8s var(--ease)}
-.tile-prev{list-style:none;width:100%;margin-top:12px;display:flex;flex-direction:column;gap:5px}
-.tile-prev li{font-size:15px;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:7px}
+.tile-prev{list-style:none;width:100%;margin-top:10px;display:flex;flex-direction:column;gap:4px;flex:1 1 auto;min-height:0;overflow:hidden}
+.tile-prev li{flex:none;font-size:15px;line-height:1.3;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:7px}
 .tile-prev li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;border:2px solid var(--ink3)}
 .tile-prev li.more{color:var(--ink3)}
 .tile-prev li.more::before{display:none}
@@ -422,7 +435,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 2.5</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 2.6</div><h1 class="title">Réglages</h1></header>
 
       <div class="label first">Notifications</div>
       <div class="line-row">
@@ -502,7 +515,7 @@ button.line-row:active{transform:scale(.98)}
       <div class="label">Données</div>
       <button class="line-row" data-act="clearlog"><span>Effacer l'historique</span></button>
       <button class="line-row danger" data-act="reset"><span>Tout réinitialiser</span></button>
-      <p class="foot">Rituel · version 2.5</p>
+      <p class="foot">Rituel · version 2.6</p>
     </section>
   </main>
 
@@ -966,10 +979,7 @@ function renderToday(){
     return rank(a) - rank(b) || withOrder(byImp)(a,b);
   });
   const tDoneToday = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t).length;
-  const prev = list => {
-    const show = list.slice(0, 3).map(x => `<li>${esc(x.title)}</li>`).join('');
-    return `<ul class="tile-prev">${show}${list.length > 3 ? `<li class="more">+ ${list.length - 3} autre${list.length - 3 > 1 ? 's' : ''}</li>` : ''}</ul>`;
-  };
+  const prev = list => `<ul class="tile-prev" data-total="${list.length}">${list.slice(0, 10).map(x => `<li class="it">${esc(x.title)}</li>`).join('')}<li class="more" hidden></li></ul>`;
   const go = '<svg class="tile-go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
   const rPct = p.rs.length ? (p.rDone / p.rs.length * 100) : 0;
   const tPct = (tAll.length + tDoneToday) ? (tDoneToday / (tAll.length + tDoneToday) * 100) : 0;
@@ -988,7 +998,24 @@ function renderToday(){
       <div class="tile-bar"><i style="width:${tPct}%"></i></div>
       ${prev(tAll)}
     </button>`;
+  fitTiles();
 }
+function fitTiles(){
+  $$('#tiles .tile-prev').forEach(ul => {
+    const total = +ul.dataset.total, items = [...ul.querySelectorAll('li.it')], more = ul.querySelector('li.more');
+    const fits = () => ul.scrollHeight <= ul.clientHeight + 1;
+    const label = n => `+ ${n} autre${n > 1 ? 's' : ''}`;
+    items.forEach(li => li.hidden = false);
+    let shown = items.length;
+    more.hidden = shown >= total; more.textContent = label(total - shown);
+    while(!fits() && shown > 0){
+      items[--shown].hidden = true;
+      more.hidden = false; more.textContent = label(total - shown);
+    }
+    if(!fits()) more.hidden = true;
+  });
+}
+window.addEventListener('resize', () => requestAnimationFrame(fitTiles));
 function renderTasks(){
   const t = today(), tm = key(addDays(new Date(),1));
   const p = tasks().filter(x => !x.done);
