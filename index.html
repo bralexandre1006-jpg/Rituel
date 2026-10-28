@@ -330,7 +330,29 @@ button.line-row:active{transform:scale(.98)}
 .qbtn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}
 .qinput:placeholder-shown+.qbtn{transform:scale(.4) rotate(-90deg);opacity:0;width:0;margin-left:-8px;pointer-events:none}
 .qbtn:active{transform:scale(.88)}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:26px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:206px;padding:18px 16px 16px;border-radius:28px;
+  background:var(--card);box-shadow:0 1px 0 var(--line);overflow:hidden;transition:transform .35s var(--soft-spring)}
+.tile:active{transform:scale(.96)}
+.view.active .tile{animation:rowIn .6s .16s var(--soft-spring) both}
+.view.active .tile+.tile{animation-delay:.22s}
+.tile-top{display:flex;justify-content:space-between;align-items:center;width:100%}
+.tile-ico{width:42px;height:42px;border-radius:14px;background:var(--soft);display:grid;place-items:center}
+.tile-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tile-go{width:22px;height:22px;fill:none;stroke:var(--ink3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.tile-n{font-size:44px;font-weight:900;letter-spacing:-.05em;line-height:1;margin-top:14px}
+.tile-l{font-size:16px;font-weight:900;color:var(--ink2);margin-top:4px}
+.tile-bar{width:100%;height:6px;border-radius:3px;background:var(--soft);margin-top:12px;overflow:hidden}
+.tile-bar i{display:block;height:100%;border-radius:3px;background:var(--ink);transition:width .8s var(--ease)}
+.tile-prev{list-style:none;width:100%;margin-top:12px;display:flex;flex-direction:column;gap:5px}
+.tile-prev li{font-size:15px;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:7px}
+.tile-prev li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;border:2px solid var(--ink3)}
+.tile-prev li.more{color:var(--ink3)}
+.tile-prev li.more::before{display:none}
+.tile.done .tile-n{color:var(--ink3)}
+.bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 124px);z-index:15;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,var(--bg) 52%)}
 .view.active .week{animation:rowIn .6s .12s var(--soft-spring) both}
 .wd{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0 11px;border-radius:18px;transition:background .3s}
 .wd small{font-size:12px;font-weight:900;letter-spacing:.06em;color:var(--ink3)}
@@ -374,8 +396,7 @@ button.line-row:active{transform:scale(.98)}
         </div>
       </div>
       <div class="week" id="week"></div>
-      <form class="quick" data-q="today" autocomplete="off"><input class="qinput" placeholder="Ajouter une tâche…" maxlength="140" enterkeyhint="done"><button class="qbtn" type="submit" aria-label="Ajouter"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></form>
-      <div id="todayList"></div>
+      <div class="tiles" id="tiles"></div>
     </section>
 
     <section class="view" id="v-rituals">
@@ -401,7 +422,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 2.4</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 2.5</div><h1 class="title">Réglages</h1></header>
 
       <div class="label first">Notifications</div>
       <div class="line-row">
@@ -481,10 +502,11 @@ button.line-row:active{transform:scale(.98)}
       <div class="label">Données</div>
       <button class="line-row" data-act="clearlog"><span>Effacer l'historique</span></button>
       <button class="line-row danger" data-act="reset"><span>Tout réinitialiser</span></button>
-      <p class="foot">Rituel · version 2.4</p>
+      <p class="foot">Rituel · version 2.5</p>
     </section>
   </main>
 
+  <div class="bfade" aria-hidden="true"></div>
   <nav class="tabbar">
     <div class="tab-ind" id="tabInd"></div>
     <button class="tab active" data-act="tab" data-v="today">
@@ -593,6 +615,7 @@ const IC = {
   repeat: '<svg viewBox="0 0 24 24"><path d="M17 2.5l3 3-3 3"/><path d="M4 11V9.5a4 4 0 0 1 4-4h12"/><path d="M7 21.5l-3-3 3-3"/><path d="M20 13v1.5a4 4 0 0 1-4 4H4"/></svg>',
   star: '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>',
   trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M5.5 7l1 12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>',
+  listck: '<svg viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7 5"/><path d="M3.5 12l1.3 1.3L7 11"/><path d="M3.5 18l1.3 1.3L7 17"/></svg>',
   note: '<svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>',
   pct: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>'
 };
@@ -936,25 +959,35 @@ function renderToday(){
   renderWeek();
   $('#todayDate').textContent = greeting() + ' · ' + new Date().toLocaleDateString('fr-BE',{weekday:'long',day:'numeric',month:'long'});
   renderHero(p);
-  let h = '', i = 0;
-  const rLeft = p.rs.filter(r => !doneOn(r.id,p.t)), tLeft = p.ts.filter(x => !x.done), lLeft = p.loose.filter(x => !x.done);
-  if(rLeft.length){
-    h += sec('Rituels', rLeft.length) + '<div class="list">' + rLeft.map(r => {
-      const s = ritualStreak(r);
-      return rowHTML(r,'today',i++,false, timeMeta(r) + (s ? `<em>${IC.flame}${s} j</em>` : ''));
-    }).join('') + '</div>';
-  }
-  if(tLeft.length){
-    h += sec('Tâches du jour', tLeft.length) + '<div class="list">' + tLeft.map(x => {
-      const late = x.date < p.t;
-      return rowHTML(x,'today',i++,false, (late ? `<em class="red">${IC.cal}${dateLabel(x.date)}</em>` : '') + impMeta(x) + timeMeta(x));
-    }).join('') + '</div>';
-  }
-  if(lLeft.length){
-    h += sec('Quand tu veux', lLeft.length) + '<div class="list">' + lLeft.map(x =>
-      rowHTML(x,'today',i++,false, impMeta(x) + timeMeta(x))).join('') + '</div>';
-  }
-  $('#todayList').innerHTML = h || bare();
+  const t = p.t;
+  const rLeft = p.rs.filter(r => !doneOn(r.id,t));
+  const tAll = tasks().filter(x => !x.done).sort((a,b) => {
+    const rank = x => !x.date ? 2 : x.date <= t ? 0 : 1;
+    return rank(a) - rank(b) || withOrder(byImp)(a,b);
+  });
+  const tDoneToday = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t).length;
+  const prev = list => {
+    const show = list.slice(0, 3).map(x => `<li>${esc(x.title)}</li>`).join('');
+    return `<ul class="tile-prev">${show}${list.length > 3 ? `<li class="more">+ ${list.length - 3} autre${list.length - 3 > 1 ? 's' : ''}</li>` : ''}</ul>`;
+  };
+  const go = '<svg class="tile-go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
+  const rPct = p.rs.length ? (p.rDone / p.rs.length * 100) : 0;
+  const tPct = (tAll.length + tDoneToday) ? (tDoneToday / (tAll.length + tDoneToday) * 100) : 0;
+  const rLabel = !rituals().length ? 'Aucun rituel' : !p.rs.length ? 'Rien aujourd’hui' : !rLeft.length ? 'Tout est fait' : (rLeft.length > 1 ? 'Rituels à faire' : 'Rituel à faire');
+  const tLabel = !tAll.length ? (tDoneToday ? 'Tout est fait' : 'Aucune tâche') : (tAll.length > 1 ? 'Tâches à faire' : 'Tâche à faire');
+  $('#tiles').innerHTML = `
+    <button class="tile ${p.rs.length && !rLeft.length ? 'done' : ''}" data-act="tab" data-v="rituals">
+      <div class="tile-top"><span class="tile-ico">${IC.repeat}</span>${go}</div>
+      <b class="tile-n">${rLeft.length}</b><span class="tile-l">${rLabel}</span>
+      <div class="tile-bar"><i style="width:${rPct}%"></i></div>
+      ${prev(rLeft)}
+    </button>
+    <button class="tile ${!tAll.length && tDoneToday ? 'done' : ''}" data-act="tab" data-v="tasks">
+      <div class="tile-top"><span class="tile-ico">${IC.listck}</span>${go}</div>
+      <b class="tile-n">${tAll.length}</b><span class="tile-l">${tLabel}</span>
+      <div class="tile-bar"><i style="width:${tPct}%"></i></div>
+      ${prev(tAll)}
+    </button>`;
 }
 function renderTasks(){
   const t = today(), tm = key(addDays(new Date(),1));
@@ -982,9 +1015,15 @@ function renderTasks(){
 }
 function renderRituals(){
   const rs = rituals().sort(withOrder(byTime));
-  $('#ritCount').textContent = rs.length ? plural(rs.length,'rituel') : 'Tes habitudes';
+  const nLeft = rs.filter(r => isDue(r,today()) && !doneOn(r.id,today())).length;
+  $('#ritCount').textContent = !rs.length ? 'Tes habitudes' : nLeft ? `${nLeft} à faire aujourd'hui` : 'Tout est fait aujourd’hui';
   const t = today();
-  $('#ritList').innerHTML = rs.length ? '<div class="list">' + rs.map((r,i) => {
+  const left = rs.filter(r => isDue(r,t) && !doneOn(r.id,t));
+  const dayHTML = left.length ? sec("À faire aujourd'hui", left.length) + '<div class="list">' + left.map((r,i) => {
+    const s = ritualStreak(r);
+    return rowHTML(r,'ritday',i,false, timeMeta(r) + (s ? `<em>${IC.flame}${s} j</em>` : ''));
+  }).join('') + '</div>' : '';
+  $('#ritList').innerHTML = rs.length ? dayHTML + (left.length ? sec('Tous mes rituels', rs.length) : '') + '<div class="list">' + rs.map((r,i) => {
     const a = anim('rit', r.id, i), s = ritualStreak(r), rate = ritualRate(r);
     let dots = '';
     for(let d=6; d>=0; d--){
