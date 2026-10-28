@@ -62,9 +62,9 @@ svg{display:block}
 #root:not(.app-in) .view.active{opacity:0;transform:translateY(24px)}
 .view::-webkit-scrollbar{display:none}
 
-.head{margin-bottom:22px}
+.head{margin-bottom:18px}
 .eyebrow{font-size:14px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin-bottom:8px}
-.title{font-size:52px;font-weight:900;letter-spacing:-.05em;line-height:1}
+.title{font-size:42px;font-weight:900;letter-spacing:-.045em;line-height:1}
 .view.active .eyebrow{animation:titleIn .6s var(--ease) both}
 .view.active .title{animation:titleIn .7s .05s var(--ease) both}
 @keyframes titleIn{from{opacity:0;transform:translateY(16px)}}
@@ -90,15 +90,15 @@ svg{display:block}
 .pill svg{width:14px;height:14px;fill:var(--amber)}
 
 /* sections + rows */
-.sec{display:flex;justify-content:space-between;align-items:baseline;margin:0 6px 11px}
-.sec h3{font-size:14.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
-.sec span{font-size:15px;font-weight:900;color:var(--ink3)}
-.list{display:flex;flex-direction:column;gap:8px;margin-bottom:30px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:0 8px 8px}
+.sec h3{font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.sec span{font-size:13.5px;font-weight:900;color:var(--ink3)}
+.list{display:flex;flex-direction:column;gap:0;margin-bottom:24px;background:var(--card);border-radius:22px;box-shadow:0 1px 0 var(--line);overflow:hidden}
 .in{animation:rowIn .6s var(--soft-spring) both}
 @keyframes rowIn{from{opacity:0;transform:translateY(16px) scale(.98)}}
 
-.swipe{position:relative;border-radius:24px;overflow:hidden}
-.sw-bg{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 24px;border-radius:24px;
+.swipe,.plain{position:relative;overflow:hidden}
+.sw-bg{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 22px;
   background:var(--ink);color:var(--bg);font-size:15px;font-weight:900;opacity:0}
 .swipe.sr .sw-bg,.swipe.sl .sw-bg{opacity:1}
 .swipe.sl .sw-bg{background:var(--red);color:#fff}
@@ -107,30 +107,44 @@ svg{display:block}
 .swipe.sr .sw-r,.swipe.sl .sw-l{visibility:hidden}
 .swipe.armed .sw-l,.swipe.armed .sw-r{opacity:1;transform:scale(1.12)}
 
-.row{position:relative;z-index:1;display:flex;align-items:center;gap:12px;background:var(--card);border-radius:24px;padding:13px 18px 13px 10px;min-height:80px;
-  box-shadow:0 1px 0 var(--line);touch-action:pan-y;transition:transform .45s var(--soft-spring),background .3s}
+.row{position:relative;z-index:1;display:flex;align-items:center;gap:8px;background:var(--card);padding:7px 16px 7px 6px;min-height:58px;
+  touch-action:pan-y;transition:transform .45s var(--soft-spring),background .3s}
+.list>[data-id]+[data-id]::before{content:"";position:absolute;top:0;left:58px;right:0;height:1px;background:var(--line);z-index:2}
+.row-ico{width:44px;height:44px;flex:none;display:grid;place-items:center;color:var(--ink3)}
+.row-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.showdone{display:flex;align-items:center;gap:8px;margin:2px auto 24px;height:40px;padding:0 16px;border-radius:14px;background:var(--soft);
+  font-size:14.5px;font-weight:900;color:var(--ink2);transition:transform .25s var(--spring)}
+.showdone:active{transform:scale(.94)}
+.showdone svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease)}
+.showdone.open svg{transform:rotate(180deg)}
+.list.dim .row-title{color:var(--ink3)}
+.alldone{display:flex;align-items:center;gap:12px;padding:16px 18px;margin-bottom:24px;border-radius:22px;background:var(--card);font-size:16px;font-weight:900;color:var(--ink2)}
+.alldone i{width:28px;height:28px;border-radius:50%;background:var(--ink);display:grid;place-items:center;flex:none}
+.alldone svg{width:15px;height:15px;fill:none;stroke:var(--bg);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .row.dragging{transition:none}
 .list>[data-id]{transition:transform .3s var(--ease)}
-.list>.lifted{position:relative;z-index:30;transition:none!important;box-shadow:0 20px 44px rgba(0,0,0,.3);border-radius:24px}
+.list>.lifted{position:relative;z-index:30;transition:none!important;box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:18px}
+.list:has(.lifted){overflow:visible}
+.list>.lifted::before{display:none}
 .row:active:not(.dragging){transform:scale(.985)}
 .row.imp{box-shadow:inset 3px 0 0 var(--amber),0 1px 0 var(--line)}
-.chk{width:48px;height:48px;flex:none;display:grid;place-items:center;border-radius:50%}
-.chk i{width:32px;height:32px;border-radius:50%;border:2.8px solid var(--ink3);display:grid;place-items:center;transition:background .25s,border-color .25s}
+.chk{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:50%}
+.chk i{width:25px;height:25px;border-radius:50%;border:2.4px solid var(--ink3);display:grid;place-items:center;transition:background .25s,border-color .25s}
 .chk:active i{transform:scale(.85)}
-.chk svg{width:17px;height:17px;fill:none;stroke:var(--bg);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s .08s var(--ease)}
+.chk svg{width:14px;height:14px;fill:none;stroke:var(--bg);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s .08s var(--ease)}
 .row.done .chk i{background:var(--ink);border-color:var(--ink);animation:chkPop .45s var(--spring)}
 .row.done .chk svg{stroke-dashoffset:0}
 @keyframes chkPop{0%{transform:scale(1)}35%{transform:scale(.72)}100%{transform:scale(1)}}
 .row-main{flex:1;min-width:0;padding:4px 0}
-.row-title{font-size:21px;font-weight:900;letter-spacing:-.02em;line-height:1.24;overflow-wrap:anywhere;transition:color .3s}
+.row-title{font-size:18px;font-weight:900;letter-spacing:-.02em;line-height:1.24;overflow-wrap:anywhere;transition:color .3s}
 .row-title span{text-decoration:line-through;text-decoration-thickness:2.5px;text-decoration-color:transparent;transition:text-decoration-color .45s var(--ease)}
 .row.done .row-title{color:var(--ink3)}
 .swipe.gone{pointer-events:none}
 .swipe.gone .row{transform:scale(.96);opacity:0;transition:transform .35s var(--ease),opacity .3s}
 
-.row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:15px;font-weight:800;color:var(--ink2);margin-top:4px}
+.row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-size:13.5px;font-weight:800;color:var(--ink2);margin-top:2px}
 .row-meta em{font-style:normal;display:inline-flex;align-items:center;gap:4px}
-.row-meta svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.row-meta svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .row-meta svg.f{fill:currentColor;stroke:none}
 .row-meta .amb{color:var(--amber)}
 .row-meta .amb svg{fill:var(--amber);stroke:none}
@@ -336,7 +350,7 @@ button.line-row:active{transform:scale(.98)}
 #v-today>*{flex:none}
 #v-today .tiles{flex:1 1 auto;min-height:150px}
 #v-today .head{margin-bottom:14px}
-#v-today .title{font-size:44px}
+#v-today .title{font-size:42px}
 #v-today .hero{padding:16px 18px;gap:16px;border-radius:28px}
 #v-today .ring,#v-today .ring svg{width:66px;height:66px}
 #v-today .ring b{font-size:18px}
@@ -364,6 +378,7 @@ button.line-row:active{transform:scale(.98)}
 .tile-prev li.more{color:var(--ink3)}
 .tile-prev li.more::before{display:none}
 .tile.done .tile-n{color:var(--ink3)}
+.tfade{position:absolute;left:0;right:0;top:0;height:calc(var(--sat) + 16px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 62%,transparent)}
 .bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 124px);z-index:15;pointer-events:none;
   background:linear-gradient(to bottom,transparent,var(--bg) 52%)}
 .view.active .week{animation:rowIn .6s .12s var(--soft-spring) both}
@@ -435,7 +450,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 2.6</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 2.7</div><h1 class="title">Réglages</h1></header>
 
       <div class="label first">Notifications</div>
       <div class="line-row">
@@ -515,10 +530,11 @@ button.line-row:active{transform:scale(.98)}
       <div class="label">Données</div>
       <button class="line-row" data-act="clearlog"><span>Effacer l'historique</span></button>
       <button class="line-row danger" data-act="reset"><span>Tout réinitialiser</span></button>
-      <p class="foot">Rituel · version 2.6</p>
+      <p class="foot">Rituel · version 2.7</p>
     </section>
   </main>
 
+  <div class="tfade" aria-hidden="true"></div>
   <div class="bfade" aria-hidden="true"></div>
   <nav class="tabbar">
     <div class="tab-ind" id="tabInd"></div>
@@ -902,7 +918,7 @@ function confetti(){
 function collapse(el, cb){
   el.style.height = el.offsetHeight + 'px';
   el.style.transition = 'height .32s cubic-bezier(.2,.8,.2,1), margin .32s cubic-bezier(.2,.8,.2,1), opacity .25s';
-  requestAnimationFrame(() => { el.style.height = '0px'; el.style.marginBottom = '-8px'; el.style.opacity = '0'; });
+  requestAnimationFrame(() => { el.style.height = '0px'; el.style.marginBottom = '0px'; el.style.opacity = '0'; });
   setTimeout(cb, 330);
 }
 
@@ -1038,34 +1054,39 @@ function renderTasks(){
       return rowHTML(x,'tasks',i++,false, meta + impMeta(x) + timeMeta(x));
     }).join('') + '</div>';
   });
-  $('#tasksList').innerHTML = h || bare();
+  const doneT = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t);
+  const tog = doneToggle('tasks', doneT, list => list.map((x,i) => rowHTML(x,'taskdone',i,true, '')).join(''));
+  $('#tasksList').innerHTML = (h || (doneT.length ? `<div class="alldone"><i>${IC.plain}</i>Toutes tes tâches sont faites</div>` : bare())) + tog;
+}
+let showDone = {rituals:false, tasks:false};
+function doneToggle(view, list, rowsFn){
+  if(!list.length) return '';
+  const chev = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+  const btn = `<button class="showdone ${showDone[view] ? 'open' : ''}" data-act="showdone" data-v="${view}">${list.length} fait${list.length > 1 ? 's' : ''} aujourd'hui ${chev}</button>`;
+  return btn + (showDone[view] ? '<div class="list dim">' + rowsFn(list) + '</div>' : '');
 }
 function renderRituals(){
-  const rs = rituals().sort(withOrder(byTime));
-  const nLeft = rs.filter(r => isDue(r,today()) && !doneOn(r.id,today())).length;
-  $('#ritCount').textContent = !rs.length ? 'Tes habitudes' : nLeft ? `${nLeft} à faire aujourd'hui` : 'Tout est fait aujourd’hui';
-  const t = today();
+  const t = today(), rs = rituals().sort(withOrder(byTime));
   const left = rs.filter(r => isDue(r,t) && !doneOn(r.id,t));
-  const dayHTML = left.length ? sec("À faire aujourd'hui", left.length) + '<div class="list">' + left.map((r,i) => {
-    const s = ritualStreak(r);
-    return rowHTML(r,'ritday',i,false, timeMeta(r) + (s ? `<em>${IC.flame}${s} j</em>` : ''));
-  }).join('') + '</div>' : '';
-  $('#ritList').innerHTML = rs.length ? dayHTML + (left.length ? sec('Tous mes rituels', rs.length) : '') + '<div class="list">' + rs.map((r,i) => {
-    const a = anim('rit', r.id, i), s = ritualStreak(r), rate = ritualRate(r);
-    let dots = '';
-    for(let d=6; d>=0; d--){
-      const k = key(addDays(new Date(),-d));
-      let c = '';
-      if(isDue(r,k)) c = doneOn(r.id,k) ? 'on' : (k === t ? 'now' : 'miss');
-      dots += `<i class="dot ${c}"></i>`;
-    }
-    return `<div class="rcard ${a.c}" style="${a.s}" data-id="${r.id}" data-act="open">
-      <div class="rc-main"><div class="rc-title">${esc(r.title)}</div>
-        <div class="row-meta"><em>${IC.repeat}${schedText(r.days)}</em>${timeMeta(r)}${rate !== null ? `<em>${IC.pct}${rate}%</em>` : ''}${notesMeta(r)}</div>
-        <div class="dots">${dots}</div></div>
-      <div class="rc-streak"><b>${s}</b><small>${s>1?'jours':'jour'}</small></div>
-    </div>`;
-  }).join('') + '</div>' : bare();
+  const doneT = rs.filter(r => isDue(r,t) && doneOn(r.id,t));
+  const other = rs.filter(r => !isDue(r,t));
+  $('#ritCount').textContent = !rs.length ? 'Tes habitudes' : left.length ? `${left.length} à faire aujourd'hui` : 'Tout est fait aujourd’hui';
+  if(!rs.length){ $('#ritList').innerHTML = bare(); return; }
+  const streak = r => { const s = ritualStreak(r); return s ? `<em>${IC.flame}${s} j</em>` : ''; };
+  let h = '';
+  if(left.length) h += sec("Aujourd'hui", left.length) + '<div class="list">' + left.map((r,i) => rowHTML(r,'ritday',i,false, timeMeta(r) + streak(r))).join('') + '</div>';
+  else if(doneT.length) h += `<div class="alldone"><i>${IC.plain}</i>Tous tes rituels du jour sont faits</div>`;
+  h += doneToggle('rituals', doneT, list => list.map((r,i) => rowHTML(r,'ritdone',i,true, streak(r))).join(''));
+  if(other.length){
+    h += sec('Autres jours', other.length) + '<div class="list">' + other.map((r,i) => {
+      const a = anim('ritother', r.id, i);
+      return `<div class="plain ${a.c}" style="${a.s}" data-id="${r.id}"><div class="row">
+        <span class="row-ico">${IC.repeat}</span>
+        <div class="row-main" data-act="open"><div class="row-title"><span>${esc(r.title)}</span></div><div class="row-meta"><em>${schedText(r.days)}</em>${timeMeta(r)}${notesMeta(r)}</div></div>
+      </div></div>`;
+    }).join('') + '</div>';
+  }
+  $('#ritList').innerHTML = h;
 }
 function renderHistory(grow){
   const t = today();
@@ -1724,6 +1745,7 @@ root.addEventListener('click', e => {
     case 'toggle': onToggle(el.closest('[data-id]')); break;
     case 'edit': haptic(); openEditor(el.closest('[data-id]').dataset.id); break;
     case 'open': haptic(); openDetail(el.closest('[data-id]').dataset.id); break;
+    case 'showdone': showDone[el.dataset.v] = !showDone[el.dataset.v]; Sound.play('tap'); haptic(); flipRender(); break;
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
     case 'type': if(!F.id){ F.type = el.dataset.t; Sound.play('tap'); renderEditor(); } break;
