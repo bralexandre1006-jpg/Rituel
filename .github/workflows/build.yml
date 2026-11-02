@@ -52,7 +52,7 @@ jobs:
           from PIL import Image, ImageOps, ImageDraw
           src = Image.open(sys.argv[1]).convert('L')
           logo = src.crop(src.point(lambda p: 255 if p < 128 else 0).getbbox())
-          LIGHT = (0xF3, 0xF2, 0xEE); DARK = (0x0A, 0x0A, 0x0A); INK = (14, 14, 14); PAPER = (243, 242, 238)
+          LIGHT = (0, 0, 0); DARK = (0, 0, 0); INK = (255, 255, 255); PAPER = (255, 255, 255)
           OUT = sys.argv[2]
           def layer(px, color):
               w, h = logo.size; s = px / max(w, h)
@@ -85,7 +85,7 @@ jobs:
               open(os.path.join(OUT, 'mipmap-anydpi-v26', nm + '.xml'), 'w').write(xml)
           os.makedirs(os.path.join(OUT, 'values'), exist_ok=True)
           open(os.path.join(OUT, 'values', 'ic_launcher_background.xml'), 'w').write(
-              '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#F3F2EE</color>\n</resources>\n')
+              '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#000000</color>\n</resources>\n')
           for d, (w, h) in {'mdpi': (320, 480), 'hdpi': (480, 800), 'xhdpi': (720, 1280), 'xxhdpi': (960, 1600), 'xxxhdpi': (1280, 1920)}.items():
               save(canvas(w, h, LIGHT, .22, INK), f'drawable-port-{d}/splash.png')
               save(canvas(h, w, LIGHT, .22, INK), f'drawable-land-{d}/splash.png')
@@ -106,7 +106,7 @@ jobs:
           VC=$(( $(date +%s) / 60 ))
           sed -i "s/versionCode [0-9]*/versionCode $VC/" android/app/build.gradle
           echo "versionCode : $VC"
-          sed -i "s/versionName \"[^\"]*\"/versionName \"3.0.${{ github.run_number }}\"/" android/app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"4.0.${{ github.run_number }}\"/" android/app/build.gradle
 
       - name: Signature fixe (mises à jour sans désinstaller)
         run: |
