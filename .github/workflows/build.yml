@@ -87,12 +87,14 @@ jobs:
           open(os.path.join(OUT, 'values', 'ic_launcher_background.xml'), 'w').write(
               '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#000000</color>\n</resources>\n')
           for d, (w, h) in {'mdpi': (320, 480), 'hdpi': (480, 800), 'xhdpi': (720, 1280), 'xxhdpi': (960, 1600), 'xxxhdpi': (1280, 1920)}.items():
-              save(canvas(w, h, LIGHT, .22, INK, dx=.125), f'drawable-port-{d}/splash.png')
-              save(canvas(h, w, LIGHT, .22, INK, dx=.125), f'drawable-land-{d}/splash.png')
-              save(canvas(w, h, DARK, .22, PAPER, dx=.125), f'drawable-port-night-{d}/splash.png')
-              save(canvas(h, w, DARK, .22, PAPER, dx=.125), f'drawable-land-night-{d}/splash.png')
-          save(canvas(480, 320, LIGHT, .22, INK, dx=.125), 'drawable/splash.png')
-          save(canvas(480, 320, DARK, .22, PAPER, dx=.125), 'drawable-night/splash.png')
+              save(canvas(w, h, LIGHT, .22, INK, dx=-0.1581), f'drawable-port-{d}/splash.png')
+              save(canvas(h, w, LIGHT, .22, INK, dx=-0.1581), f'drawable-land-{d}/splash.png')
+              save(canvas(w, h, DARK, .22, PAPER, dx=-0.1581), f'drawable-port-night-{d}/splash.png')
+              save(canvas(h, w, DARK, .22, PAPER, dx=-0.1581), f'drawable-land-night-{d}/splash.png')
+          save(canvas(480, 320, LIGHT, .22, INK, dx=-0.1581), 'drawable/splash.png')
+          save(canvas(480, 320, DARK, .22, PAPER, dx=-0.1581), 'drawable-night/splash.png')
+          for d, n in {'mdpi': 24, 'hdpi': 36, 'xhdpi': 48, 'xxhdpi': 72, 'xxxhdpi': 96}.items():
+              save(canvas(n, n, None, .86, (255, 255, 255), True), f'drawable-{d}/ic_stat_rituel.png')
           print('Icône Rituel appliquée')
           EOF
 
@@ -106,7 +108,7 @@ jobs:
           VC=$(( $(date +%s) / 60 ))
           sed -i "s/versionCode [0-9]*/versionCode $VC/" android/app/build.gradle
           echo "versionCode : $VC"
-          sed -i "s/versionName \"[^\"]*\"/versionName \"4.3.${{ github.run_number }}\"/" android/app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"4.4.${{ github.run_number }}\"/" android/app/build.gradle
 
       - name: Signature fixe (mises à jour sans désinstaller)
         run: |
