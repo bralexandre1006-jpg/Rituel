@@ -106,7 +106,7 @@ jobs:
           VC=$(( $(date +%s) / 60 ))
           sed -i "s/versionCode [0-9]*/versionCode $VC/" android/app/build.gradle
           echo "versionCode : $VC"
-          sed -i "s/versionName \"[^\"]*\"/versionName \"2.3.${{ github.run_number }}\"/" android/app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"3.0.${{ github.run_number }}\"/" android/app/build.gradle
 
       - name: Signature fixe (mises à jour sans désinstaller)
         run: |
