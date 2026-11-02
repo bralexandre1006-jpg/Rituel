@@ -1,6 +1,6 @@
 {
   "name": "rituel",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^7.0.0",
