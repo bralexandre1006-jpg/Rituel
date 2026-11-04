@@ -441,7 +441,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 4.6</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 4.7</div><h1 class="title">Réglages</h1></header>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -542,7 +542,7 @@ button.line-row:active{transform:scale(.98)}
         </div></div>
       </div>
 
-      <p class="foot">Rituel · version 4.6</p>
+      <p class="foot">Rituel · version 4.7</p>
     </section>
   </main>
 
@@ -1026,8 +1026,8 @@ function renderToday(){
   renderHero(p);
   const t = p.t;
   const rLeft = p.rs.filter(r => !doneOn(r.id,t));
-  const tAll = tasks().filter(x => !x.done && x.date && x.date <= t).sort(withOrder(byImp));
-  const tDoneToday = tasks().filter(x => x.done && x.date && x.doneAt && key(new Date(x.doneAt)) === t).length;
+  const tAll = tasks().filter(x => !x.done && (!x.date || x.date <= t)).sort((a,b) => (!b.date) - (!a.date) || withOrder(byImp)(a,b));
+  const tDoneToday = tasks().filter(x => x.done && (!x.date || x.date <= t) && x.doneAt && key(new Date(x.doneAt)) === t).length;
   const prev = list => `<ul class="tile-prev" data-total="${list.length}">${list.slice(0, 10).map(x => `<li class="it">${esc(x.title)}</li>`).join('')}<li class="more" hidden></li></ul>`;
   const go = '<svg class="tile-go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
   const rPct = p.rs.length ? (p.rDone / p.rs.length * 100) : 0;
