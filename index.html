@@ -441,7 +441,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 4.7</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 4.8</div><h1 class="title">Réglages</h1></header>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -504,6 +504,10 @@ button.line-row:active{transform:scale(.98)}
         <div><div class="lr-t">Texte en gras</div><div class="lr-s">Plus épais et un peu plus grand</div></div>
         <button class="switch" data-act="sw" data-k="bold" aria-label="Texte en gras"></button>
       </div>
+      <div class="line-row">
+        <div><div class="lr-t">Tâches avant les rituels</div><div class="lr-s">Dans la barre du bas et sur l’accueil</div></div>
+        <button class="switch" data-act="sw" data-k="tasksFirst" aria-label="Tâches avant les rituels"></button>
+      </div>
         </div></div>
       </div>
       <div class="acc" data-acc="xiao" id="xiaomiTips" hidden>
@@ -542,7 +546,7 @@ button.line-row:active{transform:scale(.98)}
         </div></div>
       </div>
 
-      <p class="foot">Rituel · version 4.7</p>
+      <p class="foot">Rituel · version 4.8</p>
     </section>
   </main>
 
@@ -678,7 +682,7 @@ const SUGG = ["Boire un grand verre d'eau", 'Méditer 10 minutes', 'Lire 20 page
 
 /* ================= STORE ================= */
 const STORE = 'rituel.v1';
-const DEFAULTS = {theme:'auto', bold:false, remindItems:true, defTime:'09:00', morning:false, morningTime:'08:00', evening:false, eveningTime:'21:00', weekly:true, weeklyTime:'19:00',
+const DEFAULTS = {theme:'auto', bold:false, tasksFirst:true, remindItems:true, defTime:'09:00', morning:false, morningTime:'08:00', evening:false, eveningTime:'21:00', weekly:true, weeklyTime:'19:00',
   askedNotif:false, sound:true, haptics:true, lastWin:''};
 let S = load();
 function load(){
@@ -1034,21 +1038,23 @@ function renderToday(){
   const tPct = (tAll.length + tDoneToday) ? (tDoneToday / (tAll.length + tDoneToday) * 100) : 0;
   const rLabel = !rituals().length ? 'Aucun rituel' : !p.rs.length ? 'Rien aujourd’hui' : !rLeft.length ? 'Tout est fait' : (rLeft.length > 1 ? 'Rituels à faire' : 'Rituel à faire');
   const tLabel = !tAll.length ? (tDoneToday ? 'Tout est fait' : 'Rien pour aujourd’hui') : (tAll.length > 1 ? 'Tâches du jour' : 'Tâche du jour');
-  $('#tiles').innerHTML = `
+  const rTile = `
     <button class="tile ${p.rs.length && !rLeft.length ? 'done' : ''}" data-act="tab" data-v="rituals">
       <div class="tile-top"><span class="tile-ico">${IC.repeat}</span>${go}</div>
       <b class="tile-n" data-v="${tileWas.r}">${tileWas.r}</b><span class="tile-l">${rLabel}</span>
       <div class="tile-bar"><i style="width:${rPct}%"></i></div>
       ${prev(rLeft)}
-    </button>
+    </button>`;
+  const tTile = `
     <button class="tile ${!tAll.length && tDoneToday ? 'done' : ''}" data-act="tab" data-v="tasks">
       <div class="tile-top"><span class="tile-ico">${IC.listck}</span>${go}</div>
       <b class="tile-n" data-v="${tileWas.t}">${tileWas.t}</b><span class="tile-l">${tLabel}</span>
       <div class="tile-bar"><i style="width:${tPct}%"></i></div>
       ${prev(tAll)}
     </button>`;
+  $('#tiles').innerHTML = S.settings.tasksFirst ? tTile + rTile : rTile + tTile;
   fitTiles();
-  const tn = $$('#tiles .tile-n'); countTo(tn[0], rLeft.length); countTo(tn[1], tAll.length);
+  countTo($('#tiles [data-v="rituals"] .tile-n'), rLeft.length); countTo($('#tiles [data-v="tasks"] .tile-n'), tAll.length);
   tileWas = {r: rLeft.length, t: tAll.length};
 }
 let tileWas = {r:0, t:0};
@@ -1188,7 +1194,13 @@ function renderAll(){
 }
 
 /* ================= NAVIGATION ================= */
-const ORDER = ['today','rituals','tasks','notes','settings'];
+let ORDER = ['today','rituals','tasks','notes','settings'];
+function applyOrder(){
+  const first = !!S.settings.tasksFirst, bar = $('.tabbar');
+  const r = bar.querySelector('[data-v="rituals"]'), t = bar.querySelector('[data-v="tasks"]');
+  if(first) bar.insertBefore(t, r); else bar.insertBefore(r, t);
+  ORDER = first ? ['today','tasks','rituals','notes','settings'] : ['today','rituals','tasks','notes','settings'];
+}
 let cur = 'today';
 function go(v){
   if(v === cur){ $('#v-'+v).scrollTo({top:0, behavior:'smooth'}); return; }
@@ -1437,7 +1449,7 @@ async function renderSettings(){
   $('#sumNotif').textContent = (map[st] || st) + (st === 'granted' ? (s.remindItems ? ' · rappels actifs' : ' · rappels coupés') : '');
   $('#sumSum').textContent = on.length ? 'Actifs : ' + on.join(', ') : 'Désactivés';
   $('#sumSens').textContent = s.sound && s.haptics ? 'Sons et vibrations activés' : s.sound ? 'Sons seulement' : s.haptics ? 'Vibrations seulement' : 'Tout est coupé';
-  $('#sumLook').textContent = 'Noir et blanc' + (s.bold ? ' · texte en gras' : '');
+  $('#sumLook').textContent = (s.tasksFirst ? 'Tâches en premier' : 'Rituels en premier') + (s.bold ? ' · texte en gras' : '');
   $('#sumXiao').textContent = 'Pour recevoir les rappels à l’heure';
   $('#sumTips').textContent = 'Gestes et raccourcis';
   $('#sumData').textContent = plural(S.log.length, 'élément') + ' dans l’historique';
@@ -1457,6 +1469,7 @@ async function toggleSetting(k){
   S.settings[k] = !S.settings[k]; save(); renderSettings();
   Sound.play('toggle'); haptic();
   if(k === 'bold'){ applyBold(); requestAnimationFrame(() => { renderAll(); moveInd(); }); return; }
+  if(k === 'tasksFirst'){ applyOrder(); animAll = true; renderAll(); moveInd(); return; }
   if(['remindItems','morning','evening','weekly'].includes(k) && S.settings[k]){
     const st = await notifState();
     if(st !== 'granted' && st !== 'unavailable'){ await askNotif(); renderSettings(); }
@@ -1871,6 +1884,7 @@ document.addEventListener('visibilitychange', () => {
 
 /* ================= BOOT ================= */
 applyTheme();
+applyOrder();
 renderAll();
 moveInd();
 setTimeout(() => {
