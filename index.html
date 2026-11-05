@@ -441,7 +441,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 4.8</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 4.9</div><h1 class="title">Réglages</h1></header>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -546,7 +546,7 @@ button.line-row:active{transform:scale(.98)}
         </div></div>
       </div>
 
-      <p class="foot">Rituel · version 4.8</p>
+      <p class="foot">Rituel · version 4.9</p>
     </section>
   </main>
 
@@ -1037,7 +1037,7 @@ function renderToday(){
   const rPct = p.rs.length ? (p.rDone / p.rs.length * 100) : 0;
   const tPct = (tAll.length + tDoneToday) ? (tDoneToday / (tAll.length + tDoneToday) * 100) : 0;
   const rLabel = !rituals().length ? 'Aucun rituel' : !p.rs.length ? 'Rien aujourd’hui' : !rLeft.length ? 'Tout est fait' : (rLeft.length > 1 ? 'Rituels à faire' : 'Rituel à faire');
-  const tLabel = !tAll.length ? (tDoneToday ? 'Tout est fait' : 'Rien pour aujourd’hui') : (tAll.length > 1 ? 'Tâches du jour' : 'Tâche du jour');
+  const tLabel = !tAll.length ? (tDoneToday ? 'Tout est fait' : 'Rien pour aujourd’hui') : (tAll.length > 1 ? 'Tâches' : 'Tâche');
   const rTile = `
     <button class="tile ${p.rs.length && !rLeft.length ? 'done' : ''}" data-act="tab" data-v="rituals">
       <div class="tile-top"><span class="tile-ico">${IC.repeat}</span>${go}</div>
