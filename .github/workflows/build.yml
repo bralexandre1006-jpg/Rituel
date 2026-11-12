@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -160,3 +162,11 @@ jobs:
         with:
           name: Rituel-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publier l'APK (lien de téléchargement direct)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk Rituel.apk
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest Rituel.apk --title "Rituel – dernière version" --notes "Compilation n°${{ github.run_number }}" --latest
