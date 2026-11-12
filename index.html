@@ -392,6 +392,128 @@ button.line-row:active{transform:scale(.98)}
 .toast button{flex:none;color:var(--paper);background:var(--void);font-weight:800;padding:8px 14px;border-radius:16px;margin:-6px 0}
 .confetti{position:absolute;inset:0;width:100%;height:100%;z-index:95;pointer-events:none}
 
+
+/* ================= ALLÈGEMENT ================= */
+#v-today .tiles{flex:0 1 auto;min-height:120px}
+#v-today .tile-prev{flex:0 1 auto}
+:root{--s1:#0E0E0E;--line:#161616;--line2:#222}
+.view{padding:calc(var(--sat) + 20px) 18px calc(var(--sab) + 116px)}
+.head{margin-bottom:16px}
+.eyebrow{font-size:calc(11px * var(--fs));letter-spacing:.18em;margin-bottom:7px}
+.title{font-size:calc(26px * var(--fs));letter-spacing:-.02em}
+#v-today .title{font-size:calc(22px * var(--fs))}
+.streak{height:28px;padding:0 11px;border:1px solid var(--line2);font-size:calc(11.5px * var(--fs))}
+.streak svg{width:13px;height:13px}
+
+/* jauge plus légère */
+.gauge{height:96px;border-radius:24px;border:0;margin-bottom:14px}
+.g-txt{padding:14px 18px;gap:8px}
+.g-top{font-size:calc(11px * var(--fs));letter-spacing:.16em}
+.g-pct{height:21px;padding:0 8px;border-width:1px;font-size:calc(10px * var(--fs))}
+.g-sub{font-size:calc(17px * var(--fs));line-height:1.2}
+.g-ticks,.bub{display:none}
+.g-wave{height:7px} .g-wave.b{height:9px;opacity:.25}
+
+/* semaine discrète */
+.week{gap:6px;margin-bottom:14px}
+.wd{gap:5px}
+.wd small{font-size:calc(10px * var(--fs));}
+.wbar{height:22px;border:0;border-radius:7px;background:#141414}
+.wd b{font-size:calc(11px * var(--fs))}
+.wd.now .wbar{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.wd.now .wbar{animation:none}
+
+/* encadrés épurés */
+.tiles{gap:8px}
+.tile{padding:14px 14px 12px;border:0;border-radius:22px}
+.tile-ico{width:28px;height:28px;border-radius:9px}
+.tile-ico svg{width:15px;height:15px}
+.tile-go{width:17px;height:17px}
+.tile-n{font-size:calc(32px * var(--fs));margin-top:12px}
+.tile-l{font-size:calc(13px * var(--fs));margin-top:2px}
+.tile-bar{display:none}
+.tile-prev{margin-top:12px;gap:7px}
+.tile-prev li{font-size:calc(13.5px * var(--fs));font-weight:700}
+.tile-prev li::before{width:4px;height:4px}
+
+/* listes fines */
+.sec{margin:0 4px 8px}
+.sec h3{font-size:calc(10.5px * var(--fs));letter-spacing:.16em;color:var(--ink3)}
+.sec span{border:0;min-width:0;height:auto;padding:0;font-size:calc(11px * var(--fs));color:var(--ink3)}
+.list{gap:6px;margin-bottom:22px}
+.swipe,.plain,.sw-bg{border-radius:16px}
+.row{min-height:54px;padding:6px 14px 6px 4px;border:0;border-radius:16px;gap:2px}
+.row-title{font-size:calc(16.5px * var(--fs));font-weight:700;line-height:1.25}
+.row-meta{font-size:calc(12.5px * var(--fs));font-weight:700;gap:10px;margin-top:2px}
+.row-meta svg{width:12px;height:12px}
+.chk{width:42px;height:42px}
+.chk i{width:22px;height:22px;border-width:2px}
+.chk svg{width:12px;height:12px}
+.row.imp{border:0}
+.list>.lifted{border-radius:16px}
+.alldone{padding:14px 16px;border-radius:16px;font-size:calc(15px * var(--fs))}
+.alldone i{width:24px;height:24px}
+.swhint{font-size:calc(12px * var(--fs));margin:-8px 0 20px}
+.hprog{height:3px;margin-top:14px}
+
+/* ajout rapide */
+.quick{margin-bottom:20px}
+.qinput{height:50px;border:0;border-radius:16px;font-size:calc(15.5px * var(--fs));font-weight:700;padding:0 16px}
+.qinput:focus{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.qbtn{width:50px;height:50px;border-radius:16px}
+
+/* notes */
+.notes-grid{gap:8px}
+.ncard{min-height:104px;padding:14px;border:0;border-radius:18px}
+.ncard b{font-size:calc(15.5px * var(--fs))}
+.ncard p{font-size:calc(13px * var(--fs));margin-top:6px;-webkit-line-clamp:3}
+.ncard small{font-size:calc(9.5px * var(--fs));margin-top:10px}
+
+/* barre du bas */
+.tabbar{height:58px;border-radius:29px;border:1px solid var(--line2);bottom:calc(var(--sab) + 12px);left:12px;right:82px}
+.tab{height:46px;border-radius:23px}
+.tab svg{width:21px;height:21px}
+.tab span{font-size:calc(12.5px * var(--fs))}
+.add{width:58px;height:58px;right:12px;bottom:calc(var(--sab) + 12px)}
+.add svg{width:24px;height:24px}
+.bfade{height:calc(var(--sab) + 100px)}
+
+/* réglages */
+.acc{border:0;border-radius:20px;margin-bottom:6px}
+.acc-h{min-height:60px;padding:10px 14px;gap:12px}
+.acc-ico{width:34px;height:34px;border-radius:11px}
+.acc-ico svg{width:17px;height:17px}
+.acc-t b{font-size:calc(15.5px * var(--fs))}
+.acc-t small{font-size:calc(12.5px * var(--fs))}
+.acc .line-row{border-top:1px solid var(--line)}
+.line-row{min-height:56px;border:0;border-radius:16px}
+.line-row>span,.lr-t{font-size:calc(15.5px * var(--fs));font-weight:700}
+.lr-s{font-size:calc(12.5px * var(--fs))}
+.switch{width:48px;height:28px}
+.switch::after{width:20px;height:20px}
+.switch.on::after{transform:translateX(20px)}
+.tip{font-size:calc(14px * var(--fs));border:0}
+
+/* feuilles */
+.sheet{border-top:1px solid var(--line2);border-radius:28px 28px 0 0}
+.sheet-head h2{font-size:calc(19px * var(--fs))}
+.icon-btn{width:40px;height:40px}
+.icon-btn svg{width:18px;height:18px}
+.seg{border:0;border-radius:16px}
+.seg button{height:42px;border-radius:12px;font-size:calc(15px * var(--fs))}
+.field{border:0;border-radius:18px}
+.field:focus-within{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.tinput{font-size:calc(20px * var(--fs));min-height:58px;padding:16px 0}
+.label{font-size:calc(10px * var(--fs));margin:20px 6px 8px}
+.day{height:44px;border:0;border-radius:13px;font-size:calc(12.5px * var(--fs))}
+.chip{height:38px;padding:0 15px;border:0;font-size:calc(14px * var(--fs))}
+.ninput{font-size:calc(15.5px * var(--fs))}
+.btn{height:54px;border-radius:27px;font-size:calc(13.5px * var(--fs))}
+.btn-soft{height:50px;border:1px solid var(--line2);font-size:calc(15px * var(--fs))}
+.btn-ghost{height:48px;font-size:calc(14.5px * var(--fs))}
+.dt-title{font-size:calc(23px * var(--fs))}
+.dt-kind{height:26px;border-width:1px;font-size:calc(9.5px * var(--fs))}
+.toast{font-size:calc(14.5px * var(--fs));padding:11px 12px 11px 18px}
 </style>
 </head>
 <body>
@@ -441,7 +563,7 @@ button.line-row:active{transform:scale(.98)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 4.9</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div class="eyebrow">Rituel 5.0</div><h1 class="title">Réglages</h1></header>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -546,7 +668,7 @@ button.line-row:active{transform:scale(.98)}
         </div></div>
       </div>
 
-      <p class="foot">Rituel · version 4.9</p>
+      <p class="foot">Rituel · version 5.0</p>
     </section>
   </main>
 
