@@ -2174,18 +2174,22 @@ function revealFocus(){
   else if(r.top < s.top + 64) d = r.top - s.top - 64;
   if(d) openEl.scrollBy({top:d, behavior:'smooth'});
 }
+let nativeKb = false;
+window.__kb = h => { nativeKb = true; setKb(+h || 0); };
 const KB = plugin('Keyboard');
 if(KB){
   try{
-    KB.addListener('keyboardWillShow', i => setKb(i.keyboardHeight || 0));
-    KB.addListener('keyboardDidShow', i => setKb(i.keyboardHeight || 0));
-    KB.addListener('keyboardWillHide', () => setKb(0));
+    KB.addListener('keyboardWillShow', i => { if(!nativeKb) setKb(i.keyboardHeight || 0); });
+    KB.addListener('keyboardDidShow', i => { if(!nativeKb) setKb(i.keyboardHeight || 0); });
+    KB.addListener('keyboardWillHide', () => { if(!nativeKb) setKb(0); });
   }catch(e){}
 } else if(window.visualViewport){
   visualViewport.addEventListener('resize', () => setKb(Math.max(0, window.innerHeight - visualViewport.height)));
 }
 window.addEventListener('resize', () => { if(!root.classList.contains('kb')) H0 = window.innerHeight; });
 document.addEventListener('focusin', e => { if(openEl && openEl.contains(e.target)) setTimeout(revealFocus, 380); });
+let revT = null;
+document.addEventListener('input', e => { if(root.classList.contains('kb') && openEl && openEl.contains(e.target)){ clearTimeout(revT); revT = setTimeout(revealFocus, 60); } });
 
 /* ================= RIPPLE ================= */
 root.addEventListener('pointerdown', e => {
