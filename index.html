@@ -1648,7 +1648,7 @@ function rr(c, x, y, w, h, r){
   c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
 }
 function wDraw(cv, o, d){
-  const c = cv.getContext('2d'), u = Math.min(cv.width / 1200, cv.height / 300), BW = cv.width / u, BH = cv.height / u, ox = (BW - 1200) / 2, oy = (BH - 300) / 2, sc = o.scale / 100;
+  const c = cv.getContext('2d'), u = Math.min(cv.width / 1200, cv.height / 300), BW = cv.width / u, BH = cv.height / u, CW = Math.max(1200, BW), EX = CW - 1200, RX = CW - 70, ox = (BW - CW) / 2, oy = (BH - 300) / 2, sc = o.scale / 100;
   const dark = o.ink !== 'black', INK = dark ? '#fff' : '#000', INV = dark ? '#000' : '#fff', rgb = dark ? '255,255,255' : '0,0,0';
   const ink = a => `rgba(${rgb},${a})`, A = o.alpha / 100, R = BH / 2 * o.radius / 100;
   const base = dark ? '24,24,27' : '250,250,252', SOLID = dark ? '#141416' : '#ececef';
@@ -1692,20 +1692,20 @@ function wDraw(cv, o, d){
   const st = d.steps, n = d.n, r = d.r, name = r ? r.name : 'Ma routine', p = d.p, P = 70, now = Date.now();
   const cur = d.cur, pct = d.pct, pc = Math.round(pct * 100) + '%';
   const stepEnd = d.run && cur ? d.run.st + (+cur.dur || 1) * 60000 : 0;
-  const noSteps = () => SUB(r ? 'Ajoute des étapes dans Rituel' : 'Crée ta routine dans Rituel', 600, 162, 1000, 'center');
+  const noSteps = () => SUB(r ? 'Ajoute des étapes dans Rituel' : 'Crée ta routine dans Rituel', CW / 2, 162, 1000 + EX, 'center');
 
   switch(o.style){
     case 1:
       EM(cur && cur.emoji ? cur.emoji : (d.doneToday ? '🏆' : '🌅'), 125, 152, 80);
       BIG(`${d.idx}/${n}`, 215, 160);
-      SUB(!r ? 'Crée ta routine dans Rituel' : d.run ? `${cur.title} · en cours` : d.doneToday ? `${name} · terminée` : `${name} · pas commencée`, 217, 214, 720);
-      RING(1052, 150, 74, pct, pc);
+      SUB(!r ? 'Crée ta routine dans Rituel' : d.run ? `${cur.title} · en cours` : d.doneToday ? `${name} · terminée` : `${name} · pas commencée`, 217, 214, 720 + EX);
+      RING((RX - 78), 150, 74, pct, pc);
       break;
     case 2:
       ICON('M8 3.5h8a4.5 4.5 0 0 1 4.5 4.5v8a4.5 4.5 0 0 1-4.5 4.5H8A4.5 4.5 0 0 1 3.5 16V8A4.5 4.5 0 0 1 8 3.5zM8 12.5l2.8 2.8L16 9.8', 86, 112, 76);
       BIG(String(p.done), 210, 160, `/ ${p.total}`);
-      SUB(p.total ? 'tâches faites aujourd’hui' : 'aucune tâche aujourd’hui', 212, 214, 720);
-      RING(1052, 150, 74, p.pct, Math.round(p.pct * 100) + '%');
+      SUB(p.total ? 'tâches faites aujourd’hui' : 'aucune tâche aujourd’hui', 212, 214, 720 + EX);
+      RING((RX - 78), 150, 74, p.pct, Math.round(p.pct * 100) + '%');
       break;
     case 3: {
       let top, item, pl = '';
@@ -1716,25 +1716,25 @@ function wDraw(cv, o, d){
       }
       else if(d.doneToday){ top = name; item = 'Terminée, bravo'; pl = '✓'; }
       else { top = d.times[0] ? `Première étape à ${d.times[0]}` : 'Première étape'; item = st[0]; pl = fmtDur(st[0].dur); }
-      const pw = pl ? PILL(pl, 1130, 150, true) : 0;
-      SUB(top, P, 122, 1060 - pw - 40);
-      T(typeof item === 'object' ? `${item.emoji ? item.emoji + '  ' : ''}${item.title}` : item, P, 196, 56, {max: 1060 - pw - 40});
+      const pw = pl ? PILL(pl, RX, 150, true) : 0;
+      SUB(top, P, 122, (RX - P) - pw - 40);
+      T(typeof item === 'object' ? `${item.emoji ? item.emoji + '  ' : ''}${item.title}` : item, P, 196, 56, {max: (RX - P) - pw - 40});
       break;
     }
     case 4: {
       ICON('M12 2.5c1 4 6 6.5 6 12a6 6 0 0 1-12 0c0-3 1.7-5 3-6.2 0 2 1 3.2 2.2 3.2C11 7.5 10 5.5 12 2.5z', 78, 106, 86);
       BIG(String(d.streak), 205, 150, d.streak > 1 ? 'jours' : 'jour');
       d.month.slice(-7).forEach((v,i) => dot(220 + i*44, 206, 13, v > 0 ? INK : ink(.16)));
-      SUB('Record', 1130, 128, 0, 'right');
-      T(`${d.best} j`, 1130, 196, 56, {al:'right'});
+      SUB('Record', RX, 128, 0, 'right');
+      T(`${d.best} j`, RX, 196, 56, {al:'right'});
       break;
     }
     case 5: {
-      T(name, P, 108, 44, {max: 700});
-      if(!n){ SUB('Ajoute des étapes dans Rituel', P, 200, 1000); break; }
+      T(name, P, 108, 44, {max: 700 + EX});
+      if(!n){ SUB('Ajoute des étapes dans Rituel', P, 200, 1000 + EX); break; }
       const elapsed = st.slice(0, d.idx).reduce((a,s) => a + (+s.dur || 0), 0) + (d.run ? Math.min(+cur.dur || 0, Math.floor((now - d.run.st) / 60000)) : 0);
-      SUB(`${elapsed} / ${d.total} min`, 1130, 108, 0, 'right');
-      const gap = 12, w = (1060 - gap * (n - 1)) / n;
+      SUB(`${elapsed} / ${d.total} min`, RX, 108, 0, 'right');
+      const gap = 12, w = ((RX - P) - gap * (n - 1)) / n;
       st.forEach((s,i) => {
         const x = P + i * (w + gap), live = d.run && i === d.idx;
         rr(c, x, 140, w, 14, 7); c.fillStyle = ink(.16); c.fill();
@@ -1747,9 +1747,9 @@ function wDraw(cv, o, d){
     case 6: {
       if(!n){ noSteps(); break; }
       const k = Math.min(5, n), s0 = Math.max(0, Math.min(d.idx - 2, n - k)), ci = d.run ? d.idx : (d.doneToday ? -1 : 0);
-      c.strokeStyle = ink(.18); c.lineWidth = 4; c.beginPath(); c.moveTo(110, 160); c.lineTo(1090, 160); c.stroke();
+      c.strokeStyle = ink(.18); c.lineWidth = 4; c.beginPath(); c.moveTo(110, 160); c.lineTo(CW - 110, 160); c.stroke();
       for(let j = 0; j < k; j++){
-        const i = s0 + j, s = st[i], x = k === 1 ? 600 : 110 + j * (980 / (k - 1)), done = i < d.idx;
+        const i = s0 + j, s = st[i], x = k === 1 ? CW / 2 : 110 + j * ((CW - 220) / (k - 1)), done = i < d.idx;
         if(i === ci){ dot(x, 160, 22, SOLID); c.lineWidth = 7; c.strokeStyle = INK; c.stroke(); }
         else if(done) dot(x, 160, 14, INK);
         else { dot(x, 160, 13, SOLID); c.lineWidth = 4; c.strokeStyle = ink(.5); c.stroke(); }
@@ -1763,26 +1763,26 @@ function wDraw(cv, o, d){
       const f = stepEnd ? Math.max(0, (stepEnd - now) / ((+cur.dur || 1) * 60000)) : 1;
       if(f > 0){ c.strokeStyle = INK; c.beginPath(); c.arc(160, 150, 96, -Math.PI/2, -Math.PI/2 + Math.PI*2*f); c.stroke(); }
       EM(cur && cur.emoji ? cur.emoji : '⏱️', 160, 154, 62);
-      if(stepEnd){ BIG(hm(stepEnd), 300, 160); SUB(`fin d’étape · ${cur.title}`, 302, 214, 820); }
-      else if(cur){ BIG(fmtDur(cur.dur), 300, 160); SUB(`${cur.title} · à lancer`, 302, 214, 820); }
-      else { BIG(d.doneToday ? 'Fini' : '—', 300, 160); SUB(d.doneToday ? 'routine terminée' : 'aucune étape', 302, 214, 820); }
+      if(stepEnd){ BIG(hm(stepEnd), 300, 160); SUB(`fin d’étape · ${cur.title}`, 302, 214, 820 + EX); }
+      else if(cur){ BIG(fmtDur(cur.dur), 300, 160); SUB(`${cur.title} · à lancer`, 302, 214, 820 + EX); }
+      else { BIG(d.doneToday ? 'Fini' : '—', 300, 160); SUB(d.doneToday ? 'routine terminée' : 'aucune étape', 302, 214, 820 + EX); }
       break;
     }
     case 8: {
       ICON('M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z', 78, 106, 86);
       const q = d.pri, t = today();
       if(q){
-        const lt = q.date && q.date < t, pw = PILL(lt ? 'En retard' : q.date === t ? 'Aujourd’hui' : 'À faire', 1130, 150, !lt), mx = 1130 - pw - 230;
+        const lt = q.date && q.date < t, pw = PILL(lt ? 'En retard' : q.date === t ? 'Aujourd’hui' : 'À faire', RX, 150, !lt), mx = RX - pw - 230;
         T(q.title, 200, 146, 52, {max: mx});
         SUB([q.date ? dateLabel(q.date) : 'Quand je veux', q.important ? 'important' : '', q.time || ''].filter(Boolean).join(' · '), 200, 200, mx);
-      } else { T('Aucune tâche en attente', 200, 146, 52, {max: 900}); SUB('Profite de ton temps libre', 200, 200, 900); }
+      } else { T('Aucune tâche en attente', 200, 146, 52, {max: 900 + EX}); SUB('Profite de ton temps libre', 200, 200, 900 + EX); }
       break;
     }
     case 9: {
       const past = d.week.filter(v => v >= 0), wp = past.length ? Math.round(past.reduce((a,v) => a + v, 0) / past.length * 100) : 0, ti = (new Date().getDay() + 6) % 7;
-      BIG(wp + '%', P, 160); SUB('de ta semaine', P + 2, 214, 520);
+      BIG(wp + '%', P, 160); SUB('de ta semaine', P + 2, 214, 520 + EX);
       d.week.forEach((v,i) => {
-        const x = 760 + i * 54, h = v < 0 ? 16 : Math.max(16, v * 140);
+        const x = RX - 370 + i * 54, h = v < 0 ? 16 : Math.max(16, v * 140);
         rr(c, x, 220 - h, 34, h, 10); c.fillStyle = v < 0 ? ink(.12) : v === 0 ? ink(.25) : i === ti ? INK : ink(.8); c.fill();
         T('LMMJVSD'[i], x + 17, 264, 26, {al:'center', col: i === ti ? INK : ink(.35)});
       });
@@ -1790,13 +1790,13 @@ function wDraw(cv, o, d){
     }
     case 10: {
       d.month.forEach((v,i) => { rr(c, P + (i % 15) * 54, 98 + Math.floor(i / 15) * 58, 44, 44, 10); c.fillStyle = v <= 0 ? ink(.08) : v < .5 ? ink(.3) : v < .99 ? ink(.62) : INK; c.fill(); });
-      T(String(d.month.filter(v => v > 0).length), 1130, 160, 84, {al:'right'});
-      SUB('jours actifs', 1130, 212, 0, 'right');
+      T(String(d.month.filter(v => v > 0).length), RX, 160, 84, {al:'right'});
+      SUB('jours actifs', RX, 212, 0, 'right');
       break;
     }
     case 11: {
-      const pts = d.month.slice(-7).map(v => Math.max(0, v)), xs = pts.map((_,i) => 520 + i * (620 / 6)), ys = pts.map(v => 250 - v * 175);
-      c.beginPath(); c.moveTo(xs[0], 300); xs.forEach((x,i) => c.lineTo(x, ys[i])); c.lineTo(1200 + ox, ys[6]); c.lineTo(1200 + ox, 300 + oy); c.closePath(); c.fillStyle = ink(.07); c.fill();
+      const pts = d.month.slice(-7).map(v => Math.max(0, v)), xs = pts.map((_,i) => CW - 680 + i * (620 / 6)), ys = pts.map(v => 250 - v * 175);
+      c.beginPath(); c.moveTo(xs[0], 300); xs.forEach((x,i) => c.lineTo(x, ys[i])); c.lineTo(CW + 200, ys[6]); c.lineTo(CW + 200, 300 + oy); c.closePath(); c.fillStyle = ink(.07); c.fill();
       c.beginPath(); xs.forEach((x,i) => i ? c.lineTo(x, ys[i]) : c.moveTo(x, ys[i])); c.strokeStyle = INK; c.lineWidth = 9; c.lineJoin = 'round'; c.lineCap = 'round'; c.stroke();
       let mi = 0; ys.forEach((y,i) => { if(y <= ys[mi]) mi = i; });
       const fx = xs[mi], fy = ys[mi];
@@ -1804,7 +1804,7 @@ function wDraw(cv, o, d){
       c.beginPath(); c.moveTo(fx, fy - 58); c.lineTo(fx + 34, fy - 47); c.lineTo(fx, fy - 36); c.closePath(); c.fillStyle = INK; c.fill();
       dot(fx, fy, 13, INK);
       BIG(d.last ? fmtDur(d.last.dur) : Math.round(pts[6] * 100) + '%', P, 132);
-      SUB(d.last ? 'dernière routine' : 'aujourd’hui', P + 2, 184, 420);
+      SUB(d.last ? 'dernière routine' : 'aujourd’hui', P + 2, 184, 420 + EX);
       break;
     }
     case 12: {
@@ -1816,14 +1816,14 @@ function wDraw(cv, o, d){
       else if(d.run){ t1 = 'Reprendre'; t2 = `étape ${d.idx + 1}/${n} · ${cur.title}`; }
       else if(d.doneToday){ t1 = `${name} · faite`; t2 = d.last ? `à ${hm(d.last.ts)} · ${fmtDur(d.last.dur)}` : ''; }
       else { t1 = name; t2 = `${plural(n,'étape')} · ${fmtDur(d.total)}${r.time ? ` · ${r.time} → ${addMin(r.time, d.total)}` : ''}`; }
-      T(t1, 272, 146, 54, {max: 860}); SUB(t2, 272, 200, 860);
+      T(t1, 272, 146, 54, {max: 860 + EX}); SUB(t2, 272, 200, 860 + EX);
       break;
     }
     case 13: {
-      const half = (cx, pr, lab, big, sub) => { RING(cx, 150, 62, pr, lab, 11); T(big, cx + 92, 146, 56, {max: 330}); SUB(sub, cx + 92, 198, 330); };
+      const half = (cx, pr, lab, big, sub) => { RING(cx, 150, 62, pr, lab, 11); T(big, cx + 92, 146, 56, {max: 330 + EX / 2}); SUB(sub, cx + 92, 198, 330 + EX / 2); };
       half(140, pct, cur && cur.emoji ? cur.emoji : (d.doneToday ? '✓' : '•'), `${d.idx}/${n}`, 'Routine');
-      c.fillStyle = ink(.12); c.fillRect(599, 90, 2, 120);
-      half(700, p.pct, '✓', `${p.done}/${p.total}`, 'Tâches');
+      c.fillStyle = ink(.12); c.fillRect(CW / 2 - 1, 90, 2, 120);
+      half(CW / 2 + 100, p.pct, '✓', `${p.done}/${p.total}`, 'Tâches');
       break;
     }
     case 14: {
@@ -1832,10 +1832,10 @@ function wDraw(cv, o, d){
       else if(d.doneToday && d.last){ a = hm(d.last.ts - d.last.dur * 60000); la = 'début'; b = hm(d.last.ts); lb = 'fin'; }
       else if(r && r.time){ a = r.time; la = 'début'; b = addMin(r.time, d.total); lb = 'fin'; }
       else { a = fmtDur(d.total); la = 'durée'; b = String(n); lb = n > 1 ? 'étapes' : 'étape'; }
-      BIG(a, P, 160); SUB(la, P + 2, 214, 420);
+      BIG(a, P, 160); SUB(la, P + 2, 214, 420 + EX);
       c.strokeStyle = ink(.4); c.lineWidth = 5; c.lineCap = 'round'; c.lineJoin = 'round';
-      c.beginPath(); c.moveTo(560, 132); c.lineTo(640, 132); c.moveTo(618, 110); c.lineTo(640, 132); c.lineTo(618, 154); c.stroke();
-      T(b, 1130, 160, 96, {al:'right'}); SUB(lb, 1130, 214, 0, 'right');
+      c.beginPath(); c.moveTo(CW / 2 - 40, 132); c.lineTo(CW / 2 + 40, 132); c.moveTo(CW / 2 + 18, 110); c.lineTo(CW / 2 + 40, 132); c.lineTo(CW / 2 + 18, 154); c.stroke();
+      T(b, RX, 160, 96, {al:'right'}); SUB(lb, RX, 214, 0, 'right');
       break;
     }
     case 15: {
@@ -1849,14 +1849,14 @@ function wDraw(cv, o, d){
         const w = T(it.t, P + 44, y + 2, 36, {w:700, base:'middle', col: it.x ? ink(.35) : INK, max: 820});
         if(it.x){ c.fillStyle = ink(.35); c.fillRect(P + 44, y, w, 3); }
       });
-      T(String(p.left.length), 1130, 182, 96, {al:'right'});
+      T(String(p.left.length), RX, 182, 96, {al:'right'});
       break;
     }
     case 16: {
       if(!n){ noSteps(); break; }
       const m = Math.min(n, 8), s0 = Math.max(0, Math.min(d.idx - 3, n - m)), ci = d.run ? d.idx : -1;
       for(let j = 0; j < m; j++){
-        const i = s0 + j, s = st[i], x = m === 1 ? 600 : 110 + j * (980 / (m - 1)), done = i < d.idx, isC = i === ci;
+        const i = s0 + j, s = st[i], x = m === 1 ? CW / 2 : 110 + j * ((CW - 220) / (m - 1)), done = i < d.idx, isC = i === ci;
         c.save(); if(!done && !isC){ c.globalAlpha = .3; c.filter = 'grayscale(1)'; }
         EM(s.emoji || String(i + 1), x, 146, isC ? 82 : 62);
         c.restore();
@@ -1866,7 +1866,7 @@ function wDraw(cv, o, d){
     }
     case 17: {
       c.font = F(180); c.lineWidth = 4; c.strokeStyle = INK; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
-      c.strokeText(pc, P, 222); const hw = c.measureText(pc).width, mx = 1130 - P - hw - 40;
+      c.strokeText(pc, P, 222); const hw = c.measureText(pc).width, mx = RX - P - hw - 40;
       T(d.doneToday && !d.run ? 'routine faite' : 'de la routine', P + hw + 40, 146, 50, {max: mx});
       const lft = n - d.idx;
       SUB(!n ? 'aucune étape' : lft <= 0 ? 'bravo' : `${plural(lft, 'étape')} restante${lft > 1 ? 's' : ''}`, P + hw + 42, 200, mx);
@@ -1878,8 +1878,8 @@ function wDraw(cv, o, d){
       else if(d.run){ const lft = n - d.idx; m = lft === 1 ? 'Dernière étape. Courage.' : pct >= .5 ? `Plus que ${lft}. Tu y es presque.` : `C’est parti. Encore ${lft}.`; }
       else if(d.doneToday) m = 'Routine bouclée. Bravo.';
       else m = n > 1 ? `${n} étapes t’attendent.` : 'Une étape t’attend.';
-      T(m, P, 146, 50, {max: 860}); SUB(name, P + 2, 200, 860);
-      RING(1052, 150, 74, pct, '⚡');
+      T(m, P, 146, 50, {max: 860 + EX}); SUB(name, P + 2, 200, 860 + EX);
+      RING((RX - 78), 150, 74, pct, '⚡');
       break;
     }
     case 19: {
@@ -1898,11 +1898,11 @@ function wDraw(cv, o, d){
       else { c.beginPath(); c.arc(150, 150, 74, 0, Math.PI*2); c.lineWidth = 5; c.strokeStyle = ink(.3); c.stroke(); EM(st[0] && st[0].emoji ? st[0].emoji : '🌅', 150, 154, 56); }
       if(ok){
         const diff = d.total - d.last.dur;
-        T(`Routine terminée à ${hm(d.last.ts)}`, 262, 146, 50, {max: 870});
-        SUB(`${fmtDur(d.last.dur)} · ${diff > 0 ? diff + ' min d’avance' : diff < 0 ? (-diff) + ' min de plus' : 'pile à l’heure'}${d.streak ? ' · 🔥 ' + d.streak + ' j' : ''}`, 264, 200, 870);
+        T(`Routine terminée à ${hm(d.last.ts)}`, 262, 146, 50, {max: 870 + EX});
+        SUB(`${fmtDur(d.last.dur)} · ${diff > 0 ? diff + ' min d’avance' : diff < 0 ? (-diff) + ' min de plus' : 'pile à l’heure'}${d.streak ? ' · 🔥 ' + d.streak + ' j' : ''}`, 264, 200, 870 + EX);
       } else {
-        T(r ? 'Routine pas encore faite' : 'Crée ta routine', 262, 146, 50, {max: 870});
-        SUB(r ? `${plural(n,'étape')} · ${fmtDur(d.total)}` : 'dans Rituel', 264, 200, 870);
+        T(r ? 'Routine pas encore faite' : 'Crée ta routine', 262, 146, 50, {max: 870 + EX});
+        SUB(r ? `${plural(n,'étape')} · ${fmtDur(d.total)}` : 'dans Rituel', 264, 200, 870 + EX);
       }
       break;
     }
