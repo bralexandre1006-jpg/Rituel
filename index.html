@@ -111,7 +111,7 @@ svg{display:block}
 .row.dragging{transition:border-color .3s}
 .row:active:not(.dragging){transform:scale(.985)}
 .ico{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#fff;
-  box-shadow:0 6px 18px rgba(47,123,255,.35);transition:transform .3s var(--spring),background .3s,box-shadow .3s,color .3s}
+  transition:transform .3s var(--spring),background .3s,color .3s}
 .ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .ico b{font-size:calc(16px * var(--fs));font-weight:800}
 .ico.ghost{background:var(--accs);color:var(--acc2);box-shadow:inset 0 0 0 2px rgba(92,155,255,.35)}
@@ -173,8 +173,8 @@ button.ico:active{transform:scale(.82)}
   background:radial-gradient(130% 150% at 100% 0%,#2D6BFF 0%,#1238A8 42%,#0A1736 100%);box-shadow:0 18px 44px rgba(30,90,255,.28)}
 .view.active .hero{animation:heroIn .7s .06s var(--soft-spring) both}
 @keyframes heroIn{from{opacity:0;transform:translateY(18px) scale(.97)}}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.09) 50%,transparent 60%);background-size:300% 100%;animation:sweep 7s 2s ease-in-out infinite}
-@keyframes sweep{0%,70%{background-position:120% 0}100%{background-position:-60% 0}}
+.hero::after{content:"";position:absolute;top:0;bottom:0;left:0;width:45%;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,.1),transparent);transform:translateX(-120%) skewX(-12deg);animation:sweep 7s 2s ease-in-out infinite}
+@keyframes sweep{0%,70%{transform:translateX(-120%) skewX(-12deg)}100%{transform:translateX(330%) skewX(-12deg)}}
 .h-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .h-name{font-size:calc(23px * var(--fs));font-weight:800;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
 .h-sub{font-size:calc(13px * var(--fs));font-weight:700;color:rgba(255,255,255,.72);margin-top:5px}
@@ -234,11 +234,39 @@ button.ico:active{transform:scale(.82)}
 .run-go svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .run-skip{flex:none;width:100%;height:50px;margin-top:6px;color:rgba(255,255,255,.6);font-size:calc(15px * var(--fs));font-weight:800}
 
+/* ================= DÉTAILS ================= */
+.ico.emo-i{background:var(--s2);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.row.done .ico.emo-i{background:var(--accs);box-shadow:inset 0 0 0 1.5px rgba(92,155,255,.45)}
+.ico .em{font-style:normal;font-size:calc(22px * var(--fs));line-height:1}
+.ico u{position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;background:var(--acc);border:2px solid var(--s1);display:grid;place-items:center;animation:chkPop .45s var(--spring)}
+.ico u svg{width:10px;height:10px;stroke:#fff;stroke-width:3.6}
+.row.cur .ico::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--acc);animation:ping 1.8s ease-out infinite;pointer-events:none}
+@keyframes ping{from{transform:scale(.85);opacity:.9}to{transform:scale(1.35);opacity:0}}
+.emojis{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}
+.emo{height:46px;border-radius:14px;background:var(--s1);border:1px solid var(--line);font-size:calc(22px * var(--fs));line-height:1;display:grid;place-items:center;transition:background .2s,border-color .2s,transform .3s var(--spring)}
+.emo:active{transform:scale(.88)}
+.emo.on{background:var(--accs);border-color:var(--acc)}
+.emo.num{font-size:calc(17px * var(--fs));font-weight:800;color:var(--ink2)}
+.emo.num.on{color:var(--acc2)}
+.emo.pop{animation:emoPop .5s var(--spring)}
+.emo-in{min-width:0;width:72px;text-align:center;font-size:calc(22px * var(--fs))}
+.run-emo{font-style:normal;font-size:calc(34px * var(--fs));line-height:1;margin-bottom:6px}
+.run-emo.swap{animation:emoPop .6s var(--spring)}
+@keyframes emoPop{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.18) rotate(6deg);opacity:1}100%{transform:none}}
+.dial.ok{animation:dialOk .5s var(--spring)}
+@keyframes dialOk{0%{transform:scale(1)}35%{transform:scale(.94)}100%{transform:scale(1)}}
+.ring.full .fg{stroke:var(--acc2)}
+.ring b.pop{animation:emoPop .6s var(--spring)}
+.h-go,.run-go,.btn,.btn-soft,.addstep,.rchip,.chip,.day,.emo{position:relative;overflow:hidden;isolation:isolate}
+.rip{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;z-index:-1}
+.h-go.ok svg,.h-go:not(.ok) .pl{animation:goIn .6s .4s var(--spring) both}
+@keyframes goIn{from{transform:scale(.4);opacity:0}}
+
 /* ================= BARRE ================= */
 .tfade{position:absolute;left:0;right:0;top:0;height:calc(var(--sat) + 16px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 60%,transparent)}
 .bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 110px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--bg) 55%)}
 .tabbar{position:absolute;left:14px;right:14px;bottom:calc(var(--sab) + 12px);height:68px;border-radius:24px;z-index:20;
-  background:rgba(13,15,21,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line2);
+  background:rgba(11,13,18,.97);border:1px solid var(--line2);
   display:flex;align-items:center;padding:0 6px;transform:translateY(170%);transition:transform .8s var(--spring)}
 #root.app-in .tabbar{transform:none}
 .tab-ind{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:18px;background:var(--accs);transition:transform .5s var(--soft-spring),width .5s var(--soft-spring)}
@@ -262,7 +290,8 @@ button.ico:active{transform:scale(.82)}
 .backdrop.show{opacity:1;pointer-events:auto}
 .sheet{position:absolute;left:0;right:0;bottom:0;z-index:81;max-height:93%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#080A0F;
   border-top:1px solid var(--line2);border-radius:28px 28px 0 0;padding:10px 18px calc(var(--sab) + 22px);transform:translateY(105%);transition:transform .55s var(--soft-spring)}
-.sheet.show{transform:none}
+.sheet.show{transform:translateY(calc(-1 * var(--kb,0px)))}
+#root.kb .sheet{max-height:calc(93% - var(--kb,0px));padding-bottom:20px}
 .sheet::-webkit-scrollbar{display:none}
 .sheet.show>*{animation:rowIn .5s var(--soft-spring) both}
 .sheet.show>*:nth-child(3){animation-delay:.03s}.sheet.show>*:nth-child(4){animation-delay:.06s}.sheet.show>*:nth-child(5){animation-delay:.09s}
@@ -523,7 +552,7 @@ button.line-row:active{transform:scale(.98)}
     <div class="run-body">
       <div class="dial" id="dial">
         <svg viewBox="0 0 200 200"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DB0FF"/><stop offset="1" stop-color="#2F7BFF"/></linearGradient></defs><circle class="bg" cx="100" cy="100" r="94"/><circle class="fg" cx="100" cy="100" r="94"/></svg>
-        <div class="dial-t"><b id="dialT">0:00</b><small id="dialS">restant</small></div>
+        <div class="dial-t"><i class="run-emo" id="runEmo"></i><b id="dialT">0:00</b><small id="dialS">restant</small></div>
       </div>
       <div class="run-step" id="runStep"></div>
       <div class="run-next" id="runNext"></div>
@@ -586,6 +615,9 @@ button.line-row:active{transform:scale(.98)}
       <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="field" id="stField"><textarea id="sTitle" class="tinput" rows="1" placeholder="Me peser" maxlength="80" autocomplete="off" enterkeyhint="done"></textarea></div>
+    <div class="label">Emoji</div>
+    <div class="emojis" id="emoChips"></div>
+    <div class="line-row"><span>Autre emoji</span><input id="sEmo" class="native-input emo-in" maxlength="16" placeholder="😀" autocomplete="off"></div>
     <div class="label">Temps que ça me prend</div>
     <div class="chips" id="durChips" style="margin-top:0"></div>
     <div class="line-row"><span>Autre durée</span><div class="dur-in"><input type="number" id="sDur" class="native-input" min="1" max="240" inputmode="numeric">min</div></div>
@@ -919,7 +951,13 @@ const notesMeta = it => { const n = noteCount(it); return n ? `<em>${IC.note}${n
 const timeMeta = it => it.time ? `<em>${IC.bell}${it.time}</em>` : '';
 const impMeta = it => it.important ? `<em class="amb">${IC.star}Important</em>` : '';
 const swHint = () => S.settings.swiped ? '' : '<p class="swhint"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Touche le rond ou glisse vers la droite</p>';
-function setRing(el, p, txt){ el.style.setProperty('--rp', Math.max(0, Math.min(1, p))); el.querySelector('b').textContent = txt; }
+function setRing(el, p, txt){
+  const b = el.querySelector('b'), full = p >= 1, was = el.classList.contains('full');
+  el.style.setProperty('--rp', Math.max(0, Math.min(1, p)));
+  el.classList.toggle('full', full);
+  if(typeof txt === 'number' && root.classList.contains('app-in')) countTo(b, txt); else { b.textContent = txt; delete b.dataset.v; }
+  if(full && !was && root.classList.contains('app-in')){ b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+}
 
 function taskRow(x, i, done, late, meta){
   const a = anim('tasks', x.id, i);
@@ -1005,7 +1043,7 @@ function renderRoutine(){
       return `<div class="swipe ${a.c}" style="${a.s}" data-id="${s.id}" data-kind="step">
         <div class="sw-bg"><span class="sw-r">Supprimer${IC.trash}</span></div>
         <div class="row ${sDone ? 'done' : ''} ${isCur ? 'cur' : ''}">
-          <span class="ico ${sDone ? '' : 'ghost'}">${sDone ? IC.plain : `<b>${i + 1}</b>`}</span>
+          <span class="ico ${sDone ? '' : 'ghost'} ${s.emoji ? 'emo-i' : ''}">${s.emoji ? `<i class="em">${esc(s.emoji)}</i>${sDone ? `<u>${IC.plain}</u>` : ''}` : sDone ? IC.plain : `<b>${i + 1}</b>`}</span>
           <div class="row-main" data-act="sedit"><div class="row-title">${esc(s.title)}</div><div class="row-meta"><em>${IC.timer}${fmtDur(s.dur)}</em>${st ? `<em>${IC.clock}${st}</em>` : ''}</div></div>
           ${pill}
         </div>
@@ -1045,7 +1083,7 @@ function go(v){
   $$('.view').forEach(el => el.classList.toggle('active', el === next));
   $$('.tab').forEach(el => el.classList.toggle('active', el.dataset.v === v));
   next.scrollTop = 0;
-  animAll = true; renderAll(); moveInd();
+  animAll = true; if(v === 'tasks') renderTasks(); else if(v === 'routine') renderRoutine(); animAll = false; moveInd();
   const ab = $('.add'); ab.classList.toggle('off', v === 'settings'); ab.classList.remove('spin'); void ab.offsetWidth; ab.classList.add('spin');
   if(v === 'settings') renderSettings();
 }
@@ -1230,11 +1268,21 @@ function checkWin(on){
 
 /* ================= ÉTAPES ================= */
 const DURS = [1,2,3,5,10,15,20,30,45,60];
+const EMOS = ['⚖️','💧','🚿','🧘','🤸','💪','🏃','🚶','🦷','🧴','🍳','☕','🥗','💊','📖','✍️','🧠','🎧','🛏️','👔','🧹','🌞','🙏','📵'];
+const EMO_KEYS = [[/pes|balance/,'⚖️'],[/eau|boire|hydrat/,'💧'],[/douche|bain/,'🚿'],[/médit|medit|respir/,'🧘'],[/étir|etir|yoga|stretch/,'🤸'],[/sport|muscu|pompe|workout|gym/,'💪'],[/cour|run|jogg/,'🏃'],[/march|promen/,'🚶'],[/dent/,'🦷'],[/crème|creme|soin|visage|skin/,'🧴'],[/déj|dej|manger|repas|cuisin/,'🍳'],[/café|cafe|thé/,'☕'],[/salade|légume|legume|fruit/,'🥗'],[/vitamin|médic|medic|complément/,'💊'],[/lire|lecture|livre/,'📖'],[/écri|ecri|journal/,'✍️'],[/appren|étud|etud|révis|revis/,'🧠'],[/podcast|musique/,'🎧'],[/lit\b|dormir|sommeil|coucher|réveil|reveil/,'🛏️'],[/habill/,'👔'],[/rang|ménage|menage/,'🧹'],[/soleil|lumière|lumiere/,'🌞'],[/gratitude|prière|priere/,'🙏'],[/écran|ecran|téléphone|telephone/,'📵']];
+const guessEmo = t => { t = (t || '').toLowerCase(); const m = EMO_KEYS.find(([re]) => re.test(t)); return m ? m[1] : ''; };
+const firstEmo = v => { v = (v || '').trim(); if(!v) return ''; if(window.Intl && Intl.Segmenter) return [...new Intl.Segmenter('fr', {granularity:'grapheme'}).segment(v)][0].segment; return [...v][0]; };
+function renderEmo(pop){
+  const list = SF.emo && !EMOS.includes(SF.emo) ? [SF.emo, ...EMOS] : EMOS;
+  $('#emoChips').innerHTML = `<button class="emo num ${!SF.emo ? 'on' : ''}" data-act="emo" data-e="" aria-label="Numéro">#</button>`
+    + list.map(e => `<button class="emo ${SF.emo === e ? 'on' + (pop ? ' pop' : '') : ''}" data-act="emo" data-e="${e}">${e}</button>`).join('');
+}
 let SF = null;
 function openStep(id){
   const r = curR(); if(!r) return;
   const s = id ? r.steps.find(x => x.id === id) : null;
-  SF = {id: s ? s.id : null, title: s ? s.title : '', dur: s ? +s.dur || 5 : 5};
+  SF = {id: s ? s.id : null, title: s ? s.title : '', dur: s ? +s.dur || 5 : 5, emo: s ? s.emoji || '' : '', auto: !s};
+  $('#sEmo').value = '';
   $('#sTitle').value = SF.title;
   $('#sDur').value = SF.dur;
   renderStep();
@@ -1246,8 +1294,14 @@ function renderStep(){
   $('#stTitle').textContent = SF.id ? 'Modifier l’étape' : 'Nouvelle étape';
   $('#durChips').innerHTML = DURS.map(d => `<button class="chip ${SF.dur === d ? 'on' : ''}" data-act="dur" data-d="${d}">${fmtDur(d)}</button>`).join('');
   $('#sDelete').style.display = SF.id ? '' : 'none';
+  renderEmo();
 }
-$('#sTitle').addEventListener('input', e => { if(SF) SF.title = e.target.value.replace(/\n/g, ' '); grow(e.target); });
+$('#sTitle').addEventListener('input', e => {
+  if(!SF) return;
+  SF.title = e.target.value.replace(/\n/g, ' '); grow(e.target);
+  if(SF.auto){ const g = guessEmo(SF.title); if(g !== SF.emo){ SF.emo = g; renderEmo(true); } }
+});
+$('#sEmo').addEventListener('input', e => { const v = firstEmo(e.target.value); if(!SF || !v) return; SF.emo = v; SF.auto = false; renderEmo(true); });
 $('#sTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveStep(); } });
 $('#sDur').addEventListener('input', e => {
   const v = parseInt(e.target.value, 10); if(!SF || !(v > 0)) return;
@@ -1259,8 +1313,8 @@ function saveStep(){
   const title = (SF.title || '').trim();
   if(!title){ shake($('#stField')); return; }
   const was = SF.id;
-  if(was){ const s = r.steps.find(x => x.id === was); if(s){ s.title = title; s.dur = SF.dur; } }
-  else r.steps.push({id:uid(), title, dur:SF.dur});
+  if(was){ const s = r.steps.find(x => x.id === was); if(s){ s.title = title; s.dur = SF.dur; s.emoji = SF.emo || ''; } }
+  else r.steps.push({id:uid(), title, dur:SF.dur, emoji:SF.emo || ''});
   save(); closeSheet(true); flipRender(); queueSync();
   Sound.play('add'); haptic('MEDIUM'); toast(was ? 'Étape modifiée' : 'Étape ajoutée');
 }
@@ -1369,9 +1423,9 @@ function renderRun(swap){
   $('#runName').textContent = r.name;
   $('#runN').textContent = `${i+1}/${n}`;
   $('#segs').innerHTML = r.steps.map((_,j) => `<i class="${j < i ? 'd' : j === i ? 'c' : ''}"></i>`).join('');
-  const el = $('#runStep'); el.textContent = s.title;
-  if(swap){ el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }
-  $('#runNext').innerHTML = nx ? `Ensuite : <b>${esc(nx.title)}</b> · ${fmtDur(nx.dur)}` : 'Dernière étape, tu y es presque';
+  const el = $('#runStep'), em = $('#runEmo'); el.textContent = s.title; em.textContent = s.emoji || ''; em.hidden = !s.emoji;
+  if(swap){ [el, em].forEach(x => { x.classList.remove('swap'); void x.offsetWidth; x.classList.add('swap'); }); const d = $('#dial'); d.classList.remove('ok'); void d.offsetWidth; d.classList.add('ok'); }
+  $('#runNext').innerHTML = nx ? `Ensuite : ${nx.emoji ? esc(nx.emoji) + ' ' : ''}<b>${esc(nx.title)}</b> · ${fmtDur(nx.dur)}` : 'Dernière étape, tu y es presque';
   $('#runGo').innerHTML = IC.plain + (nx ? 'Valider' : 'Terminer la routine');
   $('#runSkip').hidden = false;
   tickRun();
@@ -1406,6 +1460,7 @@ function finishRun(){
   $('#dial').classList.remove('over');
   $('#dial .fg').style.strokeDashoffset = 0;
   $('#dialT').textContent = fmtDur(m);
+  { const em = $('#runEmo'); em.textContent = '🏆'; em.hidden = false; em.classList.remove('swap'); void em.offsetWidth; em.classList.add('swap'); }
   $('#dialS').textContent = 'au total';
   $('#runN').textContent = '✓';
   const st = $('#runStep'); st.textContent = 'Routine terminée !'; st.classList.remove('swap'); void st.offsetWidth; st.classList.add('swap');
@@ -1423,7 +1478,7 @@ async function scheduleStepEnd(){
     if((await notifState()) !== 'granted') return;
     await ensureChannel();
     const nx = r.steps[S.run.idx + 1];
-    await LN.schedule({notifications:[{id:STEP_NID, title:`${s.title} : temps écoulé`, body: nx ? `Valide pour passer à : ${nx.title}` : 'Dernière étape, tu y es presque.', channelId:'rituel', extra:{run:1}, schedule:{at, allowWhileIdle:true}}]});
+    await LN.schedule({notifications:[{id:STEP_NID, title:`${s.emoji ? s.emoji + ' ' : ''}${s.title} : temps écoulé`, body: nx ? `Valide pour passer à : ${nx.emoji ? nx.emoji + ' ' : ''}${nx.title}` : 'Dernière étape, tu y es presque.', channelId:'rituel', extra:{run:1}, schedule:{at, allowWhileIdle:true}}]});
   }catch(e){}
 }
 function cancelStepEnd(){ if(LN){ try{ LN.cancel({notifications:[{id:STEP_NID}]}); }catch(e){} } }
@@ -1646,6 +1701,46 @@ function webTick(){
 }
 setInterval(webTick, 15000);
 
+/* ================= CLAVIER ================= */
+let H0 = window.innerHeight;
+function setKb(h){
+  const k = Math.max(0, Math.round(h - Math.max(0, H0 - window.innerHeight)));
+  document.documentElement.style.setProperty('--kb', k + 'px');
+  root.classList.toggle('kb', h > 0);
+  if(h > 0) setTimeout(revealFocus, 120);
+}
+function revealFocus(){
+  const a = document.activeElement;
+  if(!a || !openEl || !openEl.contains(a) || !a.matches('input,textarea')) return;
+  const r = (a.closest('.field,.line-row') || a).getBoundingClientRect(), s = openEl.getBoundingClientRect();
+  let d = 0;
+  if(r.bottom > s.bottom - 24) d = r.bottom - s.bottom + 24;
+  else if(r.top < s.top + 64) d = r.top - s.top - 64;
+  if(d) openEl.scrollBy({top:d, behavior:'smooth'});
+}
+const KB = plugin('Keyboard');
+if(KB){
+  try{
+    KB.addListener('keyboardWillShow', i => setKb(i.keyboardHeight || 0));
+    KB.addListener('keyboardDidShow', i => setKb(i.keyboardHeight || 0));
+    KB.addListener('keyboardWillHide', () => setKb(0));
+  }catch(e){}
+} else if(window.visualViewport){
+  visualViewport.addEventListener('resize', () => setKb(Math.max(0, window.innerHeight - visualViewport.height)));
+}
+window.addEventListener('resize', () => { if(!root.classList.contains('kb')) H0 = window.innerHeight; });
+document.addEventListener('focusin', e => { if(openEl && openEl.contains(e.target)) setTimeout(revealFocus, 380); });
+
+/* ================= RIPPLE ================= */
+root.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.h-go,.run-go,.btn,.btn-soft,.addstep,.rchip,.chip,.day,.emo'); if(!b || !Element.prototype.animate) return;
+  const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2.2, d = document.createElement('i');
+  d.className = 'rip';
+  d.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX - r.left - s/2}px;top:${e.clientY - r.top - s/2}px`;
+  b.appendChild(d);
+  d.animate([{transform:'scale(0)', opacity:.25}, {transform:'scale(1)', opacity:0}], {duration:600, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish = () => d.remove();
+}, {passive:true});
+
 /* ================= TOAST ================= */
 let toastT, undoFn = null;
 function toast(msg, undo){
@@ -1751,8 +1846,9 @@ root.addEventListener('touchstart', e => {
 root.addEventListener('touchmove', e => {
   const t0 = e.touches[0];
   if(lp && Math.hypot(t0.clientX - lp.x, t0.clientY - lp.y) > 8){ clearTimeout(lp.timer); lp = null; }
-  if(drag){ e.preventDefault(); moveDrag(t0.clientY); }
-}, {passive:false});
+  if(drag) moveDrag(t0.clientY);
+}, {passive:true});
+const blockMove = e => { if(drag && e.cancelable) e.preventDefault(); };
 function stopLongPress(){ if(lp){ clearTimeout(lp.timer); lp = null; } if(drag) endDrag(); }
 root.addEventListener('touchend', stopLongPress);
 root.addEventListener('touchcancel', stopLongPress);
@@ -1763,6 +1859,7 @@ function startDrag(el, y){
   const list = el.parentElement, items = [...list.children], view = el.closest('.view');
   drag = {el, items, view, rects: items.map(n => n.getBoundingClientRect()), from: items.indexOf(el), to: items.indexOf(el), y0: y};
   view.style.overflowY = 'hidden';
+  document.addEventListener('touchmove', blockMove, {passive:false});
   el.classList.add('lifted');
   el.style.transform = 'scale(1.03)';
   suppressUntil = Date.now() + 60000;
@@ -1789,6 +1886,7 @@ function moveDrag(y){
 function endDrag(){
   const d = drag; drag = null; if(!d) return;
   d.view.style.overflowY = '';
+  document.removeEventListener('touchmove', blockMove);
   suppressUntil = Date.now() + 400;
   d.el.classList.remove('lifted');
   if(d.to !== d.from){
@@ -1842,6 +1940,7 @@ root.addEventListener('click', e => {
     case 'rfirst': firstRoutine(); break;
     case 'sadd': haptic(); openStep(null); break;
     case 'sedit': haptic(); openStep(el.closest('[data-id]').dataset.id); break;
+    case 'emo': SF.emo = el.dataset.e; SF.auto = false; $('#sEmo').value = ''; Sound.play('tap'); haptic(); renderEmo(true); break;
     case 'dur': SF.dur = +el.dataset.d; $('#sDur').value = SF.dur; Sound.play('tap'); haptic(); renderStep(); break;
     case 'ssave': saveStep(); break;
     case 'sdelete': { const id = SF && SF.id; if(!id) break; closeSheet(true); setTimeout(() => removeStep(id), 250); break; }
