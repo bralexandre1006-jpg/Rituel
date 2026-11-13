@@ -271,6 +271,7 @@ button.ico:active{transform:scale(.82)}
 #editor .collapse{max-height:110px}
 #editor .collapse.hide{max-height:0}
 .row-meta .rep{color:var(--acc2)}
+.lr-ico svg.st{fill:none;stroke:var(--acc2);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
 /* ================= WIDGET ================= */
 .sheet.tall{height:93%}
@@ -622,17 +623,14 @@ button.line-row:active{transform:scale(.98)}
     </div>
     <div class="field" id="titleField"><textarea id="fTitle" class="tinput" rows="1" placeholder="Appeler le garage" maxlength="140" autocomplete="off" enterkeyhint="done"></textarea></div>
     <div class="collapse" id="fDateWrap"><div class="line-row">
-      <div><div class="lr-t">Date</div><div class="lr-s" id="fDateHint">Vide : quand je veux</div></div>
+      <span class="lr-ico"><svg class="st" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></span>
       <div class="dwrap"><input type="date" id="fDate" class="native-input" aria-label="Date"><button class="dclear" data-act="dclear" id="fDateClear" aria-label="Effacer la date"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     </div></div>
-    <div class="label">Répéter</div>
-    <div class="chips" id="repChips" style="margin-top:0">
-      <button class="chip" data-act="rep" data-p="none">Jamais</button>
-      <button class="chip" data-act="rep" data-p="all">Chaque jour</button>
-      <button class="chip" data-act="rep" data-p="week">En semaine</button>
-      <button class="chip" data-act="rep" data-p="we">Week-end</button>
+    <div class="line-row">
+      <div class="lr-ico"><svg class="st" viewBox="0 0 24 24"><path d="M17 2.5l3 3-3 3"/><path d="M4 11V9.5a4 4 0 0 1 4-4h12"/><path d="M7 21.5l-3-3 3-3"/><path d="M20 13v1.5a4 4 0 0 1-4 4H4"/></svg><span class="lr-t">Récurrente</span></div>
+      <button class="switch" id="fRec" data-act="rec" aria-label="Récurrente"></button>
     </div>
-    <div class="days" id="tDays" style="margin-top:10px"></div>
+    <div class="collapse" id="tDaysWrap"><div class="days" id="tDays" style="margin-top:10px"></div></div>
     <div class="label">Notes</div>
     <div class="field notes-field"><textarea id="fNotes" class="ninput" rows="2" placeholder="- Une idée par ligne"></textarea></div>
     <button class="btn" data-act="save">Enregistrer</button>
@@ -1231,6 +1229,7 @@ function openEditor(id){
   F = it ? JSON.parse(JSON.stringify(it)) : {id:null, type:'task', title:'', date:''};
   if(F.date === undefined) F.date = '';
   F.days = Array.isArray(F.days) ? F.days.slice() : [];
+  F.rec = F.days.length > 0;
   F.notes = F.notes || '';
   $('#fTitle').value = F.title;
   $('#fNotes').value = F.notes;
@@ -1242,13 +1241,11 @@ function openEditor(id){
 function renderEditor(){
   const isNew = !F.id;
   $('#edTitle').textContent = isNew ? 'Nouvelle tâche' : 'Modifier';
-  const rec = F.days.length > 0, s = [...F.days].sort().join(',');
-  $('#fDateWrap').classList.toggle('hide', rec);
+  $('#fDateWrap').classList.toggle('hide', F.rec);
   $('#fDate').value = F.date || '';
   $('#fDateClear').hidden = !F.date;
-  $('#fDateHint').textContent = F.date ? dateLabel(F.date, true) : 'Vide : quand je veux';
-  $('#repChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
-    (c.dataset.p==='none' && !rec) || (c.dataset.p==='all' && F.days.length===7) || (c.dataset.p==='week' && s==='1,2,3,4,5') || (c.dataset.p==='we' && s==='0,6')));
+  $('#fRec').classList.toggle('on', F.rec);
+  $('#tDaysWrap').classList.toggle('hide', !F.rec);
   $('#tDays').innerHTML = DAY_ORDER.map(d => `<button class="day ${F.days.includes(d)?'on':''}" data-act="tday" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
   $('#fDelete').style.display = isNew ? 'none' : '';
 }
@@ -1260,6 +1257,8 @@ $('#fDate').addEventListener('change', e => { F.date = e.target.value; renderEdi
 async function saveItem(){
   const title = (F.title || '').trim();
   if(!title){ shake($('#titleField')); return; }
+  if(F.rec && !F.days.length){ shake($('#tDays')); toast('Choisis au moins un jour'); return; }
+  if(!F.rec) F.days = [];
   const old = F.id ? S.items.find(x => x.id === F.id) : null;
   const item = {
     id: F.id || uid(), type: 'task', title,
@@ -2384,7 +2383,7 @@ root.addEventListener('click', e => {
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
     case 'dclear': F.date = ''; Sound.play('tap'); haptic(); renderEditor(); break;
-    case 'rep': F.days = {none:[], all:[0,1,2,3,4,5,6], week:[1,2,3,4,5], we:[0,6]}[el.dataset.p].slice(); Sound.play('tap'); haptic(); renderEditor(); break;
+    case 'rec': F.rec = !F.rec; Sound.play('toggle'); haptic(); renderEditor(); break;
     case 'tday': { const d = +el.dataset.d; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; Sound.play('tap'); haptic(); renderEditor(); break; }
     case 'save': saveItem(); break;
     case 'delete': { const id = F.id; if(!id) break; closeSheet(true); setTimeout(() => removeItem(id), 250); break; }
