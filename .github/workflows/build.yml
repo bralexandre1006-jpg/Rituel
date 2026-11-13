@@ -118,7 +118,6 @@ jobs:
               '        <receiver android:name=".RituelWidget" android:exported="false">\n'
               '            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n'
               '            <meta-data android:name="android.appwidget.provider" android:resource="@xml/rituel_widget_info" />\n'
-              '            <meta-data android:name="miuiWidget" android:value="true" />\n'
               '        </receiver>\n'
               '        <provider android:name=".WidgetImageProvider" android:authorities="${applicationId}.widgetimg" android:exported="true" />\n'
           )

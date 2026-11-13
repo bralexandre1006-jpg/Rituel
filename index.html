@@ -1556,7 +1556,7 @@ function cancelStepEnd(){ if(LN){ try{ LN.cancel({notifications:[{id:STEP_NID}]}
 /* ================= SETTINGS ================= */
 async function renderSettings(){
   const s = S.settings;
-  fontsReady.then(() => wDraw(sizeCv($('#wMini'), 600), wset(), wData()));
+  fontsReady.then(() => wDraw($('#wMini'), wset(), wData()));
   $$('[data-act="sw"]').forEach(b => b.classList.toggle('on', !!s[b.dataset.k]));
   $('#sDefTime').value = s.defTime;
   $('#sMorning').value = s.morningTime;
@@ -1648,26 +1648,25 @@ function rr(c, x, y, w, h, r){
   c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
 }
 function wDraw(cv, o, d){
-  const c = cv.getContext('2d'), u = Math.min(cv.width / 1200, cv.height / 300), BW = cv.width / u, BH = cv.height / u, ox = (BW - 1200) / 2, oy = (BH - 300) / 2, sc = o.scale / 100;
+  const c = cv.getContext('2d'), u = cv.width / 1200, sc = o.scale / 100;
   const dark = o.ink !== 'black', INK = dark ? '#fff' : '#000', INV = dark ? '#000' : '#fff', rgb = dark ? '255,255,255' : '0,0,0';
-  const ink = a => `rgba(${rgb},${a})`, A = o.alpha / 100, R = BH / 2 * o.radius / 100;
+  const ink = a => `rgba(${rgb},${a})`, A = o.alpha / 100, R = 150 * o.radius / 100;
   const base = dark ? '24,24,27' : '250,250,252', SOLID = dark ? '#141416' : '#ececef';
-  c.setTransform(u, 0, 0, u, 0, 0); c.clearRect(0, 0, BW, BH);
-  c.save(); rr(c, 2, 2, BW - 4, BH - 4, R); c.clip();
-  c.fillStyle = `rgba(${base},${A})`; c.fillRect(0, 0, BW, BH);
+  c.setTransform(u, 0, 0, u, 0, 0); c.clearRect(0, 0, 1200, 300);
+  c.save(); rr(c, 2, 2, 1196, 296, R); c.clip();
+  c.fillStyle = `rgba(${base},${A})`; c.fillRect(0, 0, 1200, 300);
   if(o.glass !== 'solid'){
-    const g = c.createLinearGradient(0, 0, 0, BH);
+    const g = c.createLinearGradient(0, 0, 0, 300);
     g.addColorStop(0, `rgba(255,255,255,${o.glass === 'liquid' ? .17 : .09})`); g.addColorStop(.55, 'rgba(255,255,255,.02)'); g.addColorStop(1, `rgba(255,255,255,${o.glass === 'liquid' ? .07 : 0})`);
-    c.fillStyle = g; c.fillRect(0, 0, BW, BH);
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
   }
   if(o.glass === 'liquid'){
     let g = c.createRadialGradient(260, -40, 10, 260, -40, 560); g.addColorStop(0, 'rgba(255,255,255,.2)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-    c.fillStyle = g; c.fillRect(0, 0, BW, BH);
-    g = c.createLinearGradient(0, 0, BW, BH); g.addColorStop(.5, 'rgba(255,255,255,0)'); g.addColorStop(.58, 'rgba(255,255,255,.08)'); g.addColorStop(.64, 'rgba(255,255,255,0)');
-    c.fillStyle = g; c.fillRect(0, 0, BW, BH);
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
+    g = c.createLinearGradient(0, 0, 1200, 300); g.addColorStop(.5, 'rgba(255,255,255,0)'); g.addColorStop(.58, 'rgba(255,255,255,.08)'); g.addColorStop(.64, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
   }
 
-  c.translate(ox, oy);
   const F = (s, w) => `${w || 800} ${Math.round(s * sc)}px Manrope, system-ui, sans-serif`;
   const fit = (s, max) => { s = String(s); if(!max || c.measureText(s).width <= max) return s; while(s.length > 1 && c.measureText(s + '…').width > max) s = s.slice(0, -1); return s.trimEnd() + '…'; };
   const T = (s, x, y, size, q) => { q = q || {}; c.font = F(size, q.w); c.fillStyle = q.col || INK; c.textAlign = q.al || 'left'; c.textBaseline = q.base || 'alphabetic'; const v = fit(s, q.max); c.fillText(v, x, y); return c.measureText(v).width; };
@@ -1796,7 +1795,7 @@ function wDraw(cv, o, d){
     }
     case 11: {
       const pts = d.month.slice(-7).map(v => Math.max(0, v)), xs = pts.map((_,i) => 520 + i * (620 / 6)), ys = pts.map(v => 250 - v * 175);
-      c.beginPath(); c.moveTo(xs[0], 300); xs.forEach((x,i) => c.lineTo(x, ys[i])); c.lineTo(1200 + ox, ys[6]); c.lineTo(1200 + ox, 300 + oy); c.closePath(); c.fillStyle = ink(.07); c.fill();
+      c.beginPath(); c.moveTo(xs[0], 300); xs.forEach((x,i) => c.lineTo(x, ys[i])); c.lineTo(1200, ys[6]); c.lineTo(1200, 300); c.closePath(); c.fillStyle = ink(.07); c.fill();
       c.beginPath(); xs.forEach((x,i) => i ? c.lineTo(x, ys[i]) : c.moveTo(x, ys[i])); c.strokeStyle = INK; c.lineWidth = 9; c.lineJoin = 'round'; c.lineCap = 'round'; c.stroke();
       let mi = 0; ys.forEach((y,i) => { if(y <= ys[mi]) mi = i; });
       const fx = xs[mi], fy = ys[mi];
@@ -1883,11 +1882,11 @@ function wDraw(cv, o, d){
       break;
     }
     case 19: {
-      const tot = n + p.total, dp = tot ? (d.idx + p.done) / tot : 0, x0 = -ox + BW * dp;
-      const wave = fresh => { if(fresh) c.beginPath(); c.moveTo(-ox, -oy); c.lineTo(x0, -oy); for(let y = -oy; y <= 300 + oy; y += 10) c.lineTo(x0 + 14 * Math.sin(y / 300 * Math.PI * 4), y); c.lineTo(-ox, 300 + oy); c.closePath(); };
+      const tot = n + p.total, dp = tot ? (d.idx + p.done) / tot : 0, x0 = 1200 * dp;
+      const wave = fresh => { if(fresh) c.beginPath(); c.moveTo(0, 0); c.lineTo(x0, 0); for(let y = 0; y <= 300; y += 10) c.lineTo(x0 + 14 * Math.sin(y / 300 * Math.PI * 4), y); c.lineTo(0, 300); c.closePath(); };
       if(dp > 0){ wave(true); c.fillStyle = dark ? 'rgba(255,255,255,.92)' : 'rgba(0,0,0,.88)'; c.fill(); }
       const label = col => { T(Math.round(dp * 100) + '%', 215, 160, 96, {col}); T('de ta journée faite', 217, 214, 34, {w:700, col}); };
-      c.save(); c.beginPath(); c.rect(-ox, -oy, BW, BH); if(dp > 0) wave(false); c.clip('evenodd'); label(INK); c.restore();
+      c.save(); c.beginPath(); c.rect(0, 0, 1200, 300); if(dp > 0) wave(false); c.clip('evenodd'); label(INK); c.restore();
       if(dp > 0){ c.save(); wave(true); c.clip(); label(INV); c.restore(); }
       EM(cur && cur.emoji ? cur.emoji : '💧', 125, 152, 76);
       break;
@@ -1909,22 +1908,15 @@ function wDraw(cv, o, d){
   }
   c.restore();
   if(o.glass === 'liquid'){
-    rr(c, 4, 4, BW - 8, BH - 8, R - 2);
-    const g = c.createLinearGradient(0, 0, 0, BH);
+    rr(c, 4, 4, 1192, 292, R - 2);
+    const g = c.createLinearGradient(0, 0, 0, 300);
     g.addColorStop(0, 'rgba(255,255,255,.65)'); g.addColorStop(.3, 'rgba(255,255,255,.08)'); g.addColorStop(.7, 'rgba(255,255,255,.04)'); g.addColorStop(1, 'rgba(255,255,255,.3)');
     c.strokeStyle = g; c.lineWidth = 3; c.stroke();
-    rr(c, 10, 10, BW - 20, BH - 20, R - 8); c.strokeStyle = 'rgba(255,255,255,.06)'; c.lineWidth = 2; c.stroke();
+    rr(c, 10, 10, 1180, 280, R - 8); c.strokeStyle = 'rgba(255,255,255,.06)'; c.lineWidth = 2; c.stroke();
   }
-  if(o.border){ rr(c, 1.5, 1.5, BW - 3, BH - 3, R); c.strokeStyle = ink(.16); c.lineWidth = 3; c.stroke(); }
+  if(o.border){ rr(c, 1.5, 1.5, 1197, 297, R); c.strokeStyle = ink(.16); c.lineWidth = 3; c.stroke(); }
 }
 
-let wAspect = +S.settings.wAspect || 4;
-async function widgetAspect(){
-  if(!WG) return wAspect;
-  try{ const i = await WG.info(); if(i.w > 0 && i.h > 0){ const a = Math.max(2.2, Math.min(8, i.w / i.h)); if(Math.abs(a - wAspect) > .01){ wAspect = a; S.settings.wAspect = a; try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} } } }catch(e){}
-  return wAspect;
-}
-const sizeCv = (cv, w) => { const h = Math.round(w / wAspect); if(cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; } return cv; };
 const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
 let wT = null;
 function queueWidget(){ if(!WG) return; clearTimeout(wT); wT = setTimeout(pushWidget, 700); }
@@ -1934,21 +1926,21 @@ async function pushWidget(){
   clearTimeout(wT);
   try{
     await fontsReady;
-    const asp = await widgetAspect(), cv = document.createElement('canvas'); cv.width = 1400; cv.height = Math.round(1400 / asp);
+    const cv = document.createElement('canvas'); cv.width = 1200; cv.height = 300;
     wDraw(cv, wset(), wData());
     await WG.update({png: cv.toDataURL('image/png')});
   }catch(e){ console.warn('Widget', e); }
 }
 
 /* ===== page d'édition ===== */
-function openWidget(){ widgetAspect().then(() => { if(openEl && openEl.id === 'wSheet') renderWEdit(false); }); renderWEdit(true); openSheet('#wSheet'); refreshWInfo(); setTimeout(() => { const on = $('#wStyles .wst.on'); if(on) on.scrollIntoView({inline:'center', block:'nearest'}); }, 60); }
+function openWidget(){ renderWEdit(true); openSheet('#wSheet'); refreshWInfo(); setTimeout(() => { const on = $('#wStyles .wst.on'); if(on) on.scrollIntoView({inline:'center', block:'nearest'}); }, 60); }
 function rangeFill(el){ el.style.setProperty('--v', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
 function renderWEdit(all){
   const o = wset(), d = wData();
-  wDraw(sizeCv($('#wPrev'), 1200), o, d);
+  wDraw($('#wPrev'), o, d);
   $('#wName').textContent = `${o.style}. ${WSTYLES[o.style - 1]}`;
   if(all) $('#wStyles').innerHTML = WSTYLES.map((nm,i) => `<button class="wst" data-act="wstyle" data-s="${i + 1}"><canvas width="600" height="150"></canvas><small>${i + 1}. ${nm}</small></button>`).join('');
-  $$('#wStyles .wst').forEach((b,i) => { b.classList.toggle('on', o.style === i + 1); wDraw(sizeCv(b.querySelector('canvas'), 600), Object.assign({}, o, {style:i + 1}), d); });
+  $$('#wStyles .wst').forEach((b,i) => { b.classList.toggle('on', o.style === i + 1); wDraw(b.querySelector('canvas'), Object.assign({}, o, {style:i + 1}), d); });
   $$('#wGlass button').forEach(b => b.classList.toggle('on', b.dataset.g === o.glass));
   $$('#wInk button').forEach(b => b.classList.toggle('on', b.dataset.i === o.ink));
   $('#wAlpha').value = 100 - o.alpha; $('#wAlphaV').textContent = (100 - o.alpha) + ' %';
