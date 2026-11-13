@@ -105,6 +105,28 @@ jobs:
           sed -i 's#<application#<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.VIBRATE" />\n    <application#' android/app/src/main/AndroidManifest.xml
           sed -i 's#\(<style name="AppTheme[^"]*"[^>]*>\)#\1\n        <item name="android:forceDarkAllowed">false</item>#' android/app/src/main/res/values/styles.xml
 
+      - name: Widget écran d'accueil
+        run: |
+          DEST=android/app/src/main/java/be/brun/rituel
+          test -f "$DEST/MainActivity.java" || { echo "::error::MainActivity introuvable dans $DEST"; exit 1; }
+          cp native/java/*.java "$DEST/"
+          cp -r native/res/. android/app/src/main/res/
+          python3 - <<'EOF'
+          p = 'android/app/src/main/AndroidManifest.xml'
+          s = open(p).read()
+          add = (
+              '        <receiver android:name=".RituelWidget" android:exported="false">\n'
+              '            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n'
+              '            <meta-data android:name="android.appwidget.provider" android:resource="@xml/rituel_widget_info" />\n'
+              '        </receiver>\n'
+              '        <provider android:name=".WidgetImageProvider" android:authorities="${applicationId}.widgetimg" android:exported="true" />\n'
+          )
+          assert s.count('</application>') == 1
+          s = s.replace('</application>', add + '    </application>')
+          open(p, 'w').write(s)
+          print('Widget ajouté au manifeste')
+          EOF
+
       - name: Numéro de version automatique
         run: |
           VC=$(( $(date +%s) / 60 ))

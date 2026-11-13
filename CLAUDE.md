@@ -11,6 +11,7 @@
   - `versionName` vaut `4.5.<run_number>` ;
   - la version affichée dans l'app (`index.html`, pied des Réglages) et `package.json` sont en **6.0**.
 - **Données locales** : `localStorage`, clé unique `rituel.v1` → `{items, log, notes, settings, routines, run}` (anciens rituels conservés dans `items`, convertis en routine par `migrate()`) (fonctions `load()` et `save()` dans `index.html`). Il n'y a ni export/import ni versionnage du schéma.
+- **Widget écran d'accueil** : code natif dans `native/` (Java + res), copié par l'étape « Widget écran d'accueil » du workflow (remplace `MainActivity.java`, ajoute receiver + provider au manifeste). L'app dessine le widget en canvas (`wDraw`, 20 styles) et l'envoie via le plugin `RituelWidget` ; réglages dans `S.settings.widget`.
 - **Appareil cible** : Xiaomi 17T Pro (encoche/caméra, zones sûres, `StatusBar.overlaysWebView: true`).
 
 ## Collaboration

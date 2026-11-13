@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rituel_widget_bg"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Ouvre Rituel pour afficher le widget"
+        android:textColor="#FFFFFFFF"
+        android:textSize="13sp" />
+    <ImageView
+        android:id="@+id/widget_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Rituel"
+        android:scaleType="fitCenter" />
+</FrameLayout>

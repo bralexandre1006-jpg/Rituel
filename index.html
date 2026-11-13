@@ -262,6 +262,44 @@ button.ico:active{transform:scale(.82)}
 .h-go.ok svg,.h-go:not(.ok) .pl{animation:goIn .6s .4s var(--spring) both}
 @keyframes goIn{from{transform:scale(.4);opacity:0}}
 
+/* ================= WIDGET ================= */
+.sheet.tall{height:93%}
+.seg{display:flex;gap:4px;background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:4px}
+.seg button{flex:1;height:42px;border-radius:14px;font-size:calc(14px * var(--fs));font-weight:800;color:var(--ink3);transition:background .25s,color .25s,transform .3s var(--spring)}
+.seg button:active{transform:scale(.95)}
+.seg button.on{background:var(--acc);color:#fff}
+.wprev{position:relative;overflow:hidden;border-radius:24px;padding:40px 14px;border:1px solid var(--line);background:radial-gradient(55% 120% at 92% 30%,#4a4a4a 0%,#161616 40%,#000 70%),#000}
+.wprev::before{content:"";position:absolute;left:-30%;right:-30%;top:52%;height:44%;border-radius:50%;border:12px solid rgba(255,255,255,.09);transform:rotate(-9deg)}
+.wprev canvas{position:relative;display:block;width:100%;height:auto}
+.wprev canvas.pop{animation:wPop .45s var(--spring)}
+@keyframes wPop{0%{transform:scale(.94);opacity:.5}100%{transform:none;opacity:1}}
+.wstyles{display:flex;gap:10px;overflow-x:auto;margin:0 -16px;padding:2px 16px 6px;scroll-snap-type:x proximity;touch-action:pan-x}
+.wstyles::-webkit-scrollbar{display:none}
+.wst{flex:none;width:200px;scroll-snap-align:center;display:flex;flex-direction:column;gap:8px;padding:12px 10px 10px;border-radius:18px;
+  background:radial-gradient(80% 120% at 100% 0%,#2a2a2a,#050505 60%);border:1px solid var(--line);transition:border-color .2s,transform .3s var(--spring)}
+.wst canvas{display:block;width:100%;height:auto}
+.wst small{font-size:calc(12px * var(--fs));font-weight:800;color:var(--ink2);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wst.on{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.wst.on small{color:var(--acc2)}
+.wst:active{transform:scale(.95)}
+.wr{gap:10px}
+.wr span{flex:none;min-width:104px}
+.wr b{flex:none;min-width:46px;text-align:right;font-size:calc(13px * var(--fs));font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums}
+.wr input[type=range]{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;outline:0;
+  background:linear-gradient(90deg,var(--acc) var(--v,50%),var(--s3) var(--v,50%))}
+.wr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 10px rgba(0,0,0,.55);transition:transform .2s var(--spring)}
+.wr input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2)}
+.whint{text-align:center;font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:12px;line-height:1.5}
+.wcard{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px 12px 12px;margin-bottom:12px;border-radius:22px;text-align:left;
+  background:radial-gradient(90% 160% at 100% 0%,#1B2B55 0%,#0B0D12 60%);border:1px solid var(--line2);transition:transform .25s var(--spring)}
+.wcard:active{transform:scale(.98)}
+.view.active .wcard{animation:rowIn .5s var(--soft-spring) both}
+.wcard canvas{flex:none;width:136px;height:34px}
+.wcard-t{flex:1;min-width:0}
+.wcard-t b{display:block;font-size:calc(15.5px * var(--fs));font-weight:800}
+.wcard-t small{display:block;font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wcard>svg{flex:none;width:20px;height:20px;fill:none;stroke:var(--ink3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
 /* ================= BARRE ================= */
 .tfade{position:absolute;left:0;right:0;top:0;height:calc(var(--sat) + 16px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 60%,transparent)}
 .bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 110px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--bg) 55%)}
@@ -422,6 +460,8 @@ button.line-row:active{transform:scale(.98)}
 
     <section class="view" id="v-settings">
       <header class="head"><div><div class="eyebrow">Rituel 6.0</div><h1 class="title">Réglages</h1></div></header>
+
+      <button class="wcard" data-act="wopen"><canvas id="wMini" width="600" height="150"></canvas><span class="wcard-t"><b>Widget</b><small>Style, transparence, liquid glass</small></span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -647,6 +687,35 @@ button.line-row:active{transform:scale(.98)}
     <button class="btn-ghost" id="rDelete" data-act="rdelete">Supprimer la routine</button>
   </div>
 
+  <!-- WIDGET -->
+  <div class="sheet tall" id="wSheet">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <h2>Widget</h2>
+      <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="wprev"><canvas id="wPrev" width="1200" height="300"></canvas></div>
+    <div class="label">Style · <span id="wName"></span></div>
+    <div class="wstyles" id="wStyles"></div>
+    <div class="label">Effet</div>
+    <div class="seg" id="wGlass">
+      <button data-act="wglass" data-g="solid">Plein</button>
+      <button data-act="wglass" data-g="frost">Verre fumé</button>
+      <button data-act="wglass" data-g="liquid">Liquid glass</button>
+    </div>
+    <div class="label">Réglages</div>
+    <div class="line-row wr"><span>Transparence</span><input type="range" id="wAlpha" min="0" max="100" aria-label="Transparence"><b id="wAlphaV"></b></div>
+    <div class="line-row wr"><span>Arrondi</span><input type="range" id="wRadius" min="0" max="100" aria-label="Arrondi"><b id="wRadiusV"></b></div>
+    <div class="line-row wr"><span>Taille du texte</span><input type="range" id="wScale" min="80" max="120" aria-label="Taille du texte"><b id="wScaleV"></b></div>
+    <div class="line-row"><span>Bordure fine</span><button class="switch" id="wBorder" data-act="wborder" aria-label="Bordure"></button></div>
+    <div class="seg" id="wInk" style="margin-top:8px">
+      <button data-act="wink" data-i="white">Texte blanc</button>
+      <button data-act="wink" data-i="black">Texte noir</button>
+    </div>
+    <button class="btn" data-act="wpin" id="wPin">Ajouter à l'écran d'accueil</button>
+    <p class="whint" id="wHint"></p>
+  </div>
+
   <div class="toast" id="toast"></div>
 </div>
 
@@ -736,7 +805,7 @@ function migrate(s){
   if(s.run && (s.run.date !== today() || !s.routines.some(r => r.id === s.run.rid))) s.run = null;
   return s;
 }
-function save(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} if(window.__wq) window.__wq(); }
 save();
 
 /* ================= DOMAIN ================= */
@@ -1106,6 +1175,7 @@ function openSheet(id){
   Sound.play('open');
 }
 function closeSheet(silent){
+  if(openEl && openEl.id === 'wSheet'){ pushWidget(); renderSettings(); }
   if(openEl && openEl.id === 'detail'){ clearTimeout(notesT); saveNotes(); D = null; setTimeout(flipRender, 60); }
   if(document.activeElement) document.activeElement.blur();
   $('#backdrop').classList.remove('show');
@@ -1115,7 +1185,7 @@ function closeSheet(silent){
 $$('.sheet').forEach(sh => {
   let y0 = null, dy = 0;
   sh.addEventListener('touchstart', e => {
-    if(sh.scrollTop > 0 || e.target.closest('input,textarea')) return;
+    if(sh.scrollTop > 0 || e.target.closest('input,textarea,.wstyles')) return;
     y0 = e.touches[0].clientY; dy = 0;
   }, {passive:true});
   sh.addEventListener('touchmove', e => {
@@ -1486,6 +1556,7 @@ function cancelStepEnd(){ if(LN){ try{ LN.cancel({notifications:[{id:STEP_NID}]}
 /* ================= SETTINGS ================= */
 async function renderSettings(){
   const s = S.settings;
+  fontsReady.then(() => wDraw($('#wMini'), wset(), wData()));
   $$('[data-act="sw"]').forEach(b => b.classList.toggle('on', !!s[b.dataset.k]));
   $('#sDefTime').value = s.defTime;
   $('#sMorning').value = s.morningTime;
@@ -1531,6 +1602,373 @@ async function toggleSetting(k){
   }
   queueSync();
 }
+
+/* ================= WIDGET ================= */
+const WG = plugin('RituelWidget');
+const WSTYLES = ['Routine en cours','Tâches du jour','Prochaine étape','Série','Barre d’étapes','Frise du matin','Fin d’étape','Tâche prioritaire','Semaine en barres','Mois en carrés','Montagne','Bouton Commencer','Duo','Début et fin','Liste express','Emojis du jour','Pourcentage géant','Encouragement','Jauge liquide','Routine bouclée'];
+const WDEF = {style:1, alpha:55, glass:'liquid', radius:60, border:true, ink:'white', scale:100};
+const wset = () => Object.assign({}, WDEF, S.settings.widget || {});
+function bestStreak(){
+  const ds = [...new Set(S.log.map(l => l.date))].sort();
+  let best = 0, run = 0, prev = null;
+  for(const k of ds){ run = (prev && key(addDays(fromKey(prev),1)) === k) ? run+1 : 1; best = Math.max(best, run); prev = k; }
+  return best;
+}
+function dayScore(k){
+  const t = today(); if(k > t) return -1;
+  const due = S.routines.filter(r => r.steps.length && rDue(r,k));
+  const dn = due.filter(r => rDoneOn(r,k)).length;
+  const td = S.log.filter(l => l.date === k && l.type === 'task').length;
+  const lt = k === t ? tProgress().left.length : 0;
+  const tot = due.length + td + lt;
+  return tot ? (dn + td) / tot : 0;
+}
+function wData(){
+  const r = curR(), t = today(), steps = r ? r.steps : [], n = steps.length;
+  const run = r && S.run && S.run.rid === r.id ? S.run : null;
+  const doneToday = r ? rDoneOn(r,t) : false;
+  const idx = run ? run.idx : doneToday ? n : 0;
+  const cur = run ? steps[run.idx] : (!doneToday ? steps[0] : null);
+  const next = run ? steps[run.idx + 1] : (!doneToday ? steps[1] : null);
+  const times = steps.map(() => '');
+  if(run){ let c = hm(run.st); for(let i = run.idx; i < n; i++){ times[i] = c; c = addMin(c, steps[i].dur); } }
+  else if(r && r.time){ let c = r.time; for(let i = 0; i < n; i++){ times[i] = c; c = addMin(c, steps[i].dur); } }
+  const late = x => x.date && x.date < t ? 1 : 0;
+  const pri = tasks().filter(x => !x.done).sort((a,b) => (late(b) - late(a)) || byImp(a,b))[0] || null;
+  const mon = (new Date().getDay() + 6) % 7;
+  return {r, steps, n, run, doneToday, idx, cur, next, times, total: r ? rTotal(r) : 0, p: tProgress(), pri, last: r ? lastRun(r) : null,
+    week: [...Array(7)].map((_,i) => dayScore(key(addDays(new Date(), i - mon)))),
+    month: [...Array(30)].map((_,i) => dayScore(key(addDays(new Date(), i - 29)))),
+    streak: dayStreak(), best: Math.max(bestStreak(), dayStreak()), pct: n ? idx / n : 0};
+}
+function rr(c, x, y, w, h, r){
+  r = Math.max(0, Math.min(r, h/2, w/2));
+  c.beginPath(); c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+}
+function wDraw(cv, o, d){
+  const c = cv.getContext('2d'), u = cv.width / 1200, sc = o.scale / 100;
+  const dark = o.ink !== 'black', INK = dark ? '#fff' : '#000', INV = dark ? '#000' : '#fff', rgb = dark ? '255,255,255' : '0,0,0';
+  const ink = a => `rgba(${rgb},${a})`, A = o.alpha / 100, R = 150 * o.radius / 100;
+  const base = dark ? '24,24,27' : '250,250,252', SOLID = dark ? '#141416' : '#ececef';
+  c.setTransform(u, 0, 0, u, 0, 0); c.clearRect(0, 0, 1200, 300);
+  c.save(); rr(c, 2, 2, 1196, 296, R); c.clip();
+  c.fillStyle = `rgba(${base},${A})`; c.fillRect(0, 0, 1200, 300);
+  if(o.glass !== 'solid'){
+    const g = c.createLinearGradient(0, 0, 0, 300);
+    g.addColorStop(0, `rgba(255,255,255,${o.glass === 'liquid' ? .17 : .09})`); g.addColorStop(.55, 'rgba(255,255,255,.02)'); g.addColorStop(1, `rgba(255,255,255,${o.glass === 'liquid' ? .07 : 0})`);
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
+  }
+  if(o.glass === 'liquid'){
+    let g = c.createRadialGradient(260, -40, 10, 260, -40, 560); g.addColorStop(0, 'rgba(255,255,255,.2)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
+    g = c.createLinearGradient(0, 0, 1200, 300); g.addColorStop(.5, 'rgba(255,255,255,0)'); g.addColorStop(.58, 'rgba(255,255,255,.08)'); g.addColorStop(.64, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 1200, 300);
+  }
+
+  const F = (s, w) => `${w || 800} ${Math.round(s * sc)}px Manrope, system-ui, sans-serif`;
+  const fit = (s, max) => { s = String(s); if(!max || c.measureText(s).width <= max) return s; while(s.length > 1 && c.measureText(s + '…').width > max) s = s.slice(0, -1); return s.trimEnd() + '…'; };
+  const T = (s, x, y, size, q) => { q = q || {}; c.font = F(size, q.w); c.fillStyle = q.col || INK; c.textAlign = q.al || 'left'; c.textBaseline = q.base || 'alphabetic'; const v = fit(s, q.max); c.fillText(v, x, y); return c.measureText(v).width; };
+  const SUB = (s, x, y, max, al) => T(s, x, y, 34, {w:700, col:ink(.55), max, al});
+  const BIG = (s, x, y, suf) => { const w = T(s, x, y, 96); if(suf) T(suf, x + w + 14, y, 46, {col:ink(.55)}); return w; };
+  const EM = (s, x, y, size, a) => { c.save(); if(a != null) c.globalAlpha = a; c.font = `${Math.round(size * sc)}px sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = INK; c.fillText(s, x, y); c.restore(); };
+  const ICON = (path, x, y, s, col, lw) => { c.save(); c.translate(x, y); c.scale(s/24, s/24); c.strokeStyle = col || INK; c.lineWidth = lw || 2; c.lineCap = 'round'; c.lineJoin = 'round'; c.stroke(new Path2D(path)); c.restore(); };
+  const RING = (cx, cy, r, p, label, lw) => {
+    c.lineCap = 'round'; c.lineWidth = lw || 12; c.strokeStyle = ink(.14); c.beginPath(); c.arc(cx, cy, r, 0, Math.PI*2); c.stroke();
+    if(p > 0){ c.strokeStyle = INK; c.beginPath(); c.arc(cx, cy, r, -Math.PI/2, -Math.PI/2 + Math.PI*2*Math.min(1, p)); c.stroke(); }
+    if(label){ if(/\p{Extended_Pictographic}/u.test(label)) EM(label, cx, cy + 2, r * .72); else T(label, cx, cy + 2, r * .44, {al:'center', base:'middle'}); }
+  };
+  const PILL = (s, xr, cy, filled) => {
+    c.font = F(30); const w = c.measureText(s).width + 52, h = 60;
+    rr(c, xr - w, cy - h/2, w, h, h/2);
+    if(filled){ c.fillStyle = INK; c.fill(); } else { c.strokeStyle = ink(.5); c.lineWidth = 3; c.stroke(); }
+    T(s, xr - w/2, cy + 2, 30, {al:'center', base:'middle', col: filled ? INV : INK});
+    return w;
+  };
+  const dot = (x, y, r, fill) => { c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fillStyle = fill; c.fill(); };
+  const CHECK = 'M6 12.5l4 4 8-9';
+  const st = d.steps, n = d.n, r = d.r, name = r ? r.name : 'Ma routine', p = d.p, P = 70, now = Date.now();
+  const cur = d.cur, pct = d.pct, pc = Math.round(pct * 100) + '%';
+  const stepEnd = d.run && cur ? d.run.st + (+cur.dur || 1) * 60000 : 0;
+  const noSteps = () => SUB(r ? 'Ajoute des étapes dans Rituel' : 'Crée ta routine dans Rituel', 600, 162, 1000, 'center');
+
+  switch(o.style){
+    case 1:
+      EM(cur && cur.emoji ? cur.emoji : (d.doneToday ? '🏆' : '🌅'), 125, 152, 80);
+      BIG(`${d.idx}/${n}`, 215, 160);
+      SUB(!r ? 'Crée ta routine dans Rituel' : d.run ? `${cur.title} · en cours` : d.doneToday ? `${name} · terminée` : `${name} · pas commencée`, 217, 214, 720);
+      RING(1052, 150, 74, pct, pc);
+      break;
+    case 2:
+      ICON('M8 3.5h8a4.5 4.5 0 0 1 4.5 4.5v8a4.5 4.5 0 0 1-4.5 4.5H8A4.5 4.5 0 0 1 3.5 16V8A4.5 4.5 0 0 1 8 3.5zM8 12.5l2.8 2.8L16 9.8', 86, 112, 76);
+      BIG(String(p.done), 210, 160, `/ ${p.total}`);
+      SUB(p.total ? 'tâches faites aujourd’hui' : 'aucune tâche aujourd’hui', 212, 214, 720);
+      RING(1052, 150, 74, p.pct, Math.round(p.pct * 100) + '%');
+      break;
+    case 3: {
+      let top, item, pl = '';
+      if(!r || !n){ top = 'Routine'; item = r ? 'Ajoute des étapes' : 'Crée ta routine'; }
+      else if(d.run){
+        if(d.next){ const left = Math.ceil((stepEnd - now) / 60000); top = d.times[d.idx + 1] ? `Ensuite à ${d.times[d.idx + 1]}` : 'Ensuite'; item = d.next; pl = left > 0 ? `dans ${left} min` : 'maintenant'; }
+        else { top = 'Dernière étape'; item = cur; pl = fmtDur(cur.dur); }
+      }
+      else if(d.doneToday){ top = name; item = 'Terminée, bravo'; pl = '✓'; }
+      else { top = d.times[0] ? `Première étape à ${d.times[0]}` : 'Première étape'; item = st[0]; pl = fmtDur(st[0].dur); }
+      const pw = pl ? PILL(pl, 1130, 150, true) : 0;
+      SUB(top, P, 122, 1060 - pw - 40);
+      T(typeof item === 'object' ? `${item.emoji ? item.emoji + '  ' : ''}${item.title}` : item, P, 196, 56, {max: 1060 - pw - 40});
+      break;
+    }
+    case 4: {
+      ICON('M12 2.5c1 4 6 6.5 6 12a6 6 0 0 1-12 0c0-3 1.7-5 3-6.2 0 2 1 3.2 2.2 3.2C11 7.5 10 5.5 12 2.5z', 78, 106, 86);
+      BIG(String(d.streak), 205, 150, d.streak > 1 ? 'jours' : 'jour');
+      d.month.slice(-7).forEach((v,i) => dot(220 + i*44, 206, 13, v > 0 ? INK : ink(.16)));
+      SUB('Record', 1130, 128, 0, 'right');
+      T(`${d.best} j`, 1130, 196, 56, {al:'right'});
+      break;
+    }
+    case 5: {
+      T(name, P, 108, 44, {max: 700});
+      if(!n){ SUB('Ajoute des étapes dans Rituel', P, 200, 1000); break; }
+      const elapsed = st.slice(0, d.idx).reduce((a,s) => a + (+s.dur || 0), 0) + (d.run ? Math.min(+cur.dur || 0, Math.floor((now - d.run.st) / 60000)) : 0);
+      SUB(`${elapsed} / ${d.total} min`, 1130, 108, 0, 'right');
+      const gap = 12, w = (1060 - gap * (n - 1)) / n;
+      st.forEach((s,i) => {
+        const x = P + i * (w + gap), live = d.run && i === d.idx;
+        rr(c, x, 140, w, 14, 7); c.fillStyle = ink(.16); c.fill();
+        const f = i < d.idx ? 1 : live ? Math.min(1, (now - d.run.st) / ((+s.dur || 1) * 60000)) : 0;
+        if(f > 0){ rr(c, x, 140, Math.max(14, w * f), 14, 7); c.fillStyle = INK; c.fill(); }
+        EM(s.emoji || String(i + 1), x + w/2, 222, 40, i < d.idx || live ? 1 : .35);
+      });
+      break;
+    }
+    case 6: {
+      if(!n){ noSteps(); break; }
+      const k = Math.min(5, n), s0 = Math.max(0, Math.min(d.idx - 2, n - k)), ci = d.run ? d.idx : (d.doneToday ? -1 : 0);
+      c.strokeStyle = ink(.18); c.lineWidth = 4; c.beginPath(); c.moveTo(110, 160); c.lineTo(1090, 160); c.stroke();
+      for(let j = 0; j < k; j++){
+        const i = s0 + j, s = st[i], x = k === 1 ? 600 : 110 + j * (980 / (k - 1)), done = i < d.idx;
+        if(i === ci){ dot(x, 160, 22, SOLID); c.lineWidth = 7; c.strokeStyle = INK; c.stroke(); }
+        else if(done) dot(x, 160, 14, INK);
+        else { dot(x, 160, 13, SOLID); c.lineWidth = 4; c.strokeStyle = ink(.5); c.stroke(); }
+        EM(s.emoji || String(i + 1), x, 98, 42, done || i === ci ? 1 : .45);
+        T(d.times[i] || fmtDur(s.dur), x, 232, 28, {al:'center', w:700, col:ink(.55)});
+      }
+      break;
+    }
+    case 7: {
+      c.lineWidth = 14; c.lineCap = 'round'; c.strokeStyle = ink(.14); c.beginPath(); c.arc(160, 150, 96, 0, Math.PI*2); c.stroke();
+      const f = stepEnd ? Math.max(0, (stepEnd - now) / ((+cur.dur || 1) * 60000)) : 1;
+      if(f > 0){ c.strokeStyle = INK; c.beginPath(); c.arc(160, 150, 96, -Math.PI/2, -Math.PI/2 + Math.PI*2*f); c.stroke(); }
+      EM(cur && cur.emoji ? cur.emoji : '⏱️', 160, 154, 62);
+      if(stepEnd){ BIG(hm(stepEnd), 300, 160); SUB(`fin d’étape · ${cur.title}`, 302, 214, 820); }
+      else if(cur){ BIG(fmtDur(cur.dur), 300, 160); SUB(`${cur.title} · à lancer`, 302, 214, 820); }
+      else { BIG(d.doneToday ? 'Fini' : '—', 300, 160); SUB(d.doneToday ? 'routine terminée' : 'aucune étape', 302, 214, 820); }
+      break;
+    }
+    case 8: {
+      ICON('M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z', 78, 106, 86);
+      const q = d.pri, t = today();
+      if(q){
+        const lt = q.date && q.date < t, pw = PILL(lt ? 'En retard' : q.date === t ? 'Aujourd’hui' : 'À faire', 1130, 150, !lt), mx = 1130 - pw - 230;
+        T(q.title, 200, 146, 52, {max: mx});
+        SUB([q.date ? dateLabel(q.date) : 'Quand je veux', q.important ? 'important' : '', q.time || ''].filter(Boolean).join(' · '), 200, 200, mx);
+      } else { T('Aucune tâche en attente', 200, 146, 52, {max: 900}); SUB('Profite de ton temps libre', 200, 200, 900); }
+      break;
+    }
+    case 9: {
+      const past = d.week.filter(v => v >= 0), wp = past.length ? Math.round(past.reduce((a,v) => a + v, 0) / past.length * 100) : 0, ti = (new Date().getDay() + 6) % 7;
+      BIG(wp + '%', P, 160); SUB('de ta semaine', P + 2, 214, 520);
+      d.week.forEach((v,i) => {
+        const x = 760 + i * 54, h = v < 0 ? 16 : Math.max(16, v * 140);
+        rr(c, x, 220 - h, 34, h, 10); c.fillStyle = v < 0 ? ink(.12) : v === 0 ? ink(.25) : i === ti ? INK : ink(.8); c.fill();
+        T('LMMJVSD'[i], x + 17, 264, 26, {al:'center', col: i === ti ? INK : ink(.35)});
+      });
+      break;
+    }
+    case 10: {
+      d.month.forEach((v,i) => { rr(c, P + (i % 15) * 54, 98 + Math.floor(i / 15) * 58, 44, 44, 10); c.fillStyle = v <= 0 ? ink(.08) : v < .5 ? ink(.3) : v < .99 ? ink(.62) : INK; c.fill(); });
+      T(String(d.month.filter(v => v > 0).length), 1130, 160, 84, {al:'right'});
+      SUB('jours actifs', 1130, 212, 0, 'right');
+      break;
+    }
+    case 11: {
+      const pts = d.month.slice(-7).map(v => Math.max(0, v)), xs = pts.map((_,i) => 520 + i * (620 / 6)), ys = pts.map(v => 250 - v * 175);
+      c.beginPath(); c.moveTo(xs[0], 300); xs.forEach((x,i) => c.lineTo(x, ys[i])); c.lineTo(1200, ys[6]); c.lineTo(1200, 300); c.closePath(); c.fillStyle = ink(.07); c.fill();
+      c.beginPath(); xs.forEach((x,i) => i ? c.lineTo(x, ys[i]) : c.moveTo(x, ys[i])); c.strokeStyle = INK; c.lineWidth = 9; c.lineJoin = 'round'; c.lineCap = 'round'; c.stroke();
+      let mi = 0; ys.forEach((y,i) => { if(y <= ys[mi]) mi = i; });
+      const fx = xs[mi], fy = ys[mi];
+      c.lineWidth = 4; c.beginPath(); c.moveTo(fx, fy); c.lineTo(fx, fy - 58); c.stroke();
+      c.beginPath(); c.moveTo(fx, fy - 58); c.lineTo(fx + 34, fy - 47); c.lineTo(fx, fy - 36); c.closePath(); c.fillStyle = INK; c.fill();
+      dot(fx, fy, 13, INK);
+      BIG(d.last ? fmtDur(d.last.dur) : Math.round(pts[6] * 100) + '%', P, 132);
+      SUB(d.last ? 'dernière routine' : 'aujourd’hui', P + 2, 184, 420);
+      break;
+    }
+    case 12: {
+      dot(150, 150, 82, INK);
+      let t1, t2;
+      if(d.doneToday && !d.run) ICON(CHECK, 116, 116, 68, INV, 2.8);
+      else { c.beginPath(); c.moveTo(130, 108); c.lineTo(196, 150); c.lineTo(130, 192); c.closePath(); c.fillStyle = INV; c.fill(); }
+      if(!r){ t1 = 'Crée ta routine'; t2 = 'dans Rituel'; }
+      else if(d.run){ t1 = 'Reprendre'; t2 = `étape ${d.idx + 1}/${n} · ${cur.title}`; }
+      else if(d.doneToday){ t1 = `${name} · faite`; t2 = d.last ? `à ${hm(d.last.ts)} · ${fmtDur(d.last.dur)}` : ''; }
+      else { t1 = name; t2 = `${plural(n,'étape')} · ${fmtDur(d.total)}${r.time ? ` · ${r.time} → ${addMin(r.time, d.total)}` : ''}`; }
+      T(t1, 272, 146, 54, {max: 860}); SUB(t2, 272, 200, 860);
+      break;
+    }
+    case 13: {
+      const half = (cx, pr, lab, big, sub) => { RING(cx, 150, 62, pr, lab, 11); T(big, cx + 92, 146, 56, {max: 330}); SUB(sub, cx + 92, 198, 330); };
+      half(140, pct, cur && cur.emoji ? cur.emoji : (d.doneToday ? '✓' : '•'), `${d.idx}/${n}`, 'Routine');
+      c.fillStyle = ink(.12); c.fillRect(599, 90, 2, 120);
+      half(700, p.pct, '✓', `${p.done}/${p.total}`, 'Tâches');
+      break;
+    }
+    case 14: {
+      let a, b, la, lb;
+      if(d.run){ a = hm(d.run.t0); la = 'commencée'; const rem = st.slice(d.idx).reduce((x,s) => x + (+s.dur || 0), 0) - Math.floor((now - d.run.st) / 60000); b = hm(now + Math.max(0, rem) * 60000); lb = 'fin prévue'; }
+      else if(d.doneToday && d.last){ a = hm(d.last.ts - d.last.dur * 60000); la = 'début'; b = hm(d.last.ts); lb = 'fin'; }
+      else if(r && r.time){ a = r.time; la = 'début'; b = addMin(r.time, d.total); lb = 'fin'; }
+      else { a = fmtDur(d.total); la = 'durée'; b = String(n); lb = n > 1 ? 'étapes' : 'étape'; }
+      BIG(a, P, 160); SUB(la, P + 2, 214, 420);
+      c.strokeStyle = ink(.4); c.lineWidth = 5; c.lineCap = 'round'; c.lineJoin = 'round';
+      c.beginPath(); c.moveTo(560, 132); c.lineTo(640, 132); c.moveTo(618, 110); c.lineTo(640, 132); c.lineTo(618, 154); c.stroke();
+      T(b, 1130, 160, 96, {al:'right'}); SUB(lb, 1130, 214, 0, 'right');
+      break;
+    }
+    case 15: {
+      const items = [...p.left.slice(0, 3).map(x => ({t: x.title + (x.time ? ' · ' + x.time : ''), x:false})), ...p.doneT.map(x => ({t:x.title, x:true}))].slice(0, 3);
+      if(!items.length) items.push({t:'Rien à faire aujourd’hui', x:false});
+      const ys = [[150],[120,180],[92,150,208]][items.length - 1];
+      items.forEach((it,i) => {
+        const y = ys[i];
+        c.beginPath(); c.arc(P + 12, y, 12, 0, Math.PI*2);
+        if(it.x){ c.fillStyle = INK; c.fill(); } else { c.lineWidth = 3.5; c.strokeStyle = ink(.6); c.stroke(); }
+        const w = T(it.t, P + 44, y + 2, 36, {w:700, base:'middle', col: it.x ? ink(.35) : INK, max: 820});
+        if(it.x){ c.fillStyle = ink(.35); c.fillRect(P + 44, y, w, 3); }
+      });
+      T(String(p.left.length), 1130, 182, 96, {al:'right'});
+      break;
+    }
+    case 16: {
+      if(!n){ noSteps(); break; }
+      const m = Math.min(n, 8), s0 = Math.max(0, Math.min(d.idx - 3, n - m)), ci = d.run ? d.idx : -1;
+      for(let j = 0; j < m; j++){
+        const i = s0 + j, s = st[i], x = m === 1 ? 600 : 110 + j * (980 / (m - 1)), done = i < d.idx, isC = i === ci;
+        c.save(); if(!done && !isC){ c.globalAlpha = .3; c.filter = 'grayscale(1)'; }
+        EM(s.emoji || String(i + 1), x, 146, isC ? 82 : 62);
+        c.restore();
+        if(isC) dot(x, 226, 7, INK);
+      }
+      break;
+    }
+    case 17: {
+      c.font = F(180); c.lineWidth = 4; c.strokeStyle = INK; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+      c.strokeText(pc, P, 222); const hw = c.measureText(pc).width, mx = 1130 - P - hw - 40;
+      T(d.doneToday && !d.run ? 'routine faite' : 'de la routine', P + hw + 40, 146, 50, {max: mx});
+      const lft = n - d.idx;
+      SUB(!n ? 'aucune étape' : lft <= 0 ? 'bravo' : `${plural(lft, 'étape')} restante${lft > 1 ? 's' : ''}`, P + hw + 42, 200, mx);
+      break;
+    }
+    case 18: {
+      let m;
+      if(!r || !n) m = 'Crée ta routine du matin.';
+      else if(d.run){ const lft = n - d.idx; m = lft === 1 ? 'Dernière étape. Courage.' : pct >= .5 ? `Plus que ${lft}. Tu y es presque.` : `C’est parti. Encore ${lft}.`; }
+      else if(d.doneToday) m = 'Routine bouclée. Bravo.';
+      else m = n > 1 ? `${n} étapes t’attendent.` : 'Une étape t’attend.';
+      T(m, P, 146, 50, {max: 860}); SUB(name, P + 2, 200, 860);
+      RING(1052, 150, 74, pct, '⚡');
+      break;
+    }
+    case 19: {
+      const tot = n + p.total, dp = tot ? (d.idx + p.done) / tot : 0, x0 = 1200 * dp;
+      const wave = fresh => { if(fresh) c.beginPath(); c.moveTo(0, 0); c.lineTo(x0, 0); for(let y = 0; y <= 300; y += 10) c.lineTo(x0 + 14 * Math.sin(y / 300 * Math.PI * 4), y); c.lineTo(0, 300); c.closePath(); };
+      if(dp > 0){ wave(true); c.fillStyle = dark ? 'rgba(255,255,255,.92)' : 'rgba(0,0,0,.88)'; c.fill(); }
+      const label = col => { T(Math.round(dp * 100) + '%', 215, 160, 96, {col}); T('de ta journée faite', 217, 214, 34, {w:700, col}); };
+      c.save(); c.beginPath(); c.rect(0, 0, 1200, 300); if(dp > 0) wave(false); c.clip('evenodd'); label(INK); c.restore();
+      if(dp > 0){ c.save(); wave(true); c.clip(); label(INV); c.restore(); }
+      EM(cur && cur.emoji ? cur.emoji : '💧', 125, 152, 76);
+      break;
+    }
+    case 20: {
+      const ok = d.doneToday && d.last;
+      if(ok){ dot(150, 150, 74, INK); ICON(CHECK, 118, 118, 64, INV, 2.8); }
+      else { c.beginPath(); c.arc(150, 150, 74, 0, Math.PI*2); c.lineWidth = 5; c.strokeStyle = ink(.3); c.stroke(); EM(st[0] && st[0].emoji ? st[0].emoji : '🌅', 150, 154, 56); }
+      if(ok){
+        const diff = d.total - d.last.dur;
+        T(`Routine terminée à ${hm(d.last.ts)}`, 262, 146, 50, {max: 870});
+        SUB(`${fmtDur(d.last.dur)} · ${diff > 0 ? diff + ' min d’avance' : diff < 0 ? (-diff) + ' min de plus' : 'pile à l’heure'}${d.streak ? ' · 🔥 ' + d.streak + ' j' : ''}`, 264, 200, 870);
+      } else {
+        T(r ? 'Routine pas encore faite' : 'Crée ta routine', 262, 146, 50, {max: 870});
+        SUB(r ? `${plural(n,'étape')} · ${fmtDur(d.total)}` : 'dans Rituel', 264, 200, 870);
+      }
+      break;
+    }
+  }
+  c.restore();
+  if(o.glass === 'liquid'){
+    rr(c, 4, 4, 1192, 292, R - 2);
+    const g = c.createLinearGradient(0, 0, 0, 300);
+    g.addColorStop(0, 'rgba(255,255,255,.65)'); g.addColorStop(.3, 'rgba(255,255,255,.08)'); g.addColorStop(.7, 'rgba(255,255,255,.04)'); g.addColorStop(1, 'rgba(255,255,255,.3)');
+    c.strokeStyle = g; c.lineWidth = 3; c.stroke();
+    rr(c, 10, 10, 1180, 280, R - 8); c.strokeStyle = 'rgba(255,255,255,.06)'; c.lineWidth = 2; c.stroke();
+  }
+  if(o.border){ rr(c, 1.5, 1.5, 1197, 297, R); c.strokeStyle = ink(.16); c.lineWidth = 3; c.stroke(); }
+}
+
+const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+let wT = null;
+function queueWidget(){ if(!WG) return; clearTimeout(wT); wT = setTimeout(pushWidget, 700); }
+window.__wq = queueWidget;
+async function pushWidget(){
+  if(!WG) return;
+  clearTimeout(wT);
+  try{
+    await fontsReady;
+    const cv = document.createElement('canvas'); cv.width = 1200; cv.height = 300;
+    wDraw(cv, wset(), wData());
+    await WG.update({png: cv.toDataURL('image/png')});
+  }catch(e){ console.warn('Widget', e); }
+}
+
+/* ===== page d'édition ===== */
+function openWidget(){ renderWEdit(true); openSheet('#wSheet'); refreshWInfo(); setTimeout(() => { const on = $('#wStyles .wst.on'); if(on) on.scrollIntoView({inline:'center', block:'nearest'}); }, 60); }
+function rangeFill(el){ el.style.setProperty('--v', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
+function renderWEdit(all){
+  const o = wset(), d = wData();
+  wDraw($('#wPrev'), o, d);
+  $('#wName').textContent = `${o.style}. ${WSTYLES[o.style - 1]}`;
+  if(all) $('#wStyles').innerHTML = WSTYLES.map((nm,i) => `<button class="wst" data-act="wstyle" data-s="${i + 1}"><canvas width="600" height="150"></canvas><small>${i + 1}. ${nm}</small></button>`).join('');
+  $$('#wStyles .wst').forEach((b,i) => { b.classList.toggle('on', o.style === i + 1); wDraw(b.querySelector('canvas'), Object.assign({}, o, {style:i + 1}), d); });
+  $$('#wGlass button').forEach(b => b.classList.toggle('on', b.dataset.g === o.glass));
+  $$('#wInk button').forEach(b => b.classList.toggle('on', b.dataset.i === o.ink));
+  $('#wAlpha').value = 100 - o.alpha; $('#wAlphaV').textContent = (100 - o.alpha) + ' %';
+  $('#wRadius').value = o.radius; $('#wRadiusV').textContent = o.radius + ' %';
+  $('#wScale').value = o.scale; $('#wScaleV').textContent = o.scale + ' %';
+  ['#wAlpha','#wRadius','#wScale'].forEach(s => rangeFill($(s)));
+  $('#wBorder').classList.toggle('on', !!o.border);
+}
+function setW(k, v, light){
+  S.settings.widget = Object.assign(wset(), {[k]: v});
+  save();
+  if(light) wDraw($('#wPrev'), wset(), wData()); else renderWEdit(false);
+}
+function popPrev(){ const p = $('#wPrev'); p.classList.remove('pop'); void p.offsetWidth; p.classList.add('pop'); }
+async function refreshWInfo(){
+  const pin = $('#wPin'), hint = $('#wHint');
+  if(!WG){ pin.hidden = true; hint.textContent = 'Le widget s’ajoute depuis l’app Android installée sur ton téléphone.'; return; }
+  try{
+    const i = await WG.info();
+    pin.hidden = !i.canPin;
+    hint.textContent = i.count ? (i.count > 1 ? `${i.count} widgets actifs sur ton écran d’accueil` : 'Widget actif sur ton écran d’accueil') : 'Ou : appui long sur l’écran d’accueil, Widgets, puis Rituel';
+  }catch(e){ pin.hidden = true; }
+}
+[['#wAlpha', v => ['alpha', 100 - v], '#wAlphaV', v => v + ' %'], ['#wRadius', v => ['radius', v], '#wRadiusV', v => v + ' %'], ['#wScale', v => ['scale', v], '#wScaleV', v => v + ' %']].forEach(([id, map, lab, fmt]) => {
+  const el = $(id);
+  el.addEventListener('input', () => { const v = +el.value, [k, val] = map(v); rangeFill(el); $(lab).textContent = fmt(v); setW(k, val, true); });
+  el.addEventListener('change', () => { Sound.play('tick'); haptic(); renderWEdit(false); });
+});
 
 /* ================= THEME ================= */
 const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -1956,6 +2394,15 @@ root.addEventListener('click', e => {
     case 'rnext': if($('#run').classList.contains('fin')){ Sound.play('close'); closeRun(); } else runNext(false); break;
     case 'rskip': runNext(true); break;
     case 'rclose': Sound.play('close'); haptic(); closeRun(); if(S.run) toast('En pause · reprends quand tu veux'); break;
+    case 'wopen': haptic(); openWidget(); break;
+    case 'wstyle': { const v = +el.dataset.s; if(v !== wset().style){ setW('style', v); popPrev(); Sound.play('tap'); haptic(); } break; }
+    case 'wglass': setW('glass', el.dataset.g); popPrev(); Sound.play('toggle'); haptic(); break;
+    case 'wink': setW('ink', el.dataset.i); popPrev(); Sound.play('toggle'); haptic(); break;
+    case 'wborder': setW('border', !wset().border); Sound.play('toggle'); haptic(); break;
+    case 'wpin':
+      pushWidget().then(() => WG.pin()).then(() => toast('Choisis où le poser sur ton écran d’accueil')).catch(() => toast('Appui long sur l’écran d’accueil, puis Widgets'));
+      haptic('MEDIUM');
+      break;
     case 'undo': { const fn = undoFn; undoFn = null; $('#toast').classList.remove('show'); if(fn) fn(); break; }
     case 'notif': enableNotif(); break;
     case 'exact': if(LN && LN.changeExactNotificationSetting){ LN.changeExactNotificationSetting().then(renderSettings).catch(() => {}); } break;
@@ -1989,6 +2436,7 @@ if(App){
 let lastDay = today();
 setInterval(() => { if(today() !== lastDay){ lastDay = today(); if(S.run && S.run.date !== lastDay){ S.run = null; save(); } renderAll(); } }, 30000);
 document.addEventListener('visibilitychange', () => {
+  if(document.hidden){ pushWidget(); return; }
   if(!document.hidden){ lastDay = today(); renderAll(); if(cur === 'settings') renderSettings(); if(runOn()) tickRun(); queueSync(); }
 });
 
@@ -2002,7 +2450,7 @@ setTimeout(() => {
   root.classList.add('app-in');
   if(S.run) go('routine');
   animAll = true; renderAll();
-  setTimeout(() => { sp.remove(); moveInd(); firstAsk(); }, 600);
+  setTimeout(() => { sp.remove(); moveInd(); firstAsk(); pushWidget(); }, 600);
 }, 1250);
 })();
 </script>
