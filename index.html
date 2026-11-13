@@ -13,8 +13,9 @@
 @property --p{syntax:"<number>";inherits:true;initial-value:0}
 
 :root{
-  --bg:#000;--s1:#0D0D0D;--s2:#171717;--s3:#222;--line:#1E1E1E;--line2:#2C2C2C;
-  --ink:#FFF;--ink2:#9B9B9B;--ink3:#565656;--paper:#FFF;--void:#000;
+  --bg:#000;--s1:#0B0D12;--s2:#141821;--s3:#1C212C;--line:#161A23;--line2:#252B39;
+  --ink:#FFF;--ink2:#8B93A7;--ink3:#4D5466;--paper:#FFF;--void:#000;
+  --acc:#2F7BFF;--acc2:#6EA5FF;--accs:rgba(47,123,255,.15);--late:#FF5D6C;--lates:rgba(255,93,108,.14);
   --fd:"Unbounded","Manrope",system-ui,sans-serif;
   --fb:"Manrope",system-ui,-apple-system,"Roboto",sans-serif;
   --sat:max(env(safe-area-inset-top),0px);--sab:max(env(safe-area-inset-bottom),0px);
@@ -62,234 +63,205 @@ svg{display:block}
 /* ================= VUES ================= */
 .views{position:absolute;inset:0}
 .view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y;
-  padding:calc(var(--sat) + 22px) 18px calc(var(--sab) + 130px);
+  padding:calc(var(--sat) + 18px) 18px calc(var(--sab) + 176px);
   opacity:0;transform:translateX(var(--dx,30px));pointer-events:none;transition:opacity .3s var(--ease),transform .5s var(--ease)}
 .view.active{opacity:1;transform:none;pointer-events:auto}
 #root:not(.app-in) .view.active{opacity:0;transform:translateY(24px)}
 .view::-webkit-scrollbar{display:none}
-.head{margin-bottom:18px}
-.eyebrow{font-size:calc(12.5px * var(--fs));font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
-.title{font-family:var(--fd);font-weight:800;font-size:calc(36px * var(--fs));letter-spacing:-.03em;line-height:1;text-transform:uppercase}
-.view.active .eyebrow{animation:titleIn .5s var(--ease) both}
-.view.active .title{animation:titleIn .6s .04s var(--ease) both}
-@keyframes titleIn{from{opacity:0;transform:translateY(14px)}}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.eyebrow{font-size:calc(12.5px * var(--fs));font-weight:800;color:var(--ink2);margin-bottom:6px}
+.title{font-weight:800;font-size:calc(28px * var(--fs));letter-spacing:-.02em;line-height:1.1}
+.wave{display:inline-block;transform-origin:70% 80%;animation:waveHand 2.6s 1.2s ease-in-out infinite}
+@keyframes waveHand{0%,55%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-8deg)}}
+.view.active .head>*{animation:titleIn .55s var(--ease) both}
+.view.active .head>*+*{animation-delay:.08s}
+@keyframes titleIn{from{opacity:0;transform:translateY(12px)}}
 
-/* ================= JOUR ================= */
-#v-today{display:flex;flex-direction:column;padding-top:calc(var(--sat) + 16px)}
-#v-today>*{flex:none}
-#v-today .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
-#v-today .head .eyebrow{margin-bottom:8px}
-#v-today .title{font-size:calc(28px * var(--fs))}
-.streak{display:flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:17px;border:1.5px solid var(--line2);font-family:var(--fd);font-size:calc(13px * var(--fs));font-weight:800}
-.streak svg{width:15px;height:15px;fill:var(--ink);transform-origin:50% 90%;animation:flick 1.8s ease-in-out infinite}
-@keyframes flick{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.12,.94) rotate(-4deg)}60%{transform:scale(.94,1.08) rotate(3deg)}}
-.view.active .streak{animation:titleIn .6s .1s var(--ease) both}
-
-/* jauge d'encre */
-.gauge{position:relative;height:124px;border-radius:30px;background:var(--s1);border:1.5px solid var(--line);overflow:hidden;isolation:isolate;margin-bottom:12px}
-.view.active .gauge{animation:heroIn .7s .06s var(--soft-spring) both}
-@keyframes heroIn{from{opacity:0;transform:translateY(18px) scale(.97)}}
-.g-fill{position:absolute;left:0;right:0;bottom:0;height:calc(var(--lvl,0) * 1%);background:var(--paper);transition:height 1.1s var(--soft-spring)}
-.g-wave{position:absolute;left:0;bottom:calc(100% - 1px);width:200%;height:9px;fill:var(--paper);animation:wave 3.2s linear infinite}
-.g-wave.b{opacity:.35;animation-duration:5s;animation-direction:reverse;height:12px}
-.gauge.empty .g-wave{opacity:0}
-@keyframes wave{to{transform:translateX(-50%)}}
-.g-txt{position:absolute;inset:0;padding:17px 22px;display:flex;flex-direction:column;justify-content:flex-start;gap:10px;color:#fff;mix-blend-mode:difference;z-index:2}
-.g-top{display:flex;justify-content:space-between;align-items:center;font-size:calc(12.5px * var(--fs));font-weight:800;letter-spacing:.2em;text-transform:uppercase}
-.g-big{display:flex;align-items:flex-start;font-family:var(--fd);font-weight:800;line-height:.85;letter-spacing:-.05em}
-.g-big b{font-size:calc(54px * var(--fs));font-weight:800;font-variant-numeric:tabular-nums}
-.g-big i{font-style:normal;font-size:calc(20px * var(--fs));margin:4px 0 0 3px}
-.g-sub{font-size:calc(22px * var(--fs));font-weight:800;letter-spacing:-.015em;line-height:1.18;margin-top:2px;max-width:86%}
-.g-day{display:flex;align-items:center;gap:10px}
-.g-pct{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;border:1.5px solid #fff;font-family:var(--fd);font-size:calc(11px * var(--fs));letter-spacing:.02em}
-.g-pct b{font-weight:800}
-.bump{animation:bump .5s var(--spring)}
-.gauge.win{animation:heroWin .9s var(--spring)!important}
-.g-big{transform-origin:left center}
-@keyframes bump{0%{transform:scale(1)}35%{transform:scale(.86)}100%{transform:scale(1)}}
-.g-ticks{position:absolute;right:16px;top:44px;bottom:16px;width:14px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;opacity:.5}
-.g-ticks i{display:block;width:8px;height:2px;border-radius:1px;background:#fff}
-.g-ticks i:nth-child(odd){width:14px}
-.bub{position:absolute;bottom:-8px;width:var(--s,6px);height:var(--s,6px);border-radius:50%;background:rgba(0,0,0,.18);opacity:0;animation:bub var(--t,4s) var(--d,0s) ease-in infinite}
-@keyframes bub{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(var(--x,6px),-120px);opacity:0}}
-.gauge.empty .bub{display:none}
-.gauge::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.07) 50%,transparent 60%);background-size:300% 100%;animation:sweep 7s 2s ease-in-out infinite}
-@keyframes sweep{0%,70%{background-position:120% 0}100%{background-position:-60% 0}}
-.view.active .g-fill{animation:fillUp 1.3s .2s var(--soft-spring) both}
-@keyframes fillUp{from{height:0}}
-@keyframes heroWin{0%{transform:scale(1)}30%{transform:scale(.95)}65%{transform:scale(1.03)}100%{transform:scale(1)}}
-
-/* semaine en colonnes */
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:12px}
-.view.active .week{animation:rowIn .6s .12s var(--soft-spring) both}
-.wd{display:flex;flex-direction:column;align-items:center;gap:6px}
-.wd small{font-size:calc(11.5px * var(--fs));font-weight:800;letter-spacing:.08em;color:var(--ink3)}
-.wbar{position:relative;width:100%;max-width:38px;height:40px;border-radius:12px;background:var(--s1);border:1.5px solid var(--line);overflow:hidden}
-.wbar i{position:absolute;left:0;right:0;bottom:0;background:var(--paper);height:0;transition:height .9s var(--soft-spring)}
-.wd b{font-family:var(--fd);font-size:calc(13px * var(--fs));font-weight:800;color:var(--ink3)}
-.wd.now small,.wd.now b{color:var(--ink)}
-.wd.now .wbar{border-color:var(--ink)}
-.wd.fut .wbar{opacity:.4}
-.view.active .wbar i{animation:fillUp .9s var(--soft-spring) both}
-.view.active .wd:nth-child(2) .wbar i{animation-delay:.05s}.view.active .wd:nth-child(3) .wbar i{animation-delay:.1s}.view.active .wd:nth-child(4) .wbar i{animation-delay:.15s}
-.view.active .wd:nth-child(5) .wbar i{animation-delay:.2s}.view.active .wd:nth-child(6) .wbar i{animation-delay:.25s}.view.active .wd:nth-child(7) .wbar i{animation-delay:.3s}
-.wd.now .wbar{animation:pulse 2.6s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.35)}70%,100%{box-shadow:0 0 0 7px rgba(255,255,255,0)}}
-
-/* encadrés */
-.tiles{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);gap:10px}
-#v-today .tiles{flex:1 1 auto;min-height:150px}
-.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:0;height:100%;padding:16px 16px 14px;border-radius:26px;
-  background:var(--s1);border:1.5px solid var(--line);overflow:hidden;transition:transform .35s var(--soft-spring),border-color .3s}
-.tile:active{transform:scale(.96);border-color:var(--line2)}
-.view.active .tile{animation:rowIn .6s .16s var(--soft-spring) both}
-.view.active .tile+.tile{animation-delay:.22s}
-.tile-top{display:flex;justify-content:space-between;align-items:center;width:100%}
-.tile-ico{width:36px;height:36px;border-radius:12px;background:var(--paper);color:var(--void);display:grid;place-items:center}
-.tile-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.tile-go{width:20px;height:20px;fill:none;stroke:var(--ink3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.tile-n{font-family:var(--fd);font-size:calc(46px * var(--fs));font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:12px}
-.tile-l{font-size:calc(14.5px * var(--fs));font-weight:800;color:var(--ink2);margin-top:4px}
-.tile-bar{flex:none;width:100%;height:5px;border-radius:3px;background:var(--s3);margin-top:12px;overflow:hidden}
-.tile-bar i{display:block;height:100%;border-radius:3px;background:var(--paper);transition:width .8s var(--ease)}
-.tile-prev{list-style:none;width:100%;margin-top:12px;display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-height:0;overflow:hidden}
-.tile-prev li{flex:none;font-size:calc(14.5px * var(--fs));line-height:1.3;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px}
-.tile-prev li::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
-.tile-prev li.more{color:var(--ink3)}
-.tile-prev li.more::before{display:none}
-.tile.done .tile-n{color:var(--ink3)}
-.view.active .tile-ico{animation:icoIn .6s .3s var(--spring) both}
-@keyframes icoIn{from{transform:scale(.3) rotate(-35deg);opacity:0}}
-.view.active .tile-prev li{animation:liIn .45s var(--soft-spring) both}
-.view.active .tile-prev li:nth-child(1){animation-delay:.3s}.view.active .tile-prev li:nth-child(2){animation-delay:.34s}.view.active .tile-prev li:nth-child(3){animation-delay:.38s}
-.view.active .tile-prev li:nth-child(4){animation-delay:.42s}.view.active .tile-prev li:nth-child(5){animation-delay:.46s}.view.active .tile-prev li:nth-child(n+6){animation-delay:.5s}
-@keyframes liIn{from{opacity:0;transform:translateX(-10px)}}
-.view.active .tile-bar i{animation:barIn 1s .3s var(--ease) both}
-@keyframes barIn{from{width:0}}
+/* anneau de progression */
+.ring{position:relative;width:54px;height:54px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5}
+.ring .bg{stroke:var(--s3)}
+.ring .fg{stroke:var(--acc);stroke-linecap:round;stroke-dasharray:138.2;stroke-dashoffset:calc(138.2 * (1 - var(--rp,0)));transition:stroke-dashoffset 1s var(--soft-spring)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:calc(13.5px * var(--fs));font-weight:800}
+.ring.win{animation:heroWin .9s var(--spring)}
+@keyframes heroWin{0%{transform:scale(1)}30%{transform:scale(.85)}65%{transform:scale(1.12)}100%{transform:scale(1)}}
 
 /* ================= LISTES ================= */
-.hprog{height:4px;border-radius:2px;background:var(--s3);margin-top:16px;overflow:hidden}
-.hprog i{display:block;height:100%;width:0;border-radius:2px;background:var(--paper);transition:width .8s var(--soft-spring)}
 .sec{display:flex;justify-content:space-between;align-items:center;margin:0 4px 10px}
-.sec h3{font-family:var(--fd);font-size:calc(11.5px * var(--fs));font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2)}
-.sec span{min-width:26px;height:22px;padding:0 8px;border-radius:11px;border:1.5px solid var(--line2);display:grid;place-items:center;font-family:var(--fd);font-size:calc(11px * var(--fs));font-weight:800;color:var(--ink2)}
-.list{display:flex;flex-direction:column;gap:8px;margin-bottom:26px}
+.sec h3{font-size:calc(17px * var(--fs));font-weight:800;letter-spacing:-.01em}
+.sec span{min-width:26px;height:24px;padding:0 8px;border-radius:12px;background:var(--accs);color:var(--acc2);display:grid;place-items:center;font-size:calc(12px * var(--fs));font-weight:800}
+.sec.late h3{color:var(--late)}
+.sec.late span{background:var(--lates);color:var(--late)}
+.list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
 .in{animation:rowIn .55s var(--soft-spring) both}
 @keyframes rowIn{from{opacity:0;transform:translateY(16px) scale(.98)}}
-.swipe,.plain{position:relative;border-radius:22px;overflow:hidden}
-.sw-bg{position:absolute;inset:0;display:flex;justify-content:flex-end;align-items:center;padding:0 24px;border-radius:22px;background:var(--s3);color:var(--ink);font-size:calc(15px * var(--fs));font-weight:800;opacity:0}
+.swipe{position:relative;border-radius:20px;overflow:hidden}
+.sw-bg{position:absolute;inset:0;display:flex;justify-content:flex-end;align-items:center;padding:0 22px;border-radius:20px;background:#2A0D13;color:var(--late);font-size:calc(14.5px * var(--fs));font-weight:800;opacity:0}
 .swipe.sl .sw-bg{opacity:1}
-.sw-l{display:none}
 .sw-r{display:flex;align-items:center;gap:8px;opacity:.5;transform:scale(.88);transition:transform .3s var(--spring),opacity .2s}
 .sw-r svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .swipe.armed .sw-r{opacity:1;transform:scale(1.08)}
 
-.row{position:relative;z-index:1;display:flex;align-items:center;gap:6px;min-height:68px;padding:12px 18px 12px 8px;border-radius:22px;
-  background:var(--s1);border:1.5px solid var(--line);isolation:isolate;touch-action:pan-y;
+.row{position:relative;z-index:1;display:flex;align-items:center;gap:12px;min-height:72px;padding:12px 14px 12px 12px;border-radius:20px;
+  background:var(--s1);border:1px solid var(--line);isolation:isolate;touch-action:pan-y;
   transition:transform .45s var(--soft-spring),border-color .3s,--p .35s var(--ease)}
-.row::before{content:"";position:absolute;inset:-1px;background:var(--paper);transform:scaleX(var(--p));transform-origin:left;z-index:0;border-radius:inherit}
+.row::before{content:"";position:absolute;inset:-1px;background:linear-gradient(90deg,var(--acc),var(--acc2));transform:scaleX(var(--p));transform-origin:left;z-index:0;border-radius:inherit}
+.row>*{position:relative;z-index:1}
 .row.dragging{transition:border-color .3s}
 .row:active:not(.dragging){transform:scale(.985)}
-.row-main{position:relative;z-index:1;flex:1;min-width:0;color:#fff;mix-blend-mode:difference}
-.chk{position:relative;z-index:1;width:46px;height:46px;flex:none;display:grid;place-items:center;border-radius:50%;mix-blend-mode:difference}
-.chk i{width:27px;height:27px;border-radius:50%;border:2.4px solid rgba(255,255,255,.42);display:grid;place-items:center;transition:background .25s,border-color .25s,transform .3s var(--spring)}
-.chk:active i{transform:scale(.8);border-color:#fff}
-.chk svg{width:15px;height:15px;fill:none;stroke:#000;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s .1s var(--ease)}
-.row.done .chk i{background:#fff;border-color:#fff;animation:chkPop .45s var(--spring)}
+.ico{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#fff;
+  box-shadow:0 6px 18px rgba(47,123,255,.35);transition:transform .3s var(--spring),background .3s,box-shadow .3s,color .3s}
+.ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ico b{font-size:calc(16px * var(--fs));font-weight:800}
+.ico.ghost{background:var(--accs);color:var(--acc2);box-shadow:inset 0 0 0 2px rgba(92,155,255,.35)}
+button.ico:active{transform:scale(.82)}
+.chk svg{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s .1s var(--ease)}
 .row.done .chk svg{stroke-dashoffset:0}
+.row.done .chk{animation:chkPop .45s var(--spring)}
 @keyframes chkPop{0%{transform:scale(1)}35%{transform:scale(.7)}100%{transform:scale(1)}}
-.row-title{font-size:calc(20px * var(--fs));font-weight:800;letter-spacing:-.01em;line-height:1.24;overflow-wrap:anywhere}
-.row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:12px;font-size:calc(13.5px * var(--fs));font-weight:800;color:#8E8E8E;margin-top:4px}
+.row-main{flex:1;min-width:0}
+.row-title{font-size:calc(16.5px * var(--fs));font-weight:800;letter-spacing:-.01em;line-height:1.25;overflow-wrap:anywhere}
+.row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:4px}
 .row-meta em{font-style:normal;display:inline-flex;align-items:center;gap:5px}
-.row-meta svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.row-meta svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .row-meta svg.f{fill:currentColor;stroke:none}
-.row-meta .amb{color:#fff;letter-spacing:.08em;text-transform:uppercase;font-size:calc(11.5px * var(--fs))}
-.row-meta .amb svg{fill:#fff;stroke:none}
-.row.imp{border-color:var(--ink3)}
-
-.red{color:#fff!important;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
-.row.armed-ink{border-color:var(--paper)}
-.row.inked{--p:1;border-color:var(--paper)}
-.row-ico{width:28px;height:28px;flex:none;display:grid;place-items:center;color:var(--ink3)}
-.row-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.row-meta .amb{color:var(--acc2)}
+.row-meta .amb svg{fill:currentColor;stroke:none}
+.red{color:var(--late)!important}
+.pill{flex:none;height:28px;padding:0 12px;border-radius:14px;display:inline-flex;align-items:center;font-size:calc(12px * var(--fs));font-weight:800;background:var(--accs);color:var(--acc2);transition:background .3s,color .3s}
+.pill.late{background:var(--lates);color:var(--late)}
+.pill.done{background:var(--acc);color:#fff}
+.pill.now{background:#fff;color:#000}
+.row.done .row-title{color:var(--ink2)}
+.list.dim .row-title{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--ink3)}
+.list.dim .row{background:#07090D}
+.row.armed-ink{border-color:var(--acc)}
+.row.inked{--p:1;border-color:var(--acc)}
+.row.inked .row-title,.row.inked .row-meta{color:#fff}
+.row.inked .ico{background:#fff;color:var(--acc);box-shadow:none}
+.row.inked .pill{background:rgba(255,255,255,.22);color:#fff}
+.row.cur{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
 .list>[data-id]{transition:transform .3s var(--ease)}
-.list>.lifted{position:relative;z-index:30;transition:none!important;box-shadow:0 18px 40px rgba(0,0,0,.8),0 0 0 1.5px var(--ink3);border-radius:22px}
+.list>.lifted{position:relative;z-index:30;transition:none!important;box-shadow:0 18px 40px rgba(0,0,0,.8),0 0 0 1.5px var(--acc);border-radius:20px}
 .swipe.gone{pointer-events:none}
 .swipe.gone .row{transform:scale(.96);opacity:0;transition:transform .35s var(--ease),opacity .3s}
-.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;pointer-events:none;z-index:60}
-.spark.a{background:#9B9B9B}
-.spark.r{background:#fff;width:3px;height:3px}
+.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--acc2);pointer-events:none;z-index:120}
+.spark.a{background:#fff}
+.spark.r{background:var(--acc);width:3px;height:3px}
 
-.alldone{display:flex;align-items:center;gap:14px;padding:18px 20px;margin-bottom:24px;border-radius:22px;background:var(--paper);color:var(--void);font-size:calc(16px * var(--fs));font-weight:800}
-.alldone i{width:30px;height:30px;border-radius:50%;background:var(--void);display:grid;place-items:center;flex:none}
-.alldone svg{width:15px;height:15px;fill:none;stroke:var(--paper);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
-.swhint{display:flex;align-items:center;justify-content:center;gap:10px;margin:-10px 0 24px;font-size:calc(13.5px * var(--fs));font-weight:800;color:var(--ink3)}
-.swhint svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;animation:nudge 1.6s ease-in-out infinite}
+.swhint{display:flex;align-items:center;justify-content:center;gap:10px;margin:-10px 0 24px;font-size:calc(12.5px * var(--fs));font-weight:800;color:var(--ink3);text-align:center}
+.swhint svg{flex:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;animation:nudge 1.6s ease-in-out infinite}
 @keyframes nudge{0%,100%{transform:translateX(-3px)}50%{transform:translateX(4px)}}
-.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 22px 10px}
-.empty .mlogo{width:100px;height:70px;opacity:.12;margin-bottom:22px;animation:float 3.6s ease-in-out infinite}
-.empty.bare{padding:96px 0 20px}
-.empty.bare .mlogo{width:140px;height:98px;opacity:.1;margin:0}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 22px 20px;gap:10px}
+.empty .mlogo{width:110px;height:77px;opacity:.13;margin-bottom:14px;animation:float 3.6s ease-in-out infinite}
+.empty b{font-size:calc(19px * var(--fs));font-weight:800}
+.empty p{font-size:calc(14px * var(--fs));font-weight:700;color:var(--ink2);line-height:1.55;max-width:290px}
+.empty .btn{max-width:320px}
 @keyframes float{50%{transform:translateY(-8px) rotate(-2deg)}}
 
-/* ajout rapide */
-.quick{display:flex;gap:8px;margin-bottom:24px;position:relative}
-.qinput{flex:1;min-width:0;height:60px;border:1.5px solid var(--line);outline:0;border-radius:22px;background:var(--s1);padding:0 20px;font-size:calc(17px * var(--fs));font-weight:800;transition:border-color .25s}
-.qinput::placeholder{color:var(--ink3)}
-.qinput:focus{border-color:var(--paper)}
-.qbtn{flex:none;width:60px;height:60px;border-radius:22px;background:var(--paper);color:var(--void);display:grid;place-items:center;
-  transition:transform .35s var(--spring),opacity .2s,width .35s var(--spring),margin .35s var(--spring)}
-.qbtn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}
-.qinput:placeholder-shown+.qbtn{transform:scale(.4) rotate(-90deg);opacity:0;width:0;margin-left:-8px;pointer-events:none}
-.qbtn:active{transform:scale(.88)}
+/* ================= ROUTINE ================= */
+.rchips{display:flex;gap:8px;overflow-x:auto;margin:-6px -18px 16px;padding:2px 18px}
+.rchips::-webkit-scrollbar{display:none}
+.rchip{flex:none;height:38px;padding:0 16px;border-radius:19px;background:var(--s1);border:1px solid var(--line);font-size:calc(14px * var(--fs));font-weight:800;color:var(--ink2);
+  transition:background .25s,color .25s,border-color .25s,transform .3s var(--spring)}
+.rchip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.rchip:active{transform:scale(.92)}
+.rchip.new{width:38px;padding:0;display:grid;place-items:center}
+.rchip svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.hero{position:relative;overflow:hidden;isolation:isolate;border-radius:28px;padding:20px;margin-bottom:26px;
+  background:radial-gradient(130% 150% at 100% 0%,#2D6BFF 0%,#1238A8 42%,#0A1736 100%);box-shadow:0 18px 44px rgba(30,90,255,.28)}
+.view.active .hero{animation:heroIn .7s .06s var(--soft-spring) both}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.09) 50%,transparent 60%);background-size:300% 100%;animation:sweep 7s 2s ease-in-out infinite}
+@keyframes sweep{0%,70%{background-position:120% 0}100%{background-position:-60% 0}}
+.h-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.h-name{font-size:calc(23px * var(--fs));font-weight:800;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
+.h-sub{font-size:calc(13px * var(--fs));font-weight:700;color:rgba(255,255,255,.72);margin-top:5px}
+.h-edit{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none;transition:transform .25s var(--spring)}
+.h-edit:active{transform:scale(.85)}
+.h-edit svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.h-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.h-stat{background:rgba(0,0,0,.24);border-radius:16px;padding:10px 12px;min-width:0}
+.h-stat b{display:block;font-size:calc(18px * var(--fs));font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-stat small{display:block;font-size:calc(11px * var(--fs));font-weight:700;color:rgba(255,255,255,.65);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.18);margin-top:16px;overflow:hidden}
+.h-bar i{display:block;height:100%;background:#fff;border-radius:3px;transition:width .8s var(--soft-spring)}
+.h-go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:58px;margin-top:14px;border-radius:29px;background:#fff;color:#0A1A40;
+  font-size:calc(16px * var(--fs));font-weight:800;transition:transform .25s var(--spring)}
+.h-go:active{transform:scale(.96)}
+.h-go svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.h-go .pl{fill:currentColor;stroke:none}
+.h-go.ok{background:rgba(255,255,255,.16);color:#fff}
+.addstep{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:58px;border-radius:20px;border:1.5px dashed var(--line2);color:var(--ink2);
+  font-size:calc(15px * var(--fs));font-weight:800;margin-bottom:22px;transition:transform .25s var(--spring),border-color .25s,color .25s}
+.addstep:active{transform:scale(.97);border-color:var(--acc);color:var(--acc2)}
+.addstep svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
 
-/* ================= NOTES ================= */
-.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.ncard{position:relative;display:flex;flex-direction:column;text-align:left;min-height:140px;padding:18px 16px 14px;border-radius:24px;background:var(--s1);border:1.5px solid var(--line);
-  overflow:hidden;transition:transform .3s var(--soft-spring),border-color .3s}
-.ncard:active{transform:scale(.96);border-color:var(--line2)}
-.ncard:first-child{background:var(--paper);color:var(--void);border-color:var(--paper)}
-.ncard:first-child p{color:#555}
-.ncard:first-child small{color:#888}
-.ncard b{font-size:calc(18px * var(--fs));font-weight:800;line-height:1.22;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ncard p{flex:1;font-size:calc(14px * var(--fs));font-weight:700;color:var(--ink2);line-height:1.45;margin-top:8px;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.ncard small{font-family:var(--fd);font-size:calc(10px * var(--fs));font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:12px}
-.ncard.wide{grid-column:1/-1;min-height:0}
-.sheet.tall{height:93%;display:flex;flex-direction:column}
-.nh-act{display:flex;gap:8px}
-.note-input{flex:1;width:100%;border:0;outline:0;background:none;resize:none;padding:6px 6px 30px;color:var(--ink);font-size:calc(18px * var(--fs));font-weight:700;line-height:1.6}
-.note-input::first-line{font-size:calc(26px * var(--fs));font-weight:800}
-.note-input::placeholder{color:var(--ink3)}
+/* ================= MODE ROUTINE ================= */
+.run{position:absolute;inset:0;z-index:70;display:flex;flex-direction:column;padding:calc(var(--sat) + 14px) 20px calc(var(--sab) + 22px);
+  background:radial-gradient(90% 55% at 50% 36%,#0F2C78 0%,#050B1C 58%,#000 100%);
+  opacity:0;transform:translateY(40px) scale(.98);pointer-events:none;transition:opacity .35s var(--ease),transform .55s var(--soft-spring)}
+.run.show{opacity:1;transform:none;pointer-events:auto}
+.run-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.run-top .icon-btn{background:rgba(255,255,255,.1)}
+.run-name{flex:1;min-width:0;text-align:center;font-size:calc(14.5px * var(--fs));font-weight:800;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.run-n{min-width:40px;text-align:right;font-size:calc(14.5px * var(--fs));font-weight:800;color:var(--acc2)}
+.segs{display:flex;gap:4px;margin-top:18px}
+.segs i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden;position:relative;transition:background .4s}
+.segs i.d{background:var(--acc2)}
+.segs i.c::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(var(--k,0));transition:transform .3s linear}
+.run-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:24px;min-height:0}
+.dial{position:relative;width:min(64vw,260px,34vh);aspect-ratio:1}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dial circle{fill:none;stroke-width:10}
+.dial .bg{stroke:rgba(255,255,255,.08)}
+.dial .fg{stroke:url(#dg);stroke-linecap:round;stroke-dasharray:590.6;transition:stroke-dashoffset .3s linear,stroke .3s}
+.dial.over .fg{stroke:var(--late)}
+.dial-t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial-t b{font-size:calc(46px * var(--fs));font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.dial-t small{font-size:calc(12px * var(--fs));font-weight:800;color:rgba(255,255,255,.6);margin-top:6px;letter-spacing:.08em;text-transform:uppercase}
+.dial.over .dial-t b{color:var(--late)}
+.run.fin .dial{animation:heroWin .9s var(--spring)}
+.run-step{font-size:calc(30px * var(--fs));font-weight:800;letter-spacing:-.02em;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.run-step.swap{animation:stepIn .5s var(--soft-spring)}
+@keyframes stepIn{from{opacity:0;transform:translateX(44px)}}
+.run-next{font-size:calc(14.5px * var(--fs));font-weight:700;color:rgba(255,255,255,.62);line-height:1.5}
+.run-next b{color:#fff;font-weight:800}
+.run-go{flex:none;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:64px;border-radius:32px;background:var(--acc);color:#fff;
+  font-size:calc(17px * var(--fs));font-weight:800;box-shadow:0 12px 30px rgba(47,123,255,.45);transition:transform .25s var(--spring)}
+.run-go:active{transform:scale(.95)}
+.run-go svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.run-skip{flex:none;width:100%;height:50px;margin-top:6px;color:rgba(255,255,255,.6);font-size:calc(15px * var(--fs));font-weight:800}
 
 /* ================= BARRE ================= */
-.tfade{position:absolute;left:0;right:0;top:0;height:calc(var(--sat) + 18px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 60%,transparent)}
-.bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 120px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--bg) 55%)}
-.tabbar{position:absolute;left:14px;right:92px;bottom:calc(var(--sab) + 14px);height:66px;border-radius:33px;z-index:20;
-  background:rgba(18,18,18,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid var(--line2);
-  display:flex;align-items:center;gap:2px;padding:0 6px;transform:translateY(170%);transition:transform .8s var(--spring)}
+.tfade{position:absolute;left:0;right:0;top:0;height:calc(var(--sat) + 16px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 60%,transparent)}
+.bfade{position:absolute;left:0;right:0;bottom:0;height:calc(var(--sab) + 110px);z-index:15;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--bg) 55%)}
+.tabbar{position:absolute;left:14px;right:14px;bottom:calc(var(--sab) + 12px);height:68px;border-radius:24px;z-index:20;
+  background:rgba(13,15,21,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line2);
+  display:flex;align-items:center;padding:0 6px;transform:translateY(170%);transition:transform .8s var(--spring)}
 #root.app-in .tabbar{transform:none}
-.tab-ind{display:none}
-.tab{flex:1 1 0;min-width:0;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;gap:0;color:var(--ink3);
-  transition:flex-grow .45s var(--spring),background .3s,color .25s,gap .3s}
-.tab svg{flex:none;width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.tab span{max-width:0;overflow:hidden;white-space:nowrap;font-size:calc(13.5px * var(--fs));font-weight:800;opacity:0;transition:max-width .45s var(--ease),opacity .25s}
-.tab.active{flex-grow:2.6;background:var(--paper);color:var(--void);gap:7px}
-.tab.active span{max-width:90px;opacity:1;transition:max-width .45s var(--ease),opacity .3s .12s}
+.tab-ind{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:18px;background:var(--accs);transition:transform .5s var(--soft-spring),width .5s var(--soft-spring)}
+.tab{position:relative;flex:1;min-width:0;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--ink3);transition:color .25s}
+.tab svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tab span{font-size:calc(11.5px * var(--fs));font-weight:800}
+.tab.active{color:var(--acc2)}
 .tab.active svg{animation:tabPop .5s var(--spring)}
 @keyframes tabPop{0%{transform:scale(1)}35%{transform:scale(.75)}100%{transform:scale(1)}}
-.add{position:absolute;right:14px;bottom:calc(var(--sab) + 14px);width:66px;height:66px;border-radius:50%;z-index:20;background:var(--paper);color:var(--void);
-  display:grid;place-items:center;transform:translateY(170%);transition:transform .8s .06s var(--spring)}
-#root.app-in .add{transform:none;transition:transform .3s var(--spring)}
+.add{position:absolute;right:20px;bottom:calc(var(--sab) + 96px);width:60px;height:60px;border-radius:50%;z-index:21;background:var(--acc);color:#fff;
+  box-shadow:0 10px 28px rgba(47,123,255,.5);display:grid;place-items:center;transform:translateY(300%);transition:transform .8s .06s var(--spring),opacity .3s}
+#root.app-in .add{transform:none;transition:transform .35s var(--spring),opacity .3s}
 #root.app-in .add:active{transform:scale(.86) rotate(90deg)}
+#root.app-in .add.off{opacity:0;pointer-events:none;transform:scale(.4)}
 .add.spin svg{animation:spin .5s var(--spring)}
 @keyframes spin{from{transform:rotate(-90deg) scale(.6)}}
-.add svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round}
+.add svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round}
 
 /* ================= FEUILLES ================= */
-.backdrop{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.72);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.backdrop{position:absolute;inset:0;z-index:80;background:rgba(0,0,0,.72);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
 .backdrop.show{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:41;max-height:93%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0A0A0A;
-  border-top:1.5px solid var(--line2);border-radius:34px 34px 0 0;padding:10px 18px calc(var(--sab) + 22px);transform:translateY(105%);transition:transform .55s var(--soft-spring)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:81;max-height:93%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#080A0F;
+  border-top:1px solid var(--line2);border-radius:28px 28px 0 0;padding:10px 18px calc(var(--sab) + 22px);transform:translateY(105%);transition:transform .55s var(--soft-spring)}
 .sheet.show{transform:none}
 .sheet::-webkit-scrollbar{display:none}
 .sheet.show>*{animation:rowIn .5s var(--soft-spring) both}
@@ -297,223 +269,96 @@ svg{display:block}
 .sheet.show>*:nth-child(6){animation-delay:.12s}.sheet.show>*:nth-child(7){animation-delay:.15s}.sheet.show>*:nth-child(8){animation-delay:.18s}.sheet.show>*:nth-child(n+9){animation-delay:.21s}
 .grab{width:42px;height:5px;border-radius:3px;background:var(--line2);margin:0 auto 14px}
 .sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.sheet-head h2{font-family:var(--fd);font-size:calc(24px * var(--fs));font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
-.icon-btn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--s2);flex:none;transition:transform .25s var(--spring)}
+.sheet-head h2{font-size:calc(21px * var(--fs));font-weight:800;letter-spacing:-.02em}
+.icon-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--s2);flex:none;transition:transform .25s var(--spring)}
 .icon-btn:active{transform:scale(.86)}
-.icon-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.seg{display:flex;background:var(--s1);border:1.5px solid var(--line);border-radius:20px;padding:4px;margin-bottom:14px}
-.seg button{flex:1;height:48px;border-radius:15px;font-size:calc(16px * var(--fs));font-weight:800;color:var(--ink3);transition:background .25s,color .25s,transform .25s var(--spring)}
-.seg button:active{transform:scale(.95)}
-.seg button.on{background:var(--paper);color:var(--void)}
-.field{background:var(--s1);border:1.5px solid var(--line);border-radius:22px;padding:0 18px;transition:border-color .25s}
-.field:focus-within{border-color:var(--paper)}
-.field.shake,.days.shake,.quick.shake{animation:shake .4s}
+.icon-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.field{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:0 18px;transition:border-color .25s}
+.field:focus-within{border-color:var(--acc)}
+.field.shake,.days.shake{animation:shake .4s}
 @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-.tinput{display:block;width:100%;min-height:68px;border:0;outline:0;background:none;font-size:calc(23px * var(--fs));font-weight:800;letter-spacing:-.01em;line-height:1.25;padding:19px 0;resize:none;overflow:hidden}
+.tinput{display:block;width:100%;min-height:60px;border:0;outline:0;background:none;font-size:calc(20px * var(--fs));font-weight:800;letter-spacing:-.01em;line-height:1.25;padding:17px 0;resize:none;overflow:hidden}
 .tinput::placeholder{color:var(--ink3)}
-.label{font-family:var(--fd);font-size:calc(11px * var(--fs));font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:24px 6px 10px}
-.label.first{margin-top:0}
+.label{font-size:calc(12.5px * var(--fs));font-weight:800;color:var(--ink2);margin:22px 6px 10px}
 .days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.day{height:50px;border-radius:16px;background:var(--s1);border:1.5px solid var(--line);font-family:var(--fd);font-size:calc(14px * var(--fs));font-weight:800;color:var(--ink3);transition:background .2s,color .2s,transform .3s var(--spring)}
+.day{height:46px;border-radius:14px;background:var(--s1);border:1px solid var(--line);font-size:calc(13.5px * var(--fs));font-weight:800;color:var(--ink3);transition:background .2s,color .2s,transform .3s var(--spring)}
 .day:active{transform:scale(.88)}
-.day.on{background:var(--paper);border-color:var(--paper);color:var(--void)}
+.day.on{background:var(--acc);border-color:var(--acc);color:#fff}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.chip{height:42px;padding:0 17px;border-radius:21px;background:var(--s1);border:1.5px solid var(--line);font-size:calc(15px * var(--fs));font-weight:800;color:var(--ink2);transition:background .2s,color .2s,transform .3s var(--spring)}
+.chip{height:40px;padding:0 16px;border-radius:20px;background:var(--s1);border:1px solid var(--line);font-size:calc(14.5px * var(--fs));font-weight:800;color:var(--ink2);transition:background .2s,color .2s,transform .3s var(--spring)}
 .chip:active{transform:scale(.92)}
-.chip.on{background:var(--paper);border-color:var(--paper);color:var(--void)}
-.line-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:var(--s1);border:1.5px solid var(--line);border-radius:22px;padding:0 18px;min-height:66px;margin-top:8px;text-align:left;transition:transform .25s var(--soft-spring)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.line-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:var(--s1);border-radius:18px;padding:0 18px;min-height:58px;margin-top:8px;text-align:left;transition:transform .25s var(--soft-spring)}
 button.line-row:active{transform:scale(.98)}
-.line-row>span,.lr-t{font-size:calc(17px * var(--fs));font-weight:800}
-.lr-s{font-size:calc(13.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:3px}
-.line-row.danger{color:var(--ink)}
-.line-row.danger span{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+.line-row>span,.lr-t{font-size:calc(15.5px * var(--fs));font-weight:800}
+.lr-s{font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:3px}
+.line-row.danger span{color:var(--late)}
 .lr-ico{display:flex;align-items:center;gap:10px}
-.lr-ico svg{width:19px;height:19px;fill:var(--ink)}
-.native-input{font-size:calc(17px * var(--fs));font-weight:800;border:0;outline:0;background:var(--s3);color:var(--ink);border-radius:14px;height:44px;padding:0 12px;min-width:116px;flex:none;color-scheme:dark}
-.switch{width:56px;height:34px;border-radius:17px;background:var(--s3);position:relative;flex:none;transition:background .25s}
-.switch::after{content:"";position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:var(--ink3);transition:transform .4s var(--spring),background .25s,width .2s}
-.switch:active::after{width:32px}
-.switch.on{background:var(--paper)}
-.switch.on::after{transform:translateX(22px);background:var(--void)}
-.switch.on:active::after{transform:translateX(16px)}
+.lr-ico svg{width:19px;height:19px;fill:var(--acc2)}
+.native-input{font-size:calc(16px * var(--fs));font-weight:800;border:0;outline:0;background:var(--s3);color:var(--ink);border-radius:12px;height:42px;padding:0 12px;min-width:116px;flex:none;color-scheme:dark}
+.dur-in{display:flex;align-items:center;gap:8px;font-size:calc(14px * var(--fs));font-weight:800;color:var(--ink2)}
+.dur-in .native-input{min-width:0;width:78px;text-align:center}
+.switch{width:50px;height:30px;border-radius:15px;background:var(--s3);position:relative;flex:none;transition:background .25s}
+.switch::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:var(--ink3);transition:transform .4s var(--spring),background .25s,width .2s}
+.switch:active::after{width:28px}
+.switch.on{background:var(--acc)}
+.switch.on::after{transform:translateX(20px);background:#fff}
+.switch.on:active::after{transform:translateX(14px)}
 .collapse{overflow:hidden;transition:max-height .45s var(--ease),opacity .3s;max-height:90px;opacity:1}
 .collapse.hide{max-height:0;opacity:0}
-.btn{width:100%;height:62px;border-radius:31px;background:var(--paper);color:var(--void);font-family:var(--fd);font-size:calc(15px * var(--fs));font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-top:24px;transition:transform .25s var(--spring)}
+.btn{width:100%;height:56px;border-radius:28px;background:var(--acc);color:#fff;font-size:calc(16px * var(--fs));font-weight:800;margin-top:24px;box-shadow:0 10px 26px rgba(47,123,255,.35);transition:transform .25s var(--spring)}
 .btn:active{transform:scale(.96)}
-.btn-ghost{width:100%;height:54px;margin-top:6px;color:var(--ink2);font-size:calc(16px * var(--fs));font-weight:800;text-decoration:underline;text-underline-offset:4px}
-.btn-soft{width:100%;height:58px;margin-top:8px;border-radius:29px;border:1.5px solid var(--line2);font-size:calc(16px * var(--fs));font-weight:800;transition:transform .25s var(--spring)}
+.btn-ghost{width:100%;height:50px;margin-top:6px;color:var(--late);font-size:calc(15px * var(--fs));font-weight:800}
+.btn-soft{width:100%;height:52px;margin-top:8px;border-radius:26px;background:var(--s2);font-size:calc(15px * var(--fs));font-weight:800;transition:transform .25s var(--spring)}
 .btn-soft:active{transform:scale(.96)}
 .notes-field{padding:0 18px}
-.ninput{display:block;width:100%;min-height:96px;border:0;outline:0;background:none;resize:none;overflow:hidden;font-size:calc(17px * var(--fs));font-weight:700;line-height:1.55;padding:16px 0;color:var(--ink)}
+.ninput{display:block;width:100%;min-height:90px;border:0;outline:0;background:none;resize:none;overflow:hidden;font-size:calc(15.5px * var(--fs));font-weight:700;line-height:1.55;padding:14px 0;color:var(--ink)}
 .ninput::placeholder{color:var(--ink3)}
-.dt-kind{display:inline-flex;align-items:center;height:30px;padding:0 13px;border-radius:15px;border:1.5px solid var(--line2);font-family:var(--fd);font-size:calc(10.5px * var(--fs));font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
-.dt-title{font-size:calc(28px * var(--fs));font-weight:800;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere;margin:2px 4px 0}
+.dt-kind{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:14px;background:var(--accs);font-size:calc(12px * var(--fs));font-weight:800;color:var(--acc2)}
+.dt-title{font-size:calc(24px * var(--fs));font-weight:800;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere;margin:2px 4px 0}
 .dt-title.done{color:var(--ink3)}
-.dt-meta{margin:12px 4px 0;gap:12px;font-size:calc(15px * var(--fs));color:var(--ink2);mix-blend-mode:normal}
+.dt-meta{margin:12px 4px 0;gap:12px;font-size:calc(14px * var(--fs))}
 .dt-meta:empty{display:none}
 .dt-saved{height:0;overflow:visible;text-align:right;font-size:calc(12.5px * var(--fs));font-weight:800;color:var(--ink3);padding-right:8px;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
 .dt-saved.show{opacity:1;transform:translateY(8px)}
 
 /* ================= RÉGLAGES ================= */
-.acc{background:var(--s1);border:1.5px solid var(--line);border-radius:24px;margin-bottom:8px;overflow:hidden;transition:border-color .3s}
+.acc{background:var(--s1);border-radius:20px;margin-bottom:8px;overflow:hidden;border:1px solid var(--line);transition:border-color .3s}
 .acc.open{border-color:var(--line2)}
 .view.active .acc{animation:rowIn .5s var(--soft-spring) both}
 .view.active .acc:nth-of-type(2){animation-delay:.03s}.view.active .acc:nth-of-type(3){animation-delay:.06s}.view.active .acc:nth-of-type(4){animation-delay:.09s}
 .view.active .acc:nth-of-type(5){animation-delay:.12s}.view.active .acc:nth-of-type(6){animation-delay:.15s}.view.active .acc:nth-of-type(7){animation-delay:.18s}
-.acc-h{display:flex;align-items:center;gap:14px;width:100%;min-height:72px;padding:12px 16px;text-align:left}
-.acc-ico{width:42px;height:42px;flex:none;border-radius:14px;background:var(--s3);display:grid;place-items:center;transition:background .3s,color .3s}
-.acc.open .acc-ico{background:var(--paper);color:var(--void);animation:icoIn .5s var(--spring)}
-.acc-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.acc-h{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:10px 14px;text-align:left}
+.acc-ico{width:38px;height:38px;flex:none;border-radius:50%;background:var(--accs);color:var(--acc2);display:grid;place-items:center;transition:background .3s,color .3s}
+.acc.open .acc-ico{background:var(--acc);color:#fff;animation:icoIn .5s var(--spring)}
+@keyframes icoIn{from{transform:scale(.3) rotate(-35deg);opacity:0}}
+.acc-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .acc-t{flex:1;min-width:0}
-.acc-t b{display:block;font-size:calc(17px * var(--fs));font-weight:800}
-.acc-t small{display:block;font-size:calc(13.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc-t b{display:block;font-size:calc(15.5px * var(--fs));font-weight:800}
+.acc-t small{display:block;font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .acc-chev{width:20px;height:20px;flex:none;fill:none;stroke:var(--ink3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s var(--ease)}
 .acc.open .acc-chev{transform:rotate(180deg)}
 .acc-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
 .acc.open .acc-b{grid-template-rows:1fr}
 .acc-in{min-height:0;overflow:hidden;opacity:0;transition:opacity .25s}
 .acc.open .acc-in{opacity:1;transition:opacity .35s .08s}
-.acc .line-row{background:transparent;border:0;border-radius:0;margin-top:0;border-top:1.5px solid var(--line)}
-.acc .seg{margin:4px 14px 12px}
-.acc .tip{background:transparent;border:0;margin:0;padding:8px 18px 18px;border-top:1.5px solid var(--line);border-radius:0}
-.tip{background:var(--s1);border:1.5px solid var(--line);border-radius:22px;padding:18px;margin-top:8px;font-size:calc(15px * var(--fs));font-weight:700;color:var(--ink2);line-height:1.6}
+.acc .line-row{background:transparent;border-radius:0;margin-top:0;border-top:1px solid var(--line)}
+.tip{background:var(--s1);border-radius:18px;padding:18px;margin-top:8px;font-size:calc(14px * var(--fs));font-weight:700;color:var(--ink2);line-height:1.6}
+.acc .tip{background:transparent;margin:0;padding:8px 18px 18px;border-top:1px solid var(--line);border-radius:0}
 .tip b{color:var(--ink);font-weight:800}
 .tip ol{padding-left:18px}
 .tip li+li{margin-top:6px}
-.foot{text-align:center;font-family:var(--fd);font-size:calc(10.5px * var(--fs));font-weight:800;color:var(--ink3);margin-top:24px;letter-spacing:.2em;text-transform:uppercase}
+.foot{text-align:center;font-size:calc(11px * var(--fs));font-weight:800;color:var(--ink3);margin-top:24px;letter-spacing:.14em;text-transform:uppercase}
 
 /* ================= TOAST + CONFETTIS ================= */
-.toast{position:absolute;left:50%;top:calc(var(--sat) + 12px);z-index:90;display:flex;align-items:center;gap:14px;
-  transform:translate(-50%,-24px) scale(.96);opacity:0;visibility:hidden;pointer-events:none;background:var(--paper);color:var(--void);
-  padding:13px 14px 13px 20px;border-radius:26px;font-size:calc(15.5px * var(--fs));font-weight:800;max-width:90%;
-  transition:transform .45s var(--spring),opacity .25s,visibility 0s .45s;white-space:nowrap}
+.toast{position:absolute;left:50%;top:calc(var(--sat) + 12px);z-index:110;display:flex;align-items:center;gap:14px;
+  transform:translate(-50%,-24px) scale(.96);opacity:0;visibility:hidden;pointer-events:none;background:#fff;color:#000;
+  padding:11px 12px 11px 18px;border-radius:24px;font-size:calc(14.5px * var(--fs));font-weight:800;max-width:90%;
+  transition:transform .45s var(--spring),opacity .25s,visibility 0s .45s;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .toast span{overflow:hidden;text-overflow:ellipsis}
 .toast.show{transform:translate(-50%,0) scale(1);opacity:1;visibility:visible;pointer-events:auto;transition:transform .45s var(--spring),opacity .2s,visibility 0s}
-.toast button{flex:none;color:var(--paper);background:var(--void);font-weight:800;padding:8px 14px;border-radius:16px;margin:-6px 0}
-.confetti{position:absolute;inset:0;width:100%;height:100%;z-index:95;pointer-events:none}
-
-
-/* ================= ALLÈGEMENT ================= */
-#v-today .tiles{flex:0 1 auto;min-height:120px}
-#v-today .tile-prev{flex:0 1 auto}
-:root{--s1:#0E0E0E;--line:#161616;--line2:#222}
-.view{padding:calc(var(--sat) + 20px) 18px calc(var(--sab) + 116px)}
-.head{margin-bottom:16px}
-.eyebrow{font-size:calc(11px * var(--fs));letter-spacing:.18em;margin-bottom:7px}
-.title{font-size:calc(26px * var(--fs));letter-spacing:-.02em}
-#v-today .title{font-size:calc(22px * var(--fs))}
-.streak{height:28px;padding:0 11px;border:1px solid var(--line2);font-size:calc(11.5px * var(--fs))}
-.streak svg{width:13px;height:13px}
-
-/* jauge plus légère */
-.gauge{height:96px;border-radius:24px;border:0;margin-bottom:14px}
-.g-txt{padding:14px 18px;gap:8px}
-.g-top{font-size:calc(11px * var(--fs));letter-spacing:.16em}
-.g-pct{height:21px;padding:0 8px;border-width:1px;font-size:calc(10px * var(--fs))}
-.g-sub{font-size:calc(17px * var(--fs));line-height:1.2}
-.g-ticks,.bub{display:none}
-.g-wave{height:7px} .g-wave.b{height:9px;opacity:.25}
-
-/* semaine discrète */
-.week{gap:6px;margin-bottom:14px}
-.wd{gap:5px}
-.wd small{font-size:calc(10px * var(--fs));}
-.wbar{height:22px;border:0;border-radius:7px;background:#141414}
-.wd b{font-size:calc(11px * var(--fs))}
-.wd.now .wbar{box-shadow:inset 0 0 0 1.5px var(--ink)}
-.wd.now .wbar{animation:none}
-
-/* encadrés épurés */
-.tiles{gap:8px}
-.tile{padding:14px 14px 12px;border:0;border-radius:22px}
-.tile-ico{width:28px;height:28px;border-radius:9px}
-.tile-ico svg{width:15px;height:15px}
-.tile-go{width:17px;height:17px}
-.tile-n{font-size:calc(32px * var(--fs));margin-top:12px}
-.tile-l{font-size:calc(13px * var(--fs));margin-top:2px}
-.tile-bar{display:none}
-.tile-prev{margin-top:12px;gap:7px}
-.tile-prev li{font-size:calc(13.5px * var(--fs));font-weight:700}
-.tile-prev li::before{width:4px;height:4px}
-
-/* listes fines */
-.sec{margin:0 4px 8px}
-.sec h3{font-size:calc(10.5px * var(--fs));letter-spacing:.16em;color:var(--ink3)}
-.sec span{border:0;min-width:0;height:auto;padding:0;font-size:calc(11px * var(--fs));color:var(--ink3)}
-.list{gap:6px;margin-bottom:22px}
-.swipe,.plain,.sw-bg{border-radius:16px}
-.row{min-height:54px;padding:6px 14px 6px 4px;border:0;border-radius:16px;gap:2px}
-.row-title{font-size:calc(16.5px * var(--fs));font-weight:700;line-height:1.25}
-.row-meta{font-size:calc(12.5px * var(--fs));font-weight:700;gap:10px;margin-top:2px}
-.row-meta svg{width:12px;height:12px}
-.chk{width:42px;height:42px}
-.chk i{width:22px;height:22px;border-width:2px}
-.chk svg{width:12px;height:12px}
-.row.imp{border:0}
-.list>.lifted{border-radius:16px}
-.alldone{padding:14px 16px;border-radius:16px;font-size:calc(15px * var(--fs))}
-.alldone i{width:24px;height:24px}
-.swhint{font-size:calc(12px * var(--fs));margin:-8px 0 20px}
-.hprog{height:3px;margin-top:14px}
-
-/* ajout rapide */
-.quick{margin-bottom:20px}
-.qinput{height:50px;border:0;border-radius:16px;font-size:calc(15.5px * var(--fs));font-weight:700;padding:0 16px}
-.qinput:focus{box-shadow:inset 0 0 0 1.5px var(--ink)}
-.qbtn{width:50px;height:50px;border-radius:16px}
-
-/* notes */
-.notes-grid{gap:8px}
-.ncard{min-height:104px;padding:14px;border:0;border-radius:18px}
-.ncard b{font-size:calc(15.5px * var(--fs))}
-.ncard p{font-size:calc(13px * var(--fs));margin-top:6px;-webkit-line-clamp:3}
-.ncard small{font-size:calc(9.5px * var(--fs));margin-top:10px}
-
-/* barre du bas */
-.tabbar{height:58px;border-radius:29px;border:1px solid var(--line2);bottom:calc(var(--sab) + 12px);left:12px;right:82px}
-.tab{height:46px;border-radius:23px}
-.tab svg{width:21px;height:21px}
-.tab span{font-size:calc(12.5px * var(--fs))}
-.add{width:58px;height:58px;right:12px;bottom:calc(var(--sab) + 12px)}
-.add svg{width:24px;height:24px}
-.bfade{height:calc(var(--sab) + 100px)}
-
-/* réglages */
-.acc{border:0;border-radius:20px;margin-bottom:6px}
-.acc-h{min-height:60px;padding:10px 14px;gap:12px}
-.acc-ico{width:34px;height:34px;border-radius:11px}
-.acc-ico svg{width:17px;height:17px}
-.acc-t b{font-size:calc(15.5px * var(--fs))}
-.acc-t small{font-size:calc(12.5px * var(--fs))}
-.acc .line-row{border-top:1px solid var(--line)}
-.line-row{min-height:56px;border:0;border-radius:16px}
-.line-row>span,.lr-t{font-size:calc(15.5px * var(--fs));font-weight:700}
-.lr-s{font-size:calc(12.5px * var(--fs))}
-.switch{width:48px;height:28px}
-.switch::after{width:20px;height:20px}
-.switch.on::after{transform:translateX(20px)}
-.tip{font-size:calc(14px * var(--fs));border:0}
-
-/* feuilles */
-.sheet{border-top:1px solid var(--line2);border-radius:28px 28px 0 0}
-.sheet-head h2{font-size:calc(19px * var(--fs))}
-.icon-btn{width:40px;height:40px}
-.icon-btn svg{width:18px;height:18px}
-.seg{border:0;border-radius:16px}
-.seg button{height:42px;border-radius:12px;font-size:calc(15px * var(--fs))}
-.field{border:0;border-radius:18px}
-.field:focus-within{box-shadow:inset 0 0 0 1.5px var(--ink)}
-.tinput{font-size:calc(20px * var(--fs));min-height:58px;padding:16px 0}
-.label{font-size:calc(10px * var(--fs));margin:20px 6px 8px}
-.day{height:44px;border:0;border-radius:13px;font-size:calc(12.5px * var(--fs))}
-.chip{height:38px;padding:0 15px;border:0;font-size:calc(14px * var(--fs))}
-.ninput{font-size:calc(15.5px * var(--fs))}
-.btn{height:54px;border-radius:27px;font-size:calc(13.5px * var(--fs))}
-.btn-soft{height:50px;border:1px solid var(--line2);font-size:calc(15px * var(--fs))}
-.btn-ghost{height:48px;font-size:calc(14.5px * var(--fs))}
-.dt-title{font-size:calc(23px * var(--fs))}
-.dt-kind{height:26px;border-width:1px;font-size:calc(9.5px * var(--fs))}
-.toast{font-size:calc(14.5px * var(--fs));padding:11px 12px 11px 18px}
+.toast button{flex:none;color:#fff;background:var(--acc);font-weight:800;padding:8px 14px;border-radius:16px;margin:-6px 0}
+.confetti{position:absolute;inset:0;width:100%;height:100%;z-index:115;pointer-events:none}
 </style>
 </head>
 <body>
@@ -529,41 +374,25 @@ button.line-row:active{transform:scale(.98)}
   </div>
 
   <main class="views">
-    <section class="view active" id="v-today">
+    <section class="view active" id="v-tasks">
       <header class="head">
-        <div><div class="eyebrow" id="todayDate"></div><h1 class="title">Aujourd'hui</h1></div>
-        <div class="streak" id="heroStreak" hidden><svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6.5 6 12a6 6 0 0 1-12 0c0-3 1.7-5 3-6.2 0 2 1 3.2 2.2 3.2C11 7 10 5 12 2z"/></svg><span></span></div>
+        <div><div class="eyebrow" id="tDate"></div><h1 class="title"><span id="hello">Bonjour</span> <span class="wave">👋</span></h1></div>
+        <div class="ring" id="tRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
       </header>
-      <div class="gauge empty" id="hero">
-        <div class="g-fill"><i class="bub" style="left:8%;--s:5px;--d:0s;--t:4.2s;--x:6px"></i><i class="bub" style="left:22%;--s:8px;--d:1.3s;--t:5s;--x:-8px"></i><i class="bub" style="left:37%;--s:4px;--d:2.4s;--t:3.6s;--x:5px"></i><i class="bub" style="left:51%;--s:7px;--d:0.6s;--t:4.6s;--x:-4px"></i><i class="bub" style="left:66%;--s:5px;--d:1.9s;--t:4s;--x:7px"></i><i class="bub" style="left:79%;--s:9px;--d:3s;--t:5.4s;--x:-6px"></i><i class="bub" style="left:91%;--s:4px;--d:0.9s;--t:3.8s;--x:4px"></i><svg class="g-wave b" viewBox="0 0 800 20" preserveAspectRatio="none"><path d="M0 10Q50 0 100 10T200 10T300 10T400 10T500 10T600 10T700 10T800 10V20H0Z"/></svg><svg class="g-wave" viewBox="0 0 800 20" preserveAspectRatio="none"><path d="M0 10Q50 0 100 10T200 10T300 10T400 10T500 10T600 10T700 10T800 10V20H0Z"/></svg></div>
-        <div class="g-txt">
-          <div class="g-top"><span class="g-day"><span id="gDate"></span><span class="g-pct"><b id="ringPct">0</b>%</span></span><span id="heroBig"></span></div>
-          <div class="g-sub" id="heroSub"></div>
-          <div class="g-ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        </div>
-      </div>
-      <div class="week" id="week"></div>
-      <div class="tiles" id="tiles"></div>
-    </section>
-
-    <section class="view" id="v-rituals">
-      <header class="head"><div class="eyebrow" id="ritCount"></div><h1 class="title">Rituels</h1><div class="hprog"><i id="ritProg"></i></div></header>
-      <div id="ritList"></div>
-    </section>
-
-    <section class="view" id="v-tasks">
-      <header class="head"><div class="eyebrow" id="tasksCount"></div><h1 class="title">Tâches</h1></header>
-      <form class="quick" data-q="tasks" autocomplete="off"><input class="qinput" placeholder="Ajouter une tâche…" maxlength="140" enterkeyhint="done"><button class="qbtn" type="submit" aria-label="Ajouter"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></form>
       <div id="tasksList"></div>
     </section>
 
-    <section class="view" id="v-notes">
-      <header class="head"><div class="eyebrow" id="notesCount"></div><h1 class="title">Notes</h1></header>
-      <div id="notesList"></div>
+    <section class="view" id="v-routine">
+      <header class="head">
+        <div><div class="eyebrow" id="rEyebrow"></div><h1 class="title">Routine</h1></div>
+        <div class="ring" id="rRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
+      </header>
+      <div class="rchips" id="rChips"></div>
+      <div id="rBody"></div>
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div class="eyebrow">Rituel 5.0</div><h1 class="title">Réglages</h1></header>
+      <header class="head"><div><div class="eyebrow">Rituel 6.0</div><h1 class="title">Réglages</h1></div></header>
 
       <div class="acc" data-acc="notif">
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg></span><span class="acc-t"><b>Notifications</b><small id="sumNotif"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -573,7 +402,7 @@ button.line-row:active{transform:scale(.98)}
         <button class="chip on" id="notifBtn" data-act="notif">Activer</button>
       </div>
       <div class="line-row">
-        <div><div class="lr-t">Rappels des rituels et tâches</div><div class="lr-s">À l'heure choisie pour chacun</div></div>
+        <div><div class="lr-t">Rappels des routines et tâches</div><div class="lr-s">À l'heure choisie pour chacune</div></div>
         <button class="switch" data-act="sw" data-k="remindItems" aria-label="Rappels"></button>
       </div>
       <div class="line-row">
@@ -595,7 +424,7 @@ button.line-row:active{transform:scale(.98)}
       </div>
       <div class="collapse" id="morningWrap"><div class="line-row"><span>Heure</span><input type="time" id="sMorning" class="native-input"></div></div>
       <div class="line-row">
-        <div><div class="lr-t">Bilan du soir</div><div class="lr-s">S'il te reste des choses à cocher</div></div>
+        <div><div class="lr-t">Bilan du soir</div><div class="lr-s">S'il te reste des choses à faire</div></div>
         <button class="switch" data-act="sw" data-k="evening" aria-label="Bilan du soir"></button>
       </div>
       <div class="collapse" id="eveningWrap"><div class="line-row"><span>Heure</span><input type="time" id="sEvening" class="native-input"></div></div>
@@ -610,7 +439,7 @@ button.line-row:active{transform:scale(.98)}
         <button class="acc-h" data-act="acc"><span class="acc-ico"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span><span class="acc-t"><b>Sons et vibrations</b><small id="sumSens"></small></span><svg class="acc-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="acc-b"><div class="acc-in">
       <div class="line-row">
-        <div><div class="lr-t">Sons</div><div class="lr-s">Au cochage, à l'ajout, aux victoires</div></div>
+        <div><div class="lr-t">Sons</div><div class="lr-s">À la validation, à l'ajout, aux victoires</div></div>
         <button class="switch" data-act="sw" data-k="sound" aria-label="Sons"></button>
       </div>
       <div class="line-row">
@@ -625,10 +454,6 @@ button.line-row:active{transform:scale(.98)}
       <div class="line-row">
         <div><div class="lr-t">Texte en gras</div><div class="lr-s">Plus épais et un peu plus grand</div></div>
         <button class="switch" data-act="sw" data-k="bold" aria-label="Texte en gras"></button>
-      </div>
-      <div class="line-row">
-        <div><div class="lr-t">Tâches avant les rituels</div><div class="lr-s">Dans la barre du bas et sur l’accueil</div></div>
-        <button class="switch" data-act="sw" data-k="tasksFirst" aria-label="Tâches avant les rituels"></button>
       </div>
         </div></div>
       </div>
@@ -650,12 +475,11 @@ button.line-row:active{transform:scale(.98)}
         <div class="acc-b"><div class="acc-in">
       <div class="tip">
         <ol>
-          <li>Touche le <b>rond</b> ou glisse une ligne <b>vers la droite</b> pour la valider.</li>
-          <li>Glisse <b>vers la gauche</b> pour la supprimer. Tu as quelques secondes pour annuler.</li>
-          <li>Garde le doigt appuyé sur une ligne pour la <b>déplacer</b>.</li>
-          <li>Dans un rappel, touche <b>Fait</b> pour cocher sans ouvrir l'app, ou <b>Dans 10 min</b> pour le reporter.</li>
-          <li>Touche un rituel ou une tâche pour voir ses <b>notes</b>. Commence une ligne par « - » pour faire une liste.</li>
-          <li>Dans <b>Notes</b>, la première ligne d’une note devient son titre.</li>
+          <li>Touche le <b>rond</b> ou glisse une tâche <b>vers la droite</b> pour la valider.</li>
+          <li>Glisse <b>vers la gauche</b> pour supprimer. Tu as quelques secondes pour annuler.</li>
+          <li>Garde le doigt appuyé sur une tâche ou une étape pour la <b>déplacer</b>.</li>
+          <li>Dans <b>Routine</b>, touche <b>Commencer</b> puis <b>Valider</b> à chaque étape pour passer à la suivante.</li>
+          <li>Dans un rappel de tâche, touche <b>Fait</b> pour cocher sans ouvrir l'app, ou <b>Dans 10 min</b> pour le reporter.</li>
         </ol>
       </div>
         </div></div>
@@ -668,7 +492,7 @@ button.line-row:active{transform:scale(.98)}
         </div></div>
       </div>
 
-      <p class="foot">Rituel · version 5.0</p>
+      <p class="foot">Rituel · version 6.0</p>
     </section>
   </main>
 
@@ -676,17 +500,11 @@ button.line-row:active{transform:scale(.98)}
   <div class="bfade" aria-hidden="true"></div>
   <nav class="tabbar">
     <div class="tab-ind" id="tabInd"></div>
-    <button class="tab active" data-act="tab" data-v="today">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg><span>Jour</span>
-    </button>
-    <button class="tab" data-act="tab" data-v="rituals">
-      <svg viewBox="0 0 24 24"><path d="M17 2.5l3 3-3 3"/><path d="M4 11V9.5a4 4 0 0 1 4-4h12"/><path d="M7 21.5l-3-3 3-3"/><path d="M20 13v1.5a4 4 0 0 1-4 4H4"/></svg><span>Rituels</span>
-    </button>
-    <button class="tab" data-act="tab" data-v="tasks">
+    <button class="tab active" data-act="tab" data-v="tasks">
       <svg viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7 5"/><path d="M3.5 12l1.3 1.3L7 11"/><path d="M3.5 18l1.3 1.3L7 17"/></svg><span>Tâches</span>
     </button>
-    <button class="tab" data-act="tab" data-v="notes">
-      <svg viewBox="0 0 24 24"><path d="M14.5 3.5H7a2.5 2.5 0 0 0-2.5 2.5v12A2.5 2.5 0 0 0 7 20.5h10a2.5 2.5 0 0 0 2.5-2.5V8.5z"/><path d="M14.5 3.5v5h5M8.5 13h7M8.5 16.5h4.5"/></svg><span>Notes</span>
+    <button class="tab" data-act="tab" data-v="routine">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.3 1.7M9.5 2.5h5M12 2.5v3.5M18.5 6.5l1.5-1.5"/></svg><span>Routine</span>
     </button>
     <button class="tab" data-act="tab" data-v="settings">
       <svg viewBox="0 0 24 24"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="8.5" cy="17" r="2.5"/></svg><span>Réglages</span>
@@ -694,61 +512,61 @@ button.line-row:active{transform:scale(.98)}
   </nav>
   <button class="add" data-act="add" aria-label="Ajouter"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
 
+  <!-- MODE ROUTINE -->
+  <div class="run" id="run">
+    <div class="run-top">
+      <button class="icon-btn" data-act="rclose" aria-label="Mettre en pause"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="run-name" id="runName"></div>
+      <div class="run-n" id="runN"></div>
+    </div>
+    <div class="segs" id="segs"></div>
+    <div class="run-body">
+      <div class="dial" id="dial">
+        <svg viewBox="0 0 200 200"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DB0FF"/><stop offset="1" stop-color="#2F7BFF"/></linearGradient></defs><circle class="bg" cx="100" cy="100" r="94"/><circle class="fg" cx="100" cy="100" r="94"/></svg>
+        <div class="dial-t"><b id="dialT">0:00</b><small id="dialS">restant</small></div>
+      </div>
+      <div class="run-step" id="runStep"></div>
+      <div class="run-next" id="runNext"></div>
+    </div>
+    <button class="run-go" data-act="rnext" id="runGo"></button>
+    <button class="run-skip" data-act="rskip" id="runSkip">Passer cette étape</button>
+  </div>
+
   <div class="backdrop" id="backdrop" data-act="close"></div>
 
-  <!-- EDITOR -->
+  <!-- TÂCHE -->
   <div class="sheet" id="editor">
     <div class="grab"></div>
     <div class="sheet-head">
-      <h2 id="edTitle">Nouveau</h2>
+      <h2 id="edTitle">Nouvelle tâche</h2>
       <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <div class="seg" id="typeSeg">
-      <button data-act="type" data-t="ritual">Rituel</button>
-      <button data-act="type" data-t="task">Tâche</button>
+    <div class="field" id="titleField"><textarea id="fTitle" class="tinput" rows="1" placeholder="Appeler le garage" maxlength="140" autocomplete="off" enterkeyhint="done"></textarea></div>
+    <div class="label">Échéance</div>
+    <div class="chips" id="dateChips" style="margin-top:0">
+      <button class="chip" data-act="dpreset" data-p="none">Quand je veux</button>
+      <button class="chip" data-act="dpreset" data-p="0">Aujourd'hui</button>
+      <button class="chip" data-act="dpreset" data-p="1">Demain</button>
     </div>
-    <div class="field" id="titleField"><textarea id="fTitle" class="tinput" rows="1" placeholder="Méditer 10 minutes" maxlength="140" autocomplete="off" enterkeyhint="done"></textarea></div>
-
-    <div id="ritualFields">
-      <div class="label">Jours</div>
-      <div class="days" id="days"></div>
-      <div class="chips" id="presetChips">
-        <button class="chip" data-act="preset" data-p="all">Chaque jour</button>
-        <button class="chip" data-act="preset" data-p="week">En semaine</button>
-        <button class="chip" data-act="preset" data-p="we">Week-end</button>
-      </div>
+    <div class="line-row"><span>Date</span><input type="date" id="fDate" class="native-input"></div>
+    <div class="line-row">
+      <div class="lr-ico"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg><span class="lr-t">Important</span></div>
+      <button class="switch" id="fImp" data-act="imp" aria-label="Important"></button>
     </div>
-
-    <div id="taskFields">
-      <div class="label">Échéance</div>
-      <div class="chips" id="dateChips" style="margin-top:0">
-        <button class="chip" data-act="dpreset" data-p="none">Sans date</button>
-        <button class="chip" data-act="dpreset" data-p="0">Aujourd'hui</button>
-        <button class="chip" data-act="dpreset" data-p="1">Demain</button>
-      </div>
-      <div class="line-row"><span>Date</span><input type="date" id="fDate" class="native-input"></div>
-      <div class="line-row">
-        <div class="lr-ico"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg><span class="lr-t">Important</span></div>
-        <button class="switch" id="fImp" data-act="imp" aria-label="Important"></button>
-      </div>
-    </div>
-
     <div class="label">Rappel</div>
-    <div class="line-row"><span>Notification</span><button class="switch" id="fRemind" data-act="remind" aria-label="Rappel"></button></div>
+    <div class="line-row" style="margin-top:0"><span>Notification</span><button class="switch" id="fRemind" data-act="remind" aria-label="Rappel"></button></div>
     <div class="collapse" id="timeWrap"><div class="line-row"><span>Heure</span><input type="time" id="fTime" class="native-input" value="09:00"></div></div>
-
     <div class="label">Notes</div>
     <div class="field notes-field"><textarea id="fNotes" class="ninput" rows="2" placeholder="- Une idée par ligne"></textarea></div>
-
     <button class="btn" data-act="save">Enregistrer</button>
     <button class="btn-ghost" id="fDelete" data-act="delete">Supprimer</button>
   </div>
 
-  <!-- DÉTAIL -->
+  <!-- DÉTAIL TÂCHE -->
   <div class="sheet" id="detail">
     <div class="grab"></div>
     <div class="sheet-head">
-      <span class="dt-kind" id="dKind">Tâche</span>
+      <span class="dt-kind">Tâche</span>
       <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <h2 class="dt-title" id="dTitle"></h2>
@@ -760,17 +578,41 @@ button.line-row:active{transform:scale(.98)}
     <button class="btn-soft" data-act="dedit">Modifier</button>
   </div>
 
-  <!-- NOTE -->
-  <div class="sheet tall" id="noteSheet">
+  <!-- ÉTAPE -->
+  <div class="sheet" id="stepSheet">
     <div class="grab"></div>
     <div class="sheet-head">
-      <span class="dt-kind" id="nDate">Note</span>
-      <div class="nh-act">
-        <button class="icon-btn" data-act="ndelete" aria-label="Supprimer"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M5.5 7l1 12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>
-        <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      </div>
+      <h2 id="stTitle">Nouvelle étape</h2>
+      <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <textarea id="nText" class="note-input" placeholder="Titre de la note&#10;Écris ce que tu veux…"></textarea>
+    <div class="field" id="stField"><textarea id="sTitle" class="tinput" rows="1" placeholder="Me peser" maxlength="80" autocomplete="off" enterkeyhint="done"></textarea></div>
+    <div class="label">Temps que ça me prend</div>
+    <div class="chips" id="durChips" style="margin-top:0"></div>
+    <div class="line-row"><span>Autre durée</span><div class="dur-in"><input type="number" id="sDur" class="native-input" min="1" max="240" inputmode="numeric">min</div></div>
+    <button class="btn" data-act="ssave">Enregistrer</button>
+    <button class="btn-ghost" id="sDelete" data-act="sdelete">Supprimer l'étape</button>
+  </div>
+
+  <!-- ROUTINE -->
+  <div class="sheet" id="routSheet">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <h2 id="rtTitle">Nouvelle routine</h2>
+      <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="field" id="rtField"><textarea id="rName" class="tinput" rows="1" placeholder="Routine du matin" maxlength="40" autocomplete="off" enterkeyhint="done"></textarea></div>
+    <div class="label">Jours</div>
+    <div class="days" id="days"></div>
+    <div class="chips" id="presetChips">
+      <button class="chip" data-act="preset" data-p="all">Chaque jour</button>
+      <button class="chip" data-act="preset" data-p="week">En semaine</button>
+      <button class="chip" data-act="preset" data-p="we">Week-end</button>
+    </div>
+    <div class="label">Heure de début</div>
+    <div class="line-row" style="margin-top:0"><div><div class="lr-t">Heure fixe</div><div class="lr-s">Calcule l'heure de chaque étape et t'envoie un rappel</div></div><button class="switch" id="rRemind" data-act="rremind" aria-label="Heure de début"></button></div>
+    <div class="collapse" id="rTimeWrap"><div class="line-row"><span>Début</span><input type="time" id="rTime" class="native-input" value="07:00"></div></div>
+    <button class="btn" data-act="rsave">Enregistrer</button>
+    <button class="btn-ghost" id="rDelete" data-act="rdelete">Supprimer la routine</button>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -797,24 +639,15 @@ const IC = {
   trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M5.5 7l1 12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>',
   listck: '<svg viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7 5"/><path d="M3.5 12l1.3 1.3L7 11"/><path d="M3.5 18l1.3 1.3L7 17"/></svg>',
   note: '<svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>',
-  pct: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>'
+  pct: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><path class="pl" d="M8 5.5v13l11-6.5z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  timer: '<svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2 1.5M9.5 2.5h5"/></svg>',
+  pen: '<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>'
 };
 const LOGO = '<i class="mlogo"></i>';
 const SUGG = ["Boire un grand verre d'eau", 'Méditer 10 minutes', 'Lire 20 pages', 'Faire du sport', 'Écrire mon journal', 'Marcher 30 minutes'];
-
-/* ================= STORE ================= */
-const STORE = 'rituel.v1';
-const DEFAULTS = {theme:'auto', bold:false, tasksFirst:true, remindItems:true, defTime:'09:00', morning:false, morningTime:'08:00', evening:false, eveningTime:'21:00', weekly:true, weeklyTime:'19:00',
-  askedNotif:false, sound:true, haptics:true, lastWin:''};
-let S = load();
-function load(){
-  try{
-    const d = JSON.parse(localStorage.getItem(STORE));
-    if(d && Array.isArray(d.items)) return {items:d.items, log:d.log||[], notes:d.notes||[], settings:Object.assign({}, DEFAULTS, d.settings)};
-  }catch(e){}
-  return {items:[], log:[], notes:[], settings:Object.assign({}, DEFAULTS)};
-}
-function save(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
 
 /* ================= DATES ================= */
 const pad = n => String(n).padStart(2,'0');
@@ -848,60 +681,76 @@ function schedText(days){
   return DAY_ORDER.filter(d => days.includes(d)).map(d => DAY_SHORT[d]).join(' · ');
 }
 
+/* ================= STORE ================= */
+const STORE = 'rituel.v1';
+const DEFAULTS = {theme:'auto', bold:false, tasksFirst:true, remindItems:true, defTime:'09:00', morning:false, morningTime:'08:00', evening:false, eveningTime:'21:00', weekly:true, weeklyTime:'19:00',
+  askedNotif:false, sound:true, haptics:true, lastWin:''};
+let S = load();
+function load(){
+  let s = null;
+  try{
+    const d = JSON.parse(localStorage.getItem(STORE));
+    if(d && Array.isArray(d.items)) s = Object.assign({}, d, {log:d.log||[], notes:d.notes||[], settings:Object.assign({}, DEFAULTS, d.settings)});
+  }catch(e){}
+  return migrate(s || {items:[], log:[], notes:[], settings:Object.assign({}, DEFAULTS)});
+}
+function migrate(s){
+  if(!Array.isArray(s.routines)){
+    const o = x => x.order === undefined ? 1e9 : x.order;
+    const old = s.items.filter(i => i.type === 'ritual').sort((a,b) => (o(a) - o(b)) || (a.time||'99:99').localeCompare(b.time||'99:99'));
+    s.routines = old.length ? [{id:uid(), name:'Ma routine', days:[0,1,2,3,4,5,6], time:'', createdAt:Date.now(), steps:old.map(r => ({id:uid(), title:r.title, dur:5}))}] : [];
+  }
+  s.routines.forEach(r => { if(!Array.isArray(r.steps)) r.steps = []; if(!Array.isArray(r.days)) r.days = [0,1,2,3,4,5,6]; });
+  if(s.run && (s.run.date !== today() || !s.routines.some(r => r.id === s.run.rid))) s.run = null;
+  return s;
+}
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
+save();
+
 /* ================= DOMAIN ================= */
-const rituals = () => S.items.filter(i => i.type === 'ritual');
 const tasks = () => S.items.filter(i => i.type === 'task');
-const isDue = (r,k) => r.days.includes(fromKey(k).getDay()) && k >= (r.createdKey || '0');
-const doneOn = (id,k) => S.log.some(l => l.itemId === id && l.date === k);
-const byTime = (a,b) => (a.time||'99:99').localeCompare(b.time||'99:99');
 const byDateTime = (a,b) => ((a.date||'9999')+(a.time||'99')).localeCompare((b.date||'9999')+(b.time||'99'));
 const ord = x => x.order === undefined ? 1e9 : x.order;
 const withOrder = f => (a,b) => (ord(a) - ord(b)) || f(a,b);
 const byImp = (a,b) => (b.important?1:0) - (a.important?1:0) || byDateTime(a,b);
+const nowHM = () => hm(Date.now());
+const rDue = (r,k) => r.days.includes(fromKey(k).getDay());
+const rDoneOn = (r,k) => S.log.some(l => l.type === 'routine' && l.itemId === r.id && l.date === k);
+const rTotal = r => r.steps.reduce((a,s) => a + (+s.dur || 0), 0);
+const lastRun = r => S.log.filter(l => l.type === 'routine' && l.itemId === r.id).sort((a,b) => b.ts - a.ts)[0] || null;
+const fmtDur = m => { m = Math.round(+m || 0); return m >= 60 ? `${Math.floor(m/60)} h${m % 60 ? ' ' + pad(m % 60) : ''}` : `${m} min`; };
+const fmtClock = s => `${Math.floor(s/60)}:${pad(s % 60)}`;
+const addMin = (t, m) => { const [h,mm] = t.split(':').map(Number), x = ((h*60 + mm + (+m || 0)) % 1440 + 1440) % 1440; return pad(Math.floor(x/60)) + ':' + pad(x % 60); };
+let RID = S.settings.lastRoutine || null;
+const curR = () => S.routines.find(r => r.id === RID) || S.routines[0] || null;
 
-function ritualStreak(r){
-  const t = today(); let d = new Date(); let n = 0;
-  if(isDue(r,t) && !doneOn(r.id,t)) d = addDays(d,-1);
+function rStreak(r){
+  const t = today(), c = key(new Date(r.createdAt || 0)); let d = new Date(), n = 0;
+  if(rDue(r,t) && !rDoneOn(r,t)) d = addDays(d,-1);
   for(let i=0;i<500;i++){
     const k = key(d);
-    if(k < (r.createdKey||'0')) break;
-    if(isDue(r,k)){ if(doneOn(r.id,k)) n++; else break; }
+    if(k < c) break;
+    if(rDue(r,k)){ if(rDoneOn(r,k)) n++; else break; }
     d = addDays(d,-1);
   }
   return n;
 }
-function ritualRate(r){
-  let due = 0, done = 0;
-  for(let i=0;i<30;i++){
-    const k = key(addDays(new Date(),-i));
-    if(k < (r.createdKey||'0')) break;
-    if(!isDue(r,k)) continue;
-    if(i === 0 && !doneOn(r.id,k)) continue;
-    due++; if(doneOn(r.id,k)) done++;
-  }
-  return due ? Math.round(done/due*100) : null;
-}
 function weekStats(mon){
-  const t = today(); let due = 0, done = 0, tasksDone = 0; const per = {};
+  const t = today(); let due = 0, done = 0, tasksDone = 0;
   for(let i=0; i<7; i++){
     const k = key(addDays(mon, i)); if(k > t) break;
-    rituals().forEach(r => {
-      if(!isDue(r,k) || (k === t && !doneOn(r.id,k))) return;
-      const q = per[r.id] = per[r.id] || {r, due:0, done:0};
-      due++; q.due++;
-      if(doneOn(r.id,k)){ done++; q.done++; }
+    S.routines.forEach(r => {
+      if(!r.steps.length || !rDue(r,k) || (k === t && !rDoneOn(r,k))) return;
+      due++; if(rDoneOn(r,k)) done++;
     });
     tasksDone += S.log.filter(l => l.date === k && l.type === 'task').length;
   }
-  let best = null;
-  Object.values(per).forEach(q => { const sc = q.done / q.due; if(q.done && (!best || sc > best.sc || (sc === best.sc && q.done > best.done))) best = {sc, done:q.done, title:q.r.title}; });
-  return {rate: due ? Math.round(done/due*100) : null, best: best ? best.title : null, tasks: tasksDone, streak: dayStreak()};
+  return {rate: due ? Math.round(done/due*100) : null, tasks: tasksDone, streak: dayStreak()};
 }
 function weekBody(w){
   if(w.rate === null && !w.tasks) return 'Ouvre Rituel pour faire le point sur ta semaine.';
   const parts = [];
-  if(w.rate !== null) parts.push(`${w.rate}% de rituels réussis`);
-  if(w.best) parts.push(`Meilleur : ${w.best}`);
+  if(w.rate !== null) parts.push(`${w.rate}% de routines terminées`);
   if(w.tasks) parts.push(plural(w.tasks,'tâche') + ' faite' + (w.tasks > 1 ? 's' : ''));
   if(w.streak > 1) parts.push(`Série de ${w.streak} jours`);
   return parts.join(' · ');
@@ -912,30 +761,12 @@ function dayStreak(){
   let n = 0; while(set.has(key(d))){ n++; d = addDays(d,-1); }
   return n;
 }
-function bestStreak(){
-  const ds = [...new Set(S.log.map(l => l.date))].sort();
-  let best = 0, run = 0, prev = null;
-  for(const k of ds){ run = (prev && key(addDays(fromKey(prev),1)) === k) ? run+1 : 1; best = Math.max(best, run); prev = k; }
-  return best;
-}
-function progress(){
+function tProgress(){
   const t = today();
-  const doneToday = x => x.done && x.doneAt && key(new Date(x.doneAt)) === t;
-  const rs = rituals().filter(r => isDue(r,t)).sort(withOrder(byTime));
-  const ts = tasks().filter(x => x.date && ((!x.done && x.date <= t) || doneToday(x))).sort(withOrder(byImp));
-  const loose = tasks().filter(x => !x.date && (!x.done || doneToday(x))).sort(withOrder(byImp));
-  const rDone = rs.filter(r => doneOn(r.id,t)).length;
-  const total = rs.length + ts.length;
-  const done = rDone + ts.filter(x => x.done).length;
-  return {t, rs, ts, loose, rDone, total, done, pct: total ? Math.round(done/total*100) : 0};
-}
-function toggleRitual(id){
-  const t = today();
-  const i = S.log.findIndex(l => l.itemId === id && l.date === t);
-  if(i >= 0){ S.log.splice(i,1); return false; }
-  const r = S.items.find(x => x.id === id);
-  S.log.push({id:uid(), itemId:id, title:r.title, type:'ritual', date:t, ts:Date.now()});
-  return true;
+  const doneT = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t);
+  const left = tasks().filter(x => !x.done && (!x.date || x.date <= t));
+  const total = doneT.length + left.length;
+  return {t, doneT, left, total, done: doneT.length, pct: total ? doneT.length / total : 0};
 }
 function toggleTask(id){
   const it = S.items.find(x => x.id === id);
@@ -1043,7 +874,7 @@ function confetti(){
   cv.width = W*dpr; cv.height = H*dpr;
   const c = cv.getContext('2d'); c.scale(dpr, dpr);
   const dark = document.documentElement.dataset.theme === 'dark';
-  const cols = ['#FFFFFF','#FFFFFF','#FFFFFF','#9B9B9B','#565656'];
+  const cols = ['#FFFFFF','#2F7BFF','#6EA5FF','#A9C9FF','#1E4FD9'];
   const P = Array.from({length:150}, (_, i) => ({
     x: W/2 + (Math.random()-.5)*80, y: H*.34,
     vx: (Math.random()-.5)*15, vy: -Math.random()*17 - 6,
@@ -1081,170 +912,109 @@ function anim(view, id, i){
   if(animAll || fresh) return {c:'in', s:`animation-delay:${animAll ? Math.min(i,12)*45 : 0}ms`};
   return {c:'', s:''};
 }
-const sec = (label, count) => `<div class="sec"><h3>${label}</h3>${count!=null?`<span>${count}</span>`:''}</div>`;
-const bare = () => '<div class="empty bare"><i class="mlogo"></i></div>';
-function empty(t, p, withSugg){
-  const chips = withSugg ? `<div class="sugg">${SUGG.map((s,i) => `<button class="chip" style="animation-delay:${200+i*50}ms" data-act="sugg" data-t="${esc(s)}">+ ${esc(s)}</button>`).join('')}</div>` : '';
-  return `<div class="empty">${LOGO}<b>${t}</b><p>${p}</p>${chips}</div>`;
-}
-function rowHTML(it, view, i, done, meta){
-  const a = anim(view, it.id, i);
-  return `<div class="swipe ${a.c}" style="${a.s}" data-id="${it.id}">
-    <div class="sw-bg"><span class="sw-l">${IC.plain}${done ? 'Décocher' : 'Fait'}</span><span class="sw-r">Supprimer${IC.trash}</span></div>
-    <div class="row ${done?'done':''} ${it.important && !done ? 'imp' : ''}">
-      <button class="chk" data-act="toggle" aria-label="Valider"><i>${IC.check}</i></button>
-      <div class="row-main" data-act="open"><div class="row-title"><span>${esc(it.title)}</span></div>${(meta = (meta||'') + notesMeta(it)) ? `<div class="row-meta">${meta}</div>` : ''}</div>
-    </div>
-  </div>`;
-}
+const sec = (label, count, cls) => `<div class="sec ${cls||''}"><h3>${label}</h3>${count!=null?`<span>${count}</span>`:''}</div>`;
+const empty = (t, p, extra) => `<div class="empty">${LOGO}<b>${t}</b><p>${p}</p>${extra||''}</div>`;
 const noteCount = it => (it.notes || '').split('\n').filter(l => l.replace(/^[-•*\s]+/, '').trim()).length;
 const notesMeta = it => { const n = noteCount(it); return n ? `<em>${IC.note}${n} note${n>1?'s':''}</em>` : ''; };
 const timeMeta = it => it.time ? `<em>${IC.bell}${it.time}</em>` : '';
 const impMeta = it => it.important ? `<em class="amb">${IC.star}Important</em>` : '';
+const swHint = () => S.settings.swiped ? '' : '<p class="swhint"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Touche le rond ou glisse vers la droite</p>';
+function setRing(el, p, txt){ el.style.setProperty('--rp', Math.max(0, Math.min(1, p))); el.querySelector('b').textContent = txt; }
 
-function heroMsg(p){
-  if(!p.total) return 'Rien de prévu. Profite.';
-  const left = p.total - p.done;
-  if(!left) return 'Journée bouclée. Respect.';
-  if(!p.done) return left > 1 ? `${left} choses t’attendent. On y va ?` : 'Une seule chose. Facile.';
-  if(p.pct >= 75) return `Plus que ${left}. Tu y es presque.`;
-  if(p.pct >= 50) return `Plus que ${left}. Garde le rythme.`;
-  return `Bien lancé. Encore ${left}.`;
+function taskRow(x, i, done, late, meta){
+  const a = anim('tasks', x.id, i);
+  meta = (meta || '') + notesMeta(x);
+  const pill = done ? '<span class="pill done">Fait</span>' : late ? '<span class="pill late">En retard</span>' : '<span class="pill">À faire</span>';
+  return `<div class="swipe ${a.c}" style="${a.s}" data-id="${x.id}">
+    <div class="sw-bg"><span class="sw-r">Supprimer${IC.trash}</span></div>
+    <div class="row ${done ? 'done' : ''}">
+      <button class="ico chk ${done ? '' : 'ghost'}" data-act="toggle" aria-label="Valider">${IC.check}</button>
+      <div class="row-main" data-act="open"><div class="row-title">${esc(x.title)}</div>${meta ? `<div class="row-meta">${meta}</div>` : ''}</div>
+      ${pill}
+    </div>
+  </div>`;
 }
-function renderHero(p){
-  p = p || progress();
-  const g = $('#hero');
-  g.style.setProperty('--lvl', p.pct);
-  g.classList.toggle('empty', p.pct === 0);
-  g.classList.toggle('full', !!p.total && p.done === p.total);
-  const big = $('#ringPct'), was = +(big.dataset.v || 0);
-  countTo(big, p.pct);
-  if(was !== p.pct && root.classList.contains('app-in')){ const gb = big.parentElement; gb.classList.remove('bump'); void gb.offsetWidth; gb.classList.add('bump'); }
-  $('#heroBig').textContent = p.total ? `${p.done} / ${p.total}` : '';
-  $('#heroSub').textContent = heroMsg(p);
-  $('#gDate').textContent = new Date().toLocaleDateString('fr-BE', {weekday:'short', day:'numeric', month:'short'}).replace(/\./g, '');
-  const st = dayStreak(), pill = $('#heroStreak');
-  pill.hidden = st < 1; pill.querySelector('span').textContent = `${st} J`;
-}
-function renderWeek(){
-  const t = today(), start = addDays(new Date(), -((new Date().getDay()+6)%7));
-  let h = '';
-  for(let i=0;i<7;i++){
-    const d = addDays(start,i), k = key(d);
-    let ratio = 0;
-    if(k <= t){
-      const due = rituals().filter(r => isDue(r,k));
-      const doneR = due.filter(r => doneOn(r.id,k)).length;
-      const doneT = S.log.filter(l => l.date === k && l.type === 'task').length;
-      const total = due.length + doneT + (k === t ? tasks().filter(x => !x.done && x.date && x.date <= t).length : 0);
-      ratio = total ? (doneR + doneT) / total : 0;
-    }
-    const pct = Math.round(ratio*100);
-    h += `<div class="wd ${k===t?'now':''} ${k>t?'fut':''} ${pct===100?'full':''}"><small>${DAY_LETTER[d.getDay()]}</small><span class="wbar"><i style="height:${pct}%"></i></span><b>${d.getDate()}</b></div>`;
-  }
-  $('#week').innerHTML = h;
-}
-function renderToday(){
-  const p = progress();
-  if(animAll) tileWas = {r:0, t:0};
-  renderWeek();
-  $('#todayDate').textContent = greeting();
-  renderHero(p);
-  const t = p.t;
-  const rLeft = p.rs.filter(r => !doneOn(r.id,t));
-  const tAll = tasks().filter(x => !x.done && (!x.date || x.date <= t)).sort((a,b) => (!b.date) - (!a.date) || withOrder(byImp)(a,b));
-  const tDoneToday = tasks().filter(x => x.done && (!x.date || x.date <= t) && x.doneAt && key(new Date(x.doneAt)) === t).length;
-  const prev = list => `<ul class="tile-prev" data-total="${list.length}">${list.slice(0, 10).map(x => `<li class="it">${esc(x.title)}</li>`).join('')}<li class="more" hidden></li></ul>`;
-  const go = '<svg class="tile-go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
-  const rPct = p.rs.length ? (p.rDone / p.rs.length * 100) : 0;
-  const tPct = (tAll.length + tDoneToday) ? (tDoneToday / (tAll.length + tDoneToday) * 100) : 0;
-  const rLabel = !rituals().length ? 'Aucun rituel' : !p.rs.length ? 'Rien aujourd’hui' : !rLeft.length ? 'Tout est fait' : (rLeft.length > 1 ? 'Rituels à faire' : 'Rituel à faire');
-  const tLabel = !tAll.length ? (tDoneToday ? 'Tout est fait' : 'Rien pour aujourd’hui') : (tAll.length > 1 ? 'Tâches' : 'Tâche');
-  const rTile = `
-    <button class="tile ${p.rs.length && !rLeft.length ? 'done' : ''}" data-act="tab" data-v="rituals">
-      <div class="tile-top"><span class="tile-ico">${IC.repeat}</span>${go}</div>
-      <b class="tile-n" data-v="${tileWas.r}">${tileWas.r}</b><span class="tile-l">${rLabel}</span>
-      <div class="tile-bar"><i style="width:${rPct}%"></i></div>
-      ${prev(rLeft)}
-    </button>`;
-  const tTile = `
-    <button class="tile ${!tAll.length && tDoneToday ? 'done' : ''}" data-act="tab" data-v="tasks">
-      <div class="tile-top"><span class="tile-ico">${IC.listck}</span>${go}</div>
-      <b class="tile-n" data-v="${tileWas.t}">${tileWas.t}</b><span class="tile-l">${tLabel}</span>
-      <div class="tile-bar"><i style="width:${tPct}%"></i></div>
-      ${prev(tAll)}
-    </button>`;
-  $('#tiles').innerHTML = S.settings.tasksFirst ? tTile + rTile : rTile + tTile;
-  fitTiles();
-  countTo($('#tiles [data-v="rituals"] .tile-n'), rLeft.length); countTo($('#tiles [data-v="tasks"] .tile-n'), tAll.length);
-  tileWas = {r: rLeft.length, t: tAll.length};
-}
-let tileWas = {r:0, t:0};
-function fitTiles(){
-  $$('#tiles .tile-prev').forEach(ul => {
-    const total = +ul.dataset.total, items = [...ul.querySelectorAll('li.it')], more = ul.querySelector('li.more');
-    const fits = () => ul.scrollHeight <= ul.clientHeight + 1;
-    const label = n => `+ ${n} autre${n > 1 ? 's' : ''}`;
-    items.forEach(li => li.hidden = false);
-    let shown = items.length;
-    more.hidden = shown >= total; more.textContent = label(total - shown);
-    while(!fits() && shown > 0){
-      items[--shown].hidden = true;
-      more.hidden = false; more.textContent = label(total - shown);
-    }
-    if(!fits()) more.hidden = true;
-  });
-}
-window.addEventListener('resize', () => requestAnimationFrame(fitTiles));
 function renderTasks(){
-  const t = today(), tm = key(addDays(new Date(),1));
-  const p = tasks().filter(x => !x.done);
-  const g = {late:[], today:[], tom:[], later:[], none:[]};
-  p.forEach(x => {
+  const t = today(), tm = key(addDays(new Date(),1)), now = nowHM(), p = tProgress();
+  $('#tDate').textContent = cap(new Date().toLocaleDateString('fr-BE', {weekday:'long', day:'numeric', month:'long'}));
+  $('#hello').textContent = greeting();
+  setRing($('#tRing'), p.pct, p.left.length ? p.left.length : (p.done ? '✓' : '0'));
+  const g = {late:[], today:[], none:[], tom:[], later:[]};
+  tasks().filter(x => !x.done).forEach(x => {
     if(!x.date) g.none.push(x);
     else if(x.date < t) g.late.push(x);
     else if(x.date === t) g.today.push(x);
     else if(x.date === tm) g.tom.push(x);
     else g.later.push(x);
   });
-  $('#tasksCount').textContent = p.length ? `${p.length} à faire` : 'À jour';
   let h = '', i = 0;
-  [['none','Sans date'],['late','En retard'],['today',"Aujourd'hui"],['tom','Demain'],['later','Plus tard']].forEach(([k,l]) => {
+  [['late','En retard'],['today',"Aujourd'hui"],['none','Quand je veux'],['tom','Demain'],['later','Plus tard']].forEach(([k,l]) => {
     if(!g[k].length) return;
-    h += sec(l, g[k].length) + '<div class="list">' + g[k].sort(withOrder(byImp)).map(x => {
-      let meta = '';
-      if(k === 'late') meta += `<em class="red">${IC.cal}${dateLabel(x.date)}</em>`;
-      if(k === 'later') meta += `<em>${IC.cal}${dateLabel(x.date)}</em>`;
-      return rowHTML(x,'tasks',i++,false, meta + impMeta(x) + timeMeta(x));
+    h += sec(l, g[k].length, k === 'late' ? 'late' : '') + '<div class="list">' + g[k].sort(withOrder(byImp)).map(x => {
+      const late = k === 'late' || (k === 'today' && x.time && x.time < now);
+      const meta = (k === 'late' || k === 'later' ? `<em class="${k === 'late' ? 'red' : ''}">${IC.cal}${dateLabel(x.date)}</em>` : '') + timeMeta(x) + impMeta(x);
+      return taskRow(x, i++, false, late, meta);
     }).join('') + '</div>';
   });
-  const doneT = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t);
   if(h) h += swHint();
-  $('#tasksList').innerHTML = h || (doneT.length ? `<div class="alldone"><i>${IC.plain}</i>Toutes tes tâches sont faites</div>` : bare());
+  if(p.doneT.length) h += sec('Faites aujourd’hui', p.doneT.length) + '<div class="list dim">' + p.doneT.sort((a,b) => b.doneAt - a.doneAt).map(x => taskRow(x, i++, true, false, '')).join('') + '</div>';
+  $('#tasksList').innerHTML = h || empty('Rien à faire', 'Touche + pour ajouter une tâche, avec ou sans date.');
 }
-const swHint = () => S.settings.swiped ? '' : '<p class="swhint"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg>Touche le rond ou glisse vers la droite</p>';
-let showDone = {rituals:false, tasks:false};
-function doneToggle(view, list, rowsFn){
-  if(!list.length) return '';
-  const chev = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
-  const btn = `<button class="showdone ${showDone[view] ? 'open' : ''}" data-act="showdone" data-v="${view}">${list.length} fait${list.length > 1 ? 's' : ''} aujourd'hui ${chev}</button>`;
-  return btn + (showDone[view] ? '<div class="list dim">' + rowsFn(list) + '</div>' : '');
-}
-function renderRituals(){
-  const t = today(), rs = rituals().sort(withOrder(byTime));
-  const left = rs.filter(r => isDue(r,t) && !doneOn(r.id,t));
-  const doneT = rs.filter(r => isDue(r,t) && doneOn(r.id,t));
-  const other = rs.filter(r => !isDue(r,t));
-  $('#ritCount').textContent = !rs.length ? 'Tes habitudes' : left.length ? `${left.length} à faire aujourd'hui` : 'Tout est fait aujourd’hui';
-  const due = left.length + doneT.length;
-  $('#ritProg').parentElement.hidden = !due;
-  $('#ritProg').style.width = (due ? doneT.length / due * 100 : 0) + '%';
-  if(!rs.length || (!left.length && !doneT.length)){ $('#ritList').innerHTML = bare(); return; }
-  const streak = r => { const s = ritualStreak(r); return s ? `<em>${IC.flame}${s} j</em>` : ''; };
-  let h = '';
-  if(left.length) h += '<div class="list">' + left.map((r,i) => rowHTML(r,'ritday',i,false, timeMeta(r) + streak(r))).join('') + '</div>' + swHint();
-  else if(doneT.length) h += `<div class="alldone"><i>${IC.plain}</i>Tous tes rituels du jour sont faits</div>`;
-  $('#ritList').innerHTML = h;
+
+function renderRoutine(){
+  const r = curR(), t = today();
+  $('#rChips').hidden = !S.routines.length;
+  $('#rChips').innerHTML = S.routines.map(x => `<button class="rchip ${r && x.id === r.id ? 'on' : ''}" data-act="rpick" data-rid="${x.id}">${esc(x.name)}</button>`).join('')
+    + `<button class="rchip new" data-act="rnew" aria-label="Nouvelle routine">${IC.plus}</button>`;
+  if(!r){
+    $('#rEyebrow').textContent = 'Étape par étape';
+    setRing($('#rRing'), 0, '0');
+    $('#rBody').innerHTML = empty('Crée ta routine', 'Ajoute tes étapes dans l’ordre avec le temps que chacune te prend. Lance-la, puis valide chaque étape pour passer à la suivante.', '<button class="btn" data-act="rfirst">Créer ma routine du matin</button>');
+    return;
+  }
+  const n = r.steps.length, total = rTotal(r), run = S.run && S.run.rid === r.id ? S.run : null;
+  const doneToday = rDoneOn(r,t), last = lastRun(r), streak = rStreak(r);
+  const dn = run ? run.idx : (doneToday ? n : 0);
+  $('#rEyebrow').textContent = schedText(r.days) + (r.time ? ' · ' + r.time : '');
+  setRing($('#rRing'), n ? dn / n : 0, `${dn}/${n}`);
+  let btn;
+  if(!n) btn = `<button class="h-go" data-act="sadd">${IC.plus}Ajouter une première étape</button>`;
+  else if(run) btn = `<button class="h-go" data-act="rstart">${IC.play}Reprendre · étape ${run.idx + 1}/${n}</button>`;
+  else if(doneToday) btn = `<button class="h-go ok" data-act="rstart">${IC.plain}Faite à ${hm(last.ts)} · Recommencer</button>`;
+  else btn = `<button class="h-go" data-act="rstart">${IC.play}Commencer la routine</button>`;
+  const sub = n ? `${plural(n,'étape')} · ${fmtDur(total)}${r.time ? ` · ${r.time} → ${addMin(r.time, total)}` : ''}` : 'Aucune étape pour l’instant';
+  let h = `<div class="hero">
+    <div class="h-top"><div><div class="h-name">${esc(r.name)}</div><div class="h-sub">${sub}</div></div><button class="h-edit" data-act="redit" aria-label="Modifier la routine">${IC.pen}</button></div>
+    ${run ? `<div class="h-bar"><i style="width:${run.idx / n * 100}%"></i></div>` : ''}
+    <div class="h-stats">
+      <div class="h-stat"><b>${fmtDur(total)}</b><small>Prévu</small></div>
+      <div class="h-stat"><b>${last && last.dur ? fmtDur(last.dur) : '—'}</b><small>Dernière fois</small></div>
+      <div class="h-stat"><b>${streak} j</b><small>De suite</small></div>
+    </div>
+    ${btn}
+  </div>`;
+  if(n){
+    let clock = r.time || '';
+    const now = nowHM(), lateOk = !run && !doneToday && rDue(r,t) && !!r.time;
+    h += sec('Étapes', n) + '<div class="list" data-reorder="steps">' + r.steps.map((s,i) => {
+      const st = clock; if(clock) clock = addMin(clock, s.dur);
+      const sDone = run ? i < run.idx : doneToday, isCur = !!run && i === run.idx;
+      const late = lateOk && st && addMin(st, s.dur) <= now;
+      const pill = sDone ? '<span class="pill done">Fait</span>' : isCur ? '<span class="pill now">En cours</span>' : late ? '<span class="pill late">En retard</span>' : '<span class="pill">À faire</span>';
+      const a = anim('step', s.id, i);
+      return `<div class="swipe ${a.c}" style="${a.s}" data-id="${s.id}" data-kind="step">
+        <div class="sw-bg"><span class="sw-r">Supprimer${IC.trash}</span></div>
+        <div class="row ${sDone ? 'done' : ''} ${isCur ? 'cur' : ''}">
+          <span class="ico ${sDone ? '' : 'ghost'}">${sDone ? IC.plain : `<b>${i + 1}</b>`}</span>
+          <div class="row-main" data-act="sedit"><div class="row-title">${esc(s.title)}</div><div class="row-meta"><em>${IC.timer}${fmtDur(s.dur)}</em>${st ? `<em>${IC.clock}${st}</em>` : ''}</div></div>
+          ${pill}
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+  }
+  h += `<button class="addstep" data-act="sadd">${IC.plus}Ajouter une étape</button>`;
+  if(n > 1) h += '<p class="swhint">Appui long pour changer l’ordre · glisse à gauche pour supprimer</p>';
+  $('#rBody').innerHTML = h;
 }
 function flipRender(){
   const view = $('#v-'+cur), before = new Map();
@@ -1257,73 +1027,14 @@ function flipRender(){
     if(Math.abs(d) > 1) el.animate([{transform:`translateY(${d}px)`},{transform:'none'}], {duration:520, easing:'cubic-bezier(.25,1.2,.5,1)'});
   });
 }
-function noteParts(n){
-  const lines = (n.text || '').split('\n');
-  const title = (lines.find(l => l.trim()) || 'Nouvelle note').trim();
-  const rest = lines.slice(lines.indexOf(lines.find(l => l.trim())) + 1).join('\n').trim();
-  return {title, rest};
-}
-function noteDate(ts){
-  const d = new Date(ts), k = key(d);
-  if(k === today()) return hm(ts);
-  if(k === key(addDays(new Date(),-1))) return 'Hier';
-  return d.toLocaleDateString('fr-BE', {day:'numeric', month:'short'});
-}
-function renderNotes(){
-  const ns = (S.notes || []).filter(n => (n.text || '').trim()).sort((a,b) => b.updatedAt - a.updatedAt);
-  $('#notesCount').textContent = ns.length ? plural(ns.length, 'note') : 'Ton bloc-notes';
-  if(!ns.length){ $('#notesList').innerHTML = bare(); return; }
-  $('#notesList').innerHTML = '<div class="notes-grid">' + ns.map((n,i) => {
-    const {title, rest} = noteParts(n), a = anim('note', n.id, i);
-    return `<button class="ncard ${a.c} ${!rest ? '' : rest.length > 140 ? 'wide' : ''}" style="${a.s}" data-act="nopen" data-nid="${n.id}">
-      <b>${esc(title)}</b>${rest ? `<p>${esc(rest)}</p>` : '<p></p>'}<small>${noteDate(n.updatedAt)}</small></button>`;
-  }).join('') + '</div>';
-}
-let NID = null, noteT = null;
-function openNote(id){
-  S.notes = S.notes || [];
-  let n = id ? S.notes.find(x => x.id === id) : null;
-  if(!n){ n = {id: uid(), text: '', createdAt: Date.now(), updatedAt: Date.now()}; S.notes.push(n); }
-  NID = n.id;
-  $('#nText').value = n.text;
-  $('#nDate').textContent = id ? noteDate(n.updatedAt) : 'Nouvelle note';
-  openSheet('#noteSheet');
-  if(!id) setTimeout(() => $('#nText').focus({preventScroll:true}), 450);
-}
-function saveNote(){
-  const n = (S.notes || []).find(x => x.id === NID); if(!n) return;
-  const v = $('#nText').value;
-  if(v === n.text) return;
-  n.text = v; n.updatedAt = Date.now(); save();
-}
-$('#nText').addEventListener('input', () => { clearTimeout(noteT); noteT = setTimeout(saveNote, 400); });
-$('#nText').addEventListener('keydown', e => bulletEnter(e));
-function closeNote(){
-  clearTimeout(noteT); saveNote();
-  S.notes = (S.notes || []).filter(n => (n.text || '').trim());
-  save(); NID = null; setTimeout(flipRender, 60);
-}
-function deleteNote(){
-  const n = (S.notes || []).find(x => x.id === NID); if(!n) return;
-  const snap = JSON.stringify(n);
-  S.notes = S.notes.filter(x => x.id !== NID); NID = null;
-  save(); closeSheet(true); flipRender(); Sound.play('del'); haptic('MEDIUM');
-  if((n.text || '').trim()) toast('Note supprimée', () => { S.notes.push(JSON.parse(snap)); save(); flipRender(); Sound.play('add'); });
-}
 function renderAll(){
-  renderToday(); renderTasks(); renderRituals(); renderNotes();
+  renderTasks(); renderRoutine();
   animAll = false;
 }
 
 /* ================= NAVIGATION ================= */
-let ORDER = ['today','rituals','tasks','notes','settings'];
-function applyOrder(){
-  const first = !!S.settings.tasksFirst, bar = $('.tabbar');
-  const r = bar.querySelector('[data-v="rituals"]'), t = bar.querySelector('[data-v="tasks"]');
-  if(first) bar.insertBefore(t, r); else bar.insertBefore(r, t);
-  ORDER = first ? ['today','tasks','rituals','notes','settings'] : ['today','rituals','tasks','notes','settings'];
-}
-let cur = 'today';
+const ORDER = ['tasks','routine','settings'];
+let cur = 'tasks';
 function go(v){
   if(v === cur){ $('#v-'+v).scrollTo({top:0, behavior:'smooth'}); return; }
   const dir = ORDER.indexOf(v) > ORDER.indexOf(cur) ? 1 : -1;
@@ -1335,15 +1046,15 @@ function go(v){
   $$('.tab').forEach(el => el.classList.toggle('active', el.dataset.v === v));
   next.scrollTop = 0;
   animAll = true; renderAll(); moveInd();
-  const ab = $('.add'); ab.classList.remove('spin'); void ab.offsetWidth; ab.classList.add('spin');
+  const ab = $('.add'); ab.classList.toggle('off', v === 'settings'); ab.classList.remove('spin'); void ab.offsetWidth; ab.classList.add('spin');
   if(v === 'settings') renderSettings();
 }
 function moveInd(){
   const a = document.querySelector('.tab.active'), bar = $('.tabbar'), ind = $('#tabInd');
   if(!a) return;
   const r = a.getBoundingClientRect(), b = bar.getBoundingClientRect();
-  ind.style.width = (r.width - 4) + 'px';
-  ind.style.transform = `translateX(${r.left - b.left + 1}px)`;
+  ind.style.width = r.width + 'px';
+  ind.style.transform = `translateX(${r.left - b.left - 1}px)`;
 }
 window.addEventListener('resize', moveInd);
 
@@ -1357,7 +1068,6 @@ function openSheet(id){
   Sound.play('open');
 }
 function closeSheet(silent){
-  if(openEl && openEl.id === 'noteSheet' && NID) closeNote();
   if(openEl && openEl.id === 'detail'){ clearTimeout(notesT); saveNotes(); D = null; setTimeout(flipRender, 60); }
   if(document.activeElement) document.activeElement.blur();
   $('#backdrop').classList.remove('show');
@@ -1382,14 +1092,15 @@ $$('.sheet').forEach(sh => {
     y0 = null;
   });
 });
+function grow(el){ el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); Sound.play('error'); haptic('MEDIUM'); }
 
-/* ================= EDITOR ================= */
+/* ================= TÂCHE ================= */
 let F = null;
 function openEditor(id){
   const it = id ? S.items.find(x => x.id === id) : null;
   if(id && !it) return;
-  F = it ? JSON.parse(JSON.stringify(it)) : {id:null, type: cur === 'tasks' ? 'task' : 'ritual', title:'', time:'', date:'', important:false};
-  if(!F.days) F.days = [0,1,2,3,4,5,6];
+  F = it ? JSON.parse(JSON.stringify(it)) : {id:null, type:'task', title:'', time:'', date:'', important:false};
   if(F.date === undefined) F.date = '';
   F.important = !!F.important;
   F.remind = !!F.time;
@@ -1405,16 +1116,7 @@ function openEditor(id){
 }
 function renderEditor(){
   const isNew = !F.id;
-  $('#edTitle').textContent = isNew ? (F.type === 'ritual' ? 'Nouveau rituel' : 'Nouvelle tâche') : 'Modifier';
-  $('#typeSeg').style.display = isNew ? '' : 'none';
-  $('#typeSeg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === F.type));
-  $('#fTitle').placeholder = F.type === 'ritual' ? 'Méditer 10 minutes' : 'Appeler le garage';
-  $('#ritualFields').style.display = F.type === 'ritual' ? '' : 'none';
-  $('#taskFields').style.display = F.type === 'task' ? '' : 'none';
-  $('#days').innerHTML = DAY_ORDER.map(d => `<button class="day ${F.days.includes(d)?'on':''}" data-act="day" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
-  const s = [...F.days].sort().join(',');
-  $('#presetChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
-    (c.dataset.p==='all' && F.days.length===7) || (c.dataset.p==='week' && s==='1,2,3,4,5') || (c.dataset.p==='we' && s==='0,6')));
+  $('#edTitle').textContent = isNew ? 'Nouvelle tâche' : 'Modifier';
   const t = today(), tm = key(addDays(new Date(),1));
   $('#dateChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
     (c.dataset.p==='0' && F.date===t) || (c.dataset.p==='1' && F.date===tm) || (c.dataset.p==='none' && !F.date)));
@@ -1430,24 +1132,56 @@ $('#fTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.prevent
 $('#fDate').addEventListener('change', e => { F.date = e.target.value; renderEditor(); });
 $('#fTime').addEventListener('change', e => { F.time = e.target.value; });
 
+async function saveItem(){
+  const title = (F.title || '').trim();
+  if(!title){ shake($('#titleField')); return; }
+  const old = F.id ? S.items.find(x => x.id === F.id) : null;
+  const item = {
+    id: F.id || uid(), type: 'task', title,
+    time: F.remind ? (F.time || S.settings.defTime || '09:00') : '',
+    createdKey: old ? old.createdKey : today(),
+    createdAt: old ? old.createdAt : Date.now(),
+    notes: (F.notes || '').replace(/\s+$/, ''),
+    date: F.date || '', important: F.important,
+    done: old ? !!old.done : false, doneAt: old ? old.doneAt : null
+  };
+  if(old && old.order !== undefined) item.order = old.order;
+  if(old){
+    S.items[S.items.indexOf(old)] = item;
+    S.log.forEach(l => { if(l.itemId === item.id) l.title = title; });
+  } else S.items.push(item);
+  save(); closeSheet(true); renderAll();
+  Sound.play('add'); haptic('MEDIUM');
+  toast(old ? 'Modifié' : 'Tâche ajoutée');
+  if(item.time) await askIfNeeded();
+  queueSync();
+}
+async function askIfNeeded(){
+  const st = await notifState();
+  if(st === 'prompt' || st === 'prompt-with-rationale' || st === 'default') await askNotif();
+}
+function removeItem(id){
+  const it = S.items.find(x => x.id === id); if(!it) return;
+  const snap = JSON.stringify({items:S.items, log:S.log});
+  S.items = S.items.filter(x => x.id !== id);
+  save(); flipRender(); queueSync();
+  Sound.play('del'); haptic('MEDIUM');
+  toast('Tâche supprimée', () => {
+    const o = JSON.parse(snap); S.items = o.items; S.log = o.log; save(); renderAll(); queueSync();
+    Sound.play('add'); toast('Restauré');
+  });
+}
+
 /* ================= FICHE DÉTAIL ================= */
-function grow(el){ el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
 let D = null, notesT = null;
-function detailDone(it){ return it.type === 'ritual' ? doneOn(it.id, today()) : !!it.done; }
 function renderDetail(){
   const it = S.items.find(x => x.id === D); if(!it) return;
-  const done = detailDone(it);
-  $('#dKind').textContent = it.type === 'ritual' ? 'Rituel' : 'Tâche';
   $('#dTitle').textContent = it.title;
-  $('#dTitle').classList.toggle('done', done);
-  let m = '';
-  if(it.type === 'ritual'){ m += `<em>${IC.repeat}${schedText(it.days)}</em>`; const s = ritualStreak(it); if(s) m += `<em>${IC.flame}${plural(s,'jour')}</em>`; }
-  else m += it.date ? `<em class="${!it.done && it.date < today() ? 'red' : ''}">${IC.cal}${dateLabel(it.date)}</em>` : `<em>${IC.cal}Sans date</em>`;
+  $('#dTitle').classList.toggle('done', !!it.done);
+  let m = it.date ? `<em class="${!it.done && it.date < today() ? 'red' : ''}">${IC.cal}${dateLabel(it.date)}</em>` : `<em>${IC.cal}Quand je veux</em>`;
   m += impMeta(it) + timeMeta(it);
   $('#dMeta').innerHTML = m;
-  const canToggle = it.type === 'task' || isDue(it, today());
-  $('#dToggle').hidden = !canToggle;
-  $('#dToggle').textContent = done ? 'Décocher' : 'Marquer comme fait';
+  $('#dToggle').textContent = it.done ? 'Décocher' : 'Marquer comme fait';
 }
 function openDetail(id){
   const it = S.items.find(x => x.id === id); if(!it) return;
@@ -1484,70 +1218,215 @@ function bulletEnter(e){
 function detailToggle(){
   const it = S.items.find(x => x.id === D); if(!it) return;
   saveNotes();
-  const on = it.type === 'ritual' ? toggleRitual(it.id) : toggleTask(it.id);
+  const on = toggleTask(it.id);
   if(on){ Sound.play('check'); haptic('MEDIUM'); burst($('#dToggle')); } else { Sound.play('uncheck'); haptic(); }
   save(); queueSync(); renderDetail();
   setTimeout(() => { closeSheet(true); flipRender(); checkWin(on); }, 380);
 }
 function checkWin(on){
-  const p = progress(); renderHero(p);
-  if(on && p.total && p.done === p.total && S.settings.lastWin !== p.t){ S.settings.lastWin = p.t; save(); setTimeout(celebrate, 380); }
+  const p = tProgress();
+  if(on && p.total && !p.left.length && S.settings.lastWin !== p.t){ S.settings.lastWin = p.t; save(); setTimeout(celebrate, 380); }
 }
 
-function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); Sound.play('error'); haptic('MEDIUM'); }
-async function saveItem(){
-  const title = (F.title || '').trim();
-  if(!title){ shake($('#titleField')); return; }
-  if(F.type === 'ritual' && !F.days.length){ shake($('#days')); toast('Choisis au moins un jour'); return; }
-  const old = F.id ? S.items.find(x => x.id === F.id) : null;
-  const item = {
-    id: F.id || uid(), type: F.type, title,
-    time: F.remind ? (F.time || S.settings.defTime || '09:00') : '',
-    createdKey: old ? old.createdKey : today(),
-    createdAt: old ? old.createdAt : Date.now(),
-    notes: (F.notes || '').replace(/\s+$/, '')
-  };
-  if(old && old.order !== undefined) item.order = old.order;
-  if(F.type === 'ritual') item.days = [...F.days].sort();
-  else { item.date = F.date || ''; item.important = F.important; item.done = old ? !!old.done : false; item.doneAt = old ? old.doneAt : null; }
-  if(old){
-    S.items[S.items.indexOf(old)] = item;
-    S.log.forEach(l => { if(l.itemId === item.id) l.title = title; });
-  } else S.items.push(item);
-  save(); closeSheet(true); renderAll();
-  Sound.play('add'); haptic('MEDIUM');
-  toast(old ? 'Modifié' : (item.type === 'ritual' ? 'Rituel ajouté' : 'Tâche ajoutée'));
-  if(item.time){
-    const st = await notifState();
-    if(st === 'prompt' || st === 'prompt-with-rationale' || st === 'default') await askNotif();
-  }
-  queueSync();
+/* ================= ÉTAPES ================= */
+const DURS = [1,2,3,5,10,15,20,30,45,60];
+let SF = null;
+function openStep(id){
+  const r = curR(); if(!r) return;
+  const s = id ? r.steps.find(x => x.id === id) : null;
+  SF = {id: s ? s.id : null, title: s ? s.title : '', dur: s ? +s.dur || 5 : 5};
+  $('#sTitle').value = SF.title;
+  $('#sDur').value = SF.dur;
+  renderStep();
+  openSheet('#stepSheet');
+  requestAnimationFrame(() => grow($('#sTitle')));
+  if(!s) setTimeout(() => $('#sTitle').focus({preventScroll:true}), 500);
 }
-function removeItem(id){
-  const it = S.items.find(x => x.id === id); if(!it) return;
-  const snap = JSON.stringify({items:S.items, log:S.log});
-  S.items = S.items.filter(x => x.id !== id);
+function renderStep(){
+  $('#stTitle').textContent = SF.id ? 'Modifier l’étape' : 'Nouvelle étape';
+  $('#durChips').innerHTML = DURS.map(d => `<button class="chip ${SF.dur === d ? 'on' : ''}" data-act="dur" data-d="${d}">${fmtDur(d)}</button>`).join('');
+  $('#sDelete').style.display = SF.id ? '' : 'none';
+}
+$('#sTitle').addEventListener('input', e => { if(SF) SF.title = e.target.value.replace(/\n/g, ' '); grow(e.target); });
+$('#sTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveStep(); } });
+$('#sDur').addEventListener('input', e => {
+  const v = parseInt(e.target.value, 10); if(!SF || !(v > 0)) return;
+  SF.dur = Math.min(240, v);
+  $$('#durChips .chip').forEach(c => c.classList.toggle('on', +c.dataset.d === SF.dur));
+});
+function saveStep(){
+  const r = curR(); if(!r || !SF) return;
+  const title = (SF.title || '').trim();
+  if(!title){ shake($('#stField')); return; }
+  const was = SF.id;
+  if(was){ const s = r.steps.find(x => x.id === was); if(s){ s.title = title; s.dur = SF.dur; } }
+  else r.steps.push({id:uid(), title, dur:SF.dur});
+  save(); closeSheet(true); flipRender(); queueSync();
+  Sound.play('add'); haptic('MEDIUM'); toast(was ? 'Étape modifiée' : 'Étape ajoutée');
+}
+function removeStep(id){
+  const r = curR(); if(!r) return;
+  const i = r.steps.findIndex(x => x.id === id); if(i < 0) return;
+  const snap = JSON.stringify({steps:r.steps, run:S.run});
+  r.steps.splice(i, 1);
+  if(S.run && S.run.rid === r.id){
+    if(i < S.run.idx) S.run.idx--;
+    if(S.run.idx >= r.steps.length) S.run = null;
+  }
   save(); flipRender(); queueSync();
   Sound.play('del'); haptic('MEDIUM');
-  toast(it.type === 'ritual' ? 'Rituel supprimé' : 'Tâche supprimée', () => {
-    const o = JSON.parse(snap); S.items = o.items; S.log = o.log; save(); renderAll(); queueSync();
-    Sound.play('add'); toast('Restauré');
+  toast('Étape supprimée', () => {
+    const o = JSON.parse(snap); r.steps = o.steps; S.run = o.run; save(); renderAll(); queueSync(); Sound.play('add');
   });
 }
-function quickAdd(form){
-  const input = form.querySelector('.qinput'), title = input.value.trim();
-  if(!title){ shake(form); return; }
-  S.items.push({id:uid(), type:'task', title, date:'', important:false, time:'', done:false, doneAt:null, createdKey:today(), createdAt:Date.now()});
-  input.value = '';
-  save(); flipRender(); queueSync();
-  Sound.play('add'); haptic('MEDIUM'); toast('Tâche ajoutée');
+
+/* ================= ROUTINES ================= */
+let RF = null;
+function openRout(id){
+  const r = id ? S.routines.find(x => x.id === id) : null;
+  RF = r ? {id:r.id, name:r.name, days:[...r.days], time:r.time || '', on:!!r.time} : {id:null, name:'', days:[0,1,2,3,4,5,6], time:'', on:false};
+  if(!RF.time) RF.time = '07:00';
+  $('#rName').value = RF.name;
+  $('#rTime').value = RF.time;
+  renderRout();
+  openSheet('#routSheet');
+  requestAnimationFrame(() => grow($('#rName')));
+  if(!r) setTimeout(() => $('#rName').focus({preventScroll:true}), 500);
 }
-$$('.quick').forEach(f => f.addEventListener('submit', e => { e.preventDefault(); quickAdd(f); }));
-function addSuggestion(title){
-  S.items.push({id:uid(), type:'ritual', title, days:[0,1,2,3,4,5,6], time:'', createdKey:today(), createdAt:Date.now()});
-  save(); flipRender(); queueSync();
-  Sound.play('add'); haptic('MEDIUM'); toast('Rituel ajouté');
+function renderRout(){
+  $('#rtTitle').textContent = RF.id ? 'Modifier la routine' : 'Nouvelle routine';
+  $('#days').innerHTML = DAY_ORDER.map(d => `<button class="day ${RF.days.includes(d)?'on':''}" data-act="day" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
+  const s = [...RF.days].sort().join(',');
+  $('#presetChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
+    (c.dataset.p==='all' && RF.days.length===7) || (c.dataset.p==='week' && s==='1,2,3,4,5') || (c.dataset.p==='we' && s==='0,6')));
+  $('#rRemind').classList.toggle('on', RF.on);
+  $('#rTimeWrap').classList.toggle('hide', !RF.on);
+  $('#rDelete').style.display = RF.id ? '' : 'none';
 }
+$('#rName').addEventListener('input', e => { if(RF) RF.name = e.target.value.replace(/\n/g, ' '); grow(e.target); });
+$('#rName').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveRout(); } });
+$('#rTime').addEventListener('change', e => { if(RF && e.target.value) RF.time = e.target.value; });
+async function saveRout(){
+  const name = (RF.name || '').trim();
+  if(!name){ shake($('#rtField')); return; }
+  if(!RF.days.length){ shake($('#days')); toast('Choisis au moins un jour'); return; }
+  const time = RF.on ? RF.time : '', isNew = !RF.id;
+  if(!isNew){ const r = S.routines.find(x => x.id === RF.id); if(r){ r.name = name; r.days = [...RF.days].sort(); r.time = time; } }
+  else { const r = {id:uid(), name, days:[...RF.days].sort(), time, steps:[], createdAt:Date.now()}; S.routines.push(r); pickRoutine(r.id); }
+  save(); closeSheet(true); animAll = true; renderAll();
+  Sound.play('add'); haptic('MEDIUM'); toast(isNew ? 'Routine créée' : 'Routine modifiée');
+  if(time) await askIfNeeded();
+  queueSync();
+}
+function removeRout(id){
+  const i = S.routines.findIndex(x => x.id === id); if(i < 0) return;
+  const r = S.routines[i], run = S.run;
+  S.routines.splice(i, 1);
+  if(S.run && S.run.rid === id) S.run = null;
+  pickRoutine(S.routines[0] ? S.routines[0].id : null);
+  save(); animAll = true; renderAll(); queueSync();
+  Sound.play('del'); haptic('MEDIUM');
+  toast('Routine supprimée', () => { S.routines.splice(i, 0, r); S.run = run; pickRoutine(r.id); save(); animAll = true; renderAll(); queueSync(); Sound.play('add'); });
+}
+function pickRoutine(id){ RID = id; S.settings.lastRoutine = id; }
+function firstRoutine(){
+  const r = {id:uid(), name:'Routine du matin', days:[0,1,2,3,4,5,6], time:'', steps:[], createdAt:Date.now()};
+  S.routines.push(r); pickRoutine(r.id); save(); animAll = true; renderAll();
+  Sound.play('add'); haptic('MEDIUM');
+  setTimeout(() => openStep(null), 250);
+}
+
+/* ================= MODE ROUTINE ================= */
+const DIAL = 590.6, STEP_NID = 900200;
+let runTimer = null, buzzed = -1;
+const runOn = () => $('#run').classList.contains('show');
+const runR = () => S.run ? S.routines.find(r => r.id === S.run.rid) : null;
+function startRun(){
+  const r = curR(); if(!r || !r.steps.length) return;
+  if(!(S.run && S.run.rid === r.id)){
+    const now = Date.now();
+    S.run = {rid:r.id, date:today(), idx:0, t0:now, st:now};
+  }
+  save(); openRun();
+}
+function openRun(){
+  if(!runR()) return;
+  if(openEl) closeSheet(true);
+  const el = $('#run'); el.classList.remove('fin'); el.classList.add('show');
+  buzzed = -1; renderRun(true);
+  clearInterval(runTimer); runTimer = setInterval(tickRun, 250);
+  Sound.play('open'); haptic('MEDIUM');
+  scheduleStepEnd();
+}
+function closeRun(){
+  $('#run').classList.remove('show');
+  clearInterval(runTimer); runTimer = null;
+  renderAll();
+}
+function renderRun(swap){
+  const r = runR(); if(!r) return;
+  const i = S.run.idx, s = r.steps[i], n = r.steps.length, nx = r.steps[i+1];
+  $('#runName').textContent = r.name;
+  $('#runN').textContent = `${i+1}/${n}`;
+  $('#segs').innerHTML = r.steps.map((_,j) => `<i class="${j < i ? 'd' : j === i ? 'c' : ''}"></i>`).join('');
+  const el = $('#runStep'); el.textContent = s.title;
+  if(swap){ el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }
+  $('#runNext').innerHTML = nx ? `Ensuite : <b>${esc(nx.title)}</b> · ${fmtDur(nx.dur)}` : 'Dernière étape, tu y es presque';
+  $('#runGo').innerHTML = IC.plain + (nx ? 'Valider' : 'Terminer la routine');
+  $('#runSkip').hidden = false;
+  tickRun();
+}
+function tickRun(){
+  const r = runR(); if(!r || $('#run').classList.contains('fin')) return;
+  const s = r.steps[S.run.idx]; if(!s) return;
+  const dur = Math.max(1, +s.dur || 1) * 60000, el = Date.now() - S.run.st, left = dur - el, over = left < 0;
+  $('#dialT').textContent = (over ? '+' : '') + fmtClock(over ? Math.floor(-left / 1000) : Math.ceil(left / 1000));
+  $('#dialS').textContent = over ? 'dépassé' : 'restant';
+  $('#dial').classList.toggle('over', over);
+  const k = Math.min(1, el / dur);
+  $('#dial .fg').style.strokeDashoffset = (DIAL * k).toFixed(1);
+  const seg = $('#segs .c'); if(seg) seg.style.setProperty('--k', k.toFixed(3));
+  if(over && buzzed !== S.run.idx && runOn()){ buzzed = S.run.idx; haptic('HEAVY'); Sound.play('open'); }
+}
+function runNext(skip){
+  const r = runR(); if(!r) return;
+  cancelStepEnd();
+  if(skip){ Sound.play('tap'); haptic(); }
+  else { Sound.play('check'); haptic('MEDIUM'); burst($('#runGo')); }
+  if(S.run.idx >= r.steps.length - 1){ finishRun(); return; }
+  S.run.idx++; S.run.st = Date.now(); save();
+  renderRun(true); scheduleStepEnd();
+}
+function finishRun(){
+  const r = runR(), m = Math.max(1, Math.round((Date.now() - S.run.t0) / 60000));
+  S.log.push({id:uid(), itemId:r.id, title:r.name, type:'routine', date:today(), ts:Date.now(), dur:m});
+  S.run = null; save(); queueSync();
+  const el = $('#run'); el.classList.add('fin');
+  $('#segs').innerHTML = r.steps.map(() => '<i class="d"></i>').join('');
+  $('#dial').classList.remove('over');
+  $('#dial .fg').style.strokeDashoffset = 0;
+  $('#dialT').textContent = fmtDur(m);
+  $('#dialS').textContent = 'au total';
+  $('#runN').textContent = '✓';
+  const st = $('#runStep'); st.textContent = 'Routine terminée !'; st.classList.remove('swap'); void st.offsetWidth; st.classList.add('swap');
+  $('#runNext').innerHTML = `${esc(r.name)} bouclée en <b>${fmtDur(m)}</b> · prévu ${fmtDur(rTotal(r))}`;
+  $('#runGo').innerHTML = IC.plain + 'Fermer';
+  $('#runSkip').hidden = true;
+  setTimeout(() => { confetti(); Sound.play('win'); haptic('HEAVY'); }, 200);
+}
+async function scheduleStepEnd(){
+  if(!LN || !S.run) return;
+  const r = runR(), s = r && r.steps[S.run.idx]; if(!s) return;
+  const at = new Date(S.run.st + Math.max(1, +s.dur || 1) * 60000);
+  if(at.getTime() <= Date.now()) return;
+  try{
+    if((await notifState()) !== 'granted') return;
+    await ensureChannel();
+    const nx = r.steps[S.run.idx + 1];
+    await LN.schedule({notifications:[{id:STEP_NID, title:`${s.title} : temps écoulé`, body: nx ? `Valide pour passer à : ${nx.title}` : 'Dernière étape, tu y es presque.', channelId:'rituel', extra:{run:1}, schedule:{at, allowWhileIdle:true}}]});
+  }catch(e){}
+}
+function cancelStepEnd(){ if(LN){ try{ LN.cancel({notifications:[{id:STEP_NID}]}); }catch(e){} } }
 
 /* ================= SETTINGS ================= */
 async function renderSettings(){
@@ -1571,7 +1450,7 @@ async function renderSettings(){
   $('#sumNotif').textContent = (map[st] || st) + (st === 'granted' ? (s.remindItems ? ' · rappels actifs' : ' · rappels coupés') : '');
   $('#sumSum').textContent = on.length ? 'Actifs : ' + on.join(', ') : 'Désactivés';
   $('#sumSens').textContent = s.sound && s.haptics ? 'Sons et vibrations activés' : s.sound ? 'Sons seulement' : s.haptics ? 'Vibrations seulement' : 'Tout est coupé';
-  $('#sumLook').textContent = (s.tasksFirst ? 'Tâches en premier' : 'Rituels en premier') + (s.bold ? ' · texte en gras' : '');
+  $('#sumLook').textContent = s.bold ? 'Texte en gras' : 'Texte normal';
   $('#sumXiao').textContent = 'Pour recevoir les rappels à l’heure';
   $('#sumTips').textContent = 'Gestes et raccourcis';
   $('#sumData').textContent = plural(S.log.length, 'élément') + ' dans l’historique';
@@ -1591,7 +1470,6 @@ async function toggleSetting(k){
   S.settings[k] = !S.settings[k]; save(); renderSettings();
   Sound.play('toggle'); haptic();
   if(k === 'bold'){ applyBold(); requestAnimationFrame(() => { renderAll(); moveInd(); }); return; }
-  if(k === 'tasksFirst'){ applyOrder(); animAll = true; renderAll(); moveInd(); return; }
   if(['remindItems','morning','evening','weekly'].includes(k) && S.settings[k]){
     const st = await notifState();
     if(st !== 'granted' && st !== 'unavailable'){ await askNotif(); renderSettings(); }
@@ -1615,7 +1493,7 @@ mq.addEventListener ? mq.addEventListener('change', applyTheme) : mq.addListener
 let chanReady = false;
 async function ensureChannel(){
   if(!LN || chanReady) return;
-  try{ await LN.createChannel({id:'rituel', name:'Rappels', description:'Rappels de tes rituels et tâches', importance:4, visibility:1, vibration:true}); }catch(e){}
+  try{ await LN.createChannel({id:'rituel', name:'Rappels', description:'Rappels de tes routines et tâches', importance:4, visibility:1, vibration:true}); }catch(e){}
   chanReady = true;
 }
 async function notifState(){
@@ -1633,7 +1511,7 @@ let syncT;
 function queueSync(){ clearTimeout(syncT); syncT = setTimeout(syncReminders, 400); }
 function dayLoad(k, includeLate){
   return {
-    r: rituals().filter(x => isDue(x,k)),
+    r: S.routines.filter(x => x.steps.length && rDue(x,k)),
     t: tasks().filter(x => !x.done && x.date && (x.date === k || (includeLate && x.date < k)))
   };
 }
@@ -1644,25 +1522,24 @@ async function syncReminders(){
     if((await notifState()) !== 'granted') return;
     await ensureChannel();
     const pend = await LN.getPending();
-    const old = (pend.notifications || []).filter(n => !(n.id >= SNOOZE_BASE && n.id <= 900001));
+    const old = (pend.notifications || []).filter(n => n.id < SNOOZE_BASE);
     if(old.length) await LN.cancel({notifications: old.map(n => ({id:n.id}))});
     const s = S.settings, list = []; let nid = 1; const now = Date.now(), t = today();
     const atFor = (k, hhmm) => { const [h,m] = hhmm.split(':').map(Number); const d = fromKey(k); d.setHours(h,m,0,0); return d; };
     if(s.remindItems){
-      for(const it of S.items){
-        if(!it.time) continue;
-        const [h,m] = it.time.split(':').map(Number);
-        if(it.type === 'ritual'){
-          for(let i=0; i<14; i++){
-            const k = key(addDays(new Date(), i));
-            if(!isDue(it,k) || (i === 0 && doneOn(it.id,k))) continue;
-            const at = atFor(k, it.time);
-            if(at.getTime() <= now) continue;
-            list.push({id:nid++, title:it.title, body:"C'est l'heure de ton rituel.", channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
-          }
-        } else if(!it.done){
-          const at = atFor(it.date || t, it.time);
-          if(at.getTime() > now) list.push({id:nid++, title:it.title, body: it.important ? 'Tâche importante à faire' : 'Tâche à faire', channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
+      for(const it of tasks()){
+        if(!it.time || it.done) continue;
+        const at = atFor(it.date || t, it.time);
+        if(at.getTime() > now) list.push({id:nid++, title:it.title, body: it.important ? 'Tâche importante à faire' : 'Tâche à faire', channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
+      }
+      for(const r of S.routines){
+        if(!r.time || !r.steps.length) continue;
+        for(let i=0; i<14; i++){
+          const k = key(addDays(new Date(), i));
+          if(!rDue(r,k) || (i === 0 && (rDoneOn(r,k) || (S.run && S.run.rid === r.id)))) continue;
+          const at = atFor(k, r.time);
+          if(at.getTime() <= now) continue;
+          list.push({id:nid++, title:r.name, body:`C'est l'heure ! ${plural(r.steps.length,'étape')} · ${fmtDur(rTotal(r))}`, channelId:'rituel', extra:{rid:r.id}, schedule:{at, allowWhileIdle:true}});
         }
       }
     }
@@ -1673,17 +1550,17 @@ async function syncReminders(){
         const at = atFor(k, s.morningTime);
         if((r.length || tk.length) && at.getTime() > now){
           const parts = [];
-          if(r.length) parts.push(plural(r.length,'rituel'));
+          if(r.length) parts.push(r.length > 1 ? plural(r.length,'routine') : r[0].name);
           if(tk.length) parts.push(plural(tk.length,'tâche'));
           list.push({id:nid++, title:greetingAt(s.morningTime), body: parts.join(' et ') + ' au programme.', channelId:'rituel', schedule:{at, allowWhileIdle:true}});
         }
       }
       if(s.evening){
         const {r, t:tk} = dayLoad(k, i === 0);
-        const left = i === 0 ? r.filter(x => !doneOn(x.id,k)).length + tk.length : r.length + tk.length;
+        const left = i === 0 ? r.filter(x => !rDoneOn(x,k)).length + tk.length : r.length + tk.length;
         const at = atFor(k, s.eveningTime);
         if(left && at.getTime() > now){
-          list.push({id:nid++, title:'Bilan du soir', body: i === 0 ? `Il te reste ${plural(left,'chose')} à cocher.` : 'Pense à cocher ce que tu as fait aujourd’hui.', channelId:'rituel', schedule:{at, allowWhileIdle:true}});
+          list.push({id:nid++, title:'Bilan du soir', body: i === 0 ? `Il te reste ${plural(left,'chose')} à faire.` : 'Pense à valider ce que tu as fait aujourd’hui.', channelId:'rituel', schedule:{at, allowWhileIdle:true}});
         }
       }
     }
@@ -1735,17 +1612,21 @@ async function setupNotifActions(){
   try{ await LN.registerActionTypes({types:[{id:'ITEM', actions:[{id:'done', title:'Fait'}, {id:'snooze', title:'Dans 10 min'}]}]}); }catch(e){}
   try{
     LN.addListener('localNotificationActionPerformed', async ev => {
-      const n = ev.notification || {}, id = n.extra && n.extra.id;
+      const n = ev.notification || {}, ex = n.extra || {}, id = ex.id;
       const it = id ? S.items.find(x => x.id === id) : null;
       if(ev.actionId === 'done' && it){
-        if(it.type === 'ritual'){ if(!doneOn(it.id, today())) toggleRitual(it.id); }
-        else if(!it.done) toggleTask(it.id);
+        if(!it.done) toggleTask(it.id);
         save(); renderAll(); queueSync(); minimize();
       } else if(ev.actionId === 'snooze' && it){
         await ensureChannel();
         await LN.schedule({notifications:[{id: SNOOZE_BASE + Math.floor(Math.random()*99000), title:n.title, body:n.body, channelId:'rituel', actionTypeId:'ITEM', extra:{id}, schedule:{at:new Date(Date.now() + 10*60000), allowWhileIdle:true}}]});
         minimize();
-      } else { closeSheet(true); go('today'); }
+      } else if(ex.rid || ex.run){
+        closeSheet(true);
+        if(ex.rid && S.routines.some(r => r.id === ex.rid)) pickRoutine(ex.rid);
+        go('routine'); renderAll();
+        if(S.run) openRun();
+      } else { closeSheet(true); go('tasks'); }
       try{ await LN.removeDeliveredNotifications({notifications:[n]}); }catch(e){}
     });
   }catch(e){}
@@ -1755,15 +1636,13 @@ const fired = new Set();
 function webTick(){
   if(LN || !S.settings.remindItems) return;
   const n = new Date(), now = pad(n.getHours())+':'+pad(n.getMinutes()), t = today();
-  for(const it of S.items){
-    if(it.time !== now) continue;
-    const k = it.id + t + now; if(fired.has(k)) continue;
-    const due = it.type === 'ritual' ? (isDue(it,t) && !doneOn(it.id,t)) : (!it.done && (it.date || t) === t);
-    if(!due) continue;
-    fired.add(k);
-    if('Notification' in window && Notification.permission === 'granted'){ try{ new Notification(it.title, {body: it.type==='ritual' ? "C'est l'heure de ton rituel." : 'Tâche à faire'}); }catch(e){} }
-    toast(it.title); Sound.play('open');
-  }
+  const ring = (k, title, body) => {
+    if(fired.has(k)) return; fired.add(k);
+    if('Notification' in window && Notification.permission === 'granted'){ try{ new Notification(title, {body}); }catch(e){} }
+    toast(title); Sound.play('open');
+  };
+  for(const it of tasks()) if(it.time === now && !it.done && (it.date || t) === t) ring(it.id + t + now, it.title, 'Tâche à faire');
+  for(const r of S.routines) if(r.time === now && r.steps.length && rDue(r,t) && !rDoneOn(r,t)) ring(r.id + t + now, r.name, "C'est l'heure de ta routine.");
 }
 setInterval(webTick, 15000);
 
@@ -1780,42 +1659,35 @@ function toast(msg, undo){
 /* ================= TOGGLE + CÉLÉBRATION ================= */
 function celebrate(){
   confetti(); Sound.play('win'); haptic('HEAVY');
-  const h = $('#hero'); h.classList.remove('win'); void h.offsetWidth; h.classList.add('win');
-  toast('Journée bouclée. Bravo !');
+  const h = $('#tRing'); h.classList.remove('win'); void h.offsetWidth; h.classList.add('win');
+  toast('Tout est fait. Bravo !');
 }
 function onToggle(wrap){
   if(!wrap) return;
   const id = wrap.dataset.id, it = S.items.find(x => x.id === id);
   if(!it) return;
-  const row = wrap.querySelector('.row');
-  const on = it.type === 'ritual' ? toggleRitual(id) : toggleTask(id);
+  const row = wrap.querySelector('.row'), ic = row.querySelector('.ico'), pl = row.querySelector('.pill');
+  const on = toggleTask(id);
   row.classList.toggle('done', on);
-  if(on){ row.classList.add('inked'); Sound.play('check'); haptic('MEDIUM'); burst(row.querySelector('.chk') || row); }
-  else { Sound.play('uncheck'); haptic(); }
+  if(ic) ic.classList.toggle('ghost', !on);
+  if(on){
+    if(pl){ pl.className = 'pill done'; pl.textContent = 'Fait'; }
+    row.classList.add('inked'); Sound.play('check'); haptic('MEDIUM'); burst(ic || row);
+  } else { Sound.play('uncheck'); haptic(); }
   save(); queueSync();
-  const p = progress(); renderHero(p);
-  let win = false;
-  if(on && p.total && p.done === p.total && S.settings.lastWin !== p.t){
-    S.settings.lastWin = p.t; save(); win = true; setTimeout(celebrate, 380);
-  }
+  checkWin(on);
   if(on){
     setTimeout(() => wrap.classList.add('gone'), 420);
     setTimeout(() => collapse(wrap, flipRender), 680);
   } else setTimeout(flipRender, 420);
-}
-function undoDone(id){
-  const it = S.items.find(x => x.id === id); if(!it) return;
-  if(it.type === 'ritual'){ if(doneOn(id, today())) toggleRitual(id); }
-  else if(it.done) toggleTask(id);
-  save(); queueSync(); flipRender(); Sound.play('uncheck'); haptic();
 }
 
 /* ================= SWIPE ================= */
 let sw = null, suppressUntil = 0;
 root.addEventListener('touchstart', e => {
   const wrap = e.target.closest('.swipe');
-  if(!wrap || e.touches.length > 1 || openEl) return;
-  sw = {wrap, row: wrap.querySelector('.row'), x0: e.touches[0].clientX, y0: e.touches[0].clientY, dx: 0, mode: null, armed: false};
+  if(!wrap || e.touches.length > 1 || openEl || runOn()) return;
+  sw = {wrap, row: wrap.querySelector('.row'), x0: e.touches[0].clientX, y0: e.touches[0].clientY, dx: 0, mode: null, armed: false, noRight: wrap.dataset.kind === 'step'};
 }, {passive:true});
 root.addEventListener('touchmove', e => {
   if(!sw) return;
@@ -1825,6 +1697,7 @@ root.addEventListener('touchmove', e => {
     else if(Math.abs(dy) > 10){ sw = null; return; }
     else return;
   }
+  if(sw.noRight && dx > 0){ sw.dx = 0; sw.row.style.transform = ''; sw.wrap.classList.remove('sl'); if(sw.armed){ sw.armed = false; sw.wrap.classList.remove('armed'); } return; }
   const W = sw.wrap.offsetWidth, INK = Math.min(130, W * .36);
   sw.dx = dx;
   if(dx > 0){
@@ -1858,7 +1731,7 @@ function endSwipe(){
   } else if(s.armed && s.dx < 0){
     s.row.style.transition = 'transform .28s cubic-bezier(.2,.8,.2,1)';
     s.row.style.transform = 'translateX(-110%)';
-    setTimeout(() => collapse(s.wrap, () => removeItem(s.wrap.dataset.id)), 200);
+    setTimeout(() => collapse(s.wrap, () => s.wrap.dataset.kind === 'step' ? removeStep(s.wrap.dataset.id) : removeItem(s.wrap.dataset.id)), 200);
   } else {
     s.row.style.transform = ''; s.row.style.removeProperty('--p'); s.row.classList.remove('armed-ink');
     setTimeout(() => s.wrap.classList.remove('sr','sl','armed'), 380);
@@ -1870,7 +1743,7 @@ root.addEventListener('touchend', endSwipe);
 let lp = null, drag = null;
 root.addEventListener('touchstart', e => {
   const el = e.target.closest('.list > [data-id]');
-  if(!el || openEl || e.touches.length > 1) return;
+  if(!el || openEl || runOn() || e.touches.length > 1) return;
   const t0 = e.touches[0];
   lp = {x: t0.clientX, y: t0.clientY};
   lp.timer = setTimeout(() => { if(lp) startDrag(el, lp.y); lp = null; }, 430);
@@ -1921,12 +1794,14 @@ function endDrag(){
   if(d.to !== d.from){
     const ids = d.items.map(n => n.dataset.id);
     const [m] = ids.splice(d.from, 1); ids.splice(d.to, 0, m);
-    ids.forEach((id, i) => { const it = S.items.find(x => x.id === id); if(it) it.order = i; });
-    save(); Sound.play('toggle'); haptic();
+    if(d.el.parentElement.dataset.reorder === 'steps'){ const r = curR(); if(r) r.steps = ids.map(id => r.steps.find(s => s.id === id)).filter(Boolean); }
+    else ids.forEach((id, i) => { const it = S.items.find(x => x.id === id); if(it) it.order = i; });
+    save(); queueSync(); Sound.play('toggle'); haptic();
   }
   flipRender();
 }
 root.addEventListener('touchcancel', endSwipe);
+
 
 /* ================= EVENTS ================= */
 root.addEventListener('click', e => {
@@ -1936,12 +1811,9 @@ root.addEventListener('click', e => {
   const act = el.dataset.act;
   switch(act){
     case 'tab': if(el.dataset.v !== cur){ Sound.play('tap'); haptic(); } go(el.dataset.v); break;
-    case 'add': haptic('MEDIUM'); if(cur === 'notes') openNote(null); else openEditor(null); break;
-    case 'nopen': haptic(); openNote(el.dataset.nid); break;
-    case 'ndelete': deleteNote(); break;
+    case 'add': haptic('MEDIUM'); if(cur === 'routine'){ if(curR()) openStep(null); else openRout(null); } else openEditor(null); break;
     case 'close': closeSheet(); break;
     case 'toggle': if(!S.settings.swiped){ S.settings.swiped = true; save(); } onToggle(el.closest('[data-id]')); break;
-    case 'edit': haptic(); openEditor(el.closest('[data-id]').dataset.id); break;
     case 'open': haptic(); openDetail(el.closest('[data-id]').dataset.id); break;
     case 'acc': {
       const a = el.closest('.acc'), open = !a.classList.contains('open');
@@ -1954,12 +1826,8 @@ root.addEventListener('click', e => {
       }, 430);
       break;
     }
-    case 'showdone': showDone[el.dataset.v] = !showDone[el.dataset.v]; Sound.play('tap'); haptic(); flipRender(); break;
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
-    case 'type': if(!F.id){ F.type = el.dataset.t; Sound.play('tap'); renderEditor(); } break;
-    case 'day': { const d = +el.dataset.d; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; Sound.play('tap'); haptic(); renderEditor(); break; }
-    case 'preset': F.days = {all:[0,1,2,3,4,5,6], week:[1,2,3,4,5], we:[0,6]}[el.dataset.p].slice(); Sound.play('tap'); renderEditor(); break;
     case 'dpreset': F.date = el.dataset.p === 'none' ? '' : key(addDays(new Date(), +el.dataset.p)); Sound.play('tap'); renderEditor(); break;
     case 'imp': F.important = !F.important; Sound.play('toggle'); haptic(); renderEditor(); break;
     case 'remind':
@@ -1968,18 +1836,38 @@ root.addEventListener('click', e => {
       break;
     case 'save': saveItem(); break;
     case 'delete': { const id = F.id; if(!id) break; closeSheet(true); setTimeout(() => removeItem(id), 250); break; }
-    case 'sugg': addSuggestion(el.dataset.t); break;
+    case 'rpick': if(el.dataset.rid !== RID){ pickRoutine(el.dataset.rid); save(); Sound.play('tap'); haptic(); animAll = true; renderRoutine(); animAll = false; } break;
+    case 'rnew': haptic(); openRout(null); break;
+    case 'redit': haptic(); { const r = curR(); if(r) openRout(r.id); } break;
+    case 'rfirst': firstRoutine(); break;
+    case 'sadd': haptic(); openStep(null); break;
+    case 'sedit': haptic(); openStep(el.closest('[data-id]').dataset.id); break;
+    case 'dur': SF.dur = +el.dataset.d; $('#sDur').value = SF.dur; Sound.play('tap'); haptic(); renderStep(); break;
+    case 'ssave': saveStep(); break;
+    case 'sdelete': { const id = SF && SF.id; if(!id) break; closeSheet(true); setTimeout(() => removeStep(id), 250); break; }
+    case 'day': { const d = +el.dataset.d; RF.days = RF.days.includes(d) ? RF.days.filter(x => x !== d) : [...RF.days, d]; Sound.play('tap'); haptic(); renderRout(); break; }
+    case 'preset': RF.days = {all:[0,1,2,3,4,5,6], week:[1,2,3,4,5], we:[0,6]}[el.dataset.p].slice(); Sound.play('tap'); renderRout(); break;
+    case 'rremind':
+      RF.on = !RF.on; Sound.play('toggle'); haptic(); renderRout();
+      if(RF.on) notifState().then(st => { if(st !== 'granted' && st !== 'unavailable' && st !== 'denied') askNotif(); });
+      break;
+    case 'rsave': saveRout(); break;
+    case 'rdelete': { const id = RF && RF.id; if(!id) break; closeSheet(true); setTimeout(() => removeRout(id), 250); break; }
+    case 'rstart': startRun(); break;
+    case 'rnext': if($('#run').classList.contains('fin')){ Sound.play('close'); closeRun(); } else runNext(false); break;
+    case 'rskip': runNext(true); break;
+    case 'rclose': Sound.play('close'); haptic(); closeRun(); if(S.run) toast('En pause · reprends quand tu veux'); break;
     case 'undo': { const fn = undoFn; undoFn = null; $('#toast').classList.remove('show'); if(fn) fn(); break; }
     case 'notif': enableNotif(); break;
     case 'exact': if(LN && LN.changeExactNotificationSetting){ LN.changeExactNotificationSetting().then(renderSettings).catch(() => {}); } break;
     case 'sw': toggleSetting(el.dataset.k); break;
-    case 'theme': S.settings.theme = el.dataset.t; save(); applyTheme(); renderSettings(); Sound.play('tap'); haptic(); break;
     case 'clearlog':
       if(confirm("Effacer tout l'historique ?")){ S.log = []; save(); renderAll(); Sound.play('del'); toast('Historique effacé'); }
       break;
     case 'reset':
-      if(confirm("Supprimer tous tes rituels, tâches et l'historique ?")){
-        S = {items:[], log:[], notes:[], settings:S.settings}; save(); renderAll(); queueSync(); Sound.play('del'); toast('Tout est remis à zéro');
+      if(confirm("Supprimer toutes tes tâches, routines et l'historique ?")){
+        S.items = []; S.log = []; S.routines = []; S.run = null; pickRoutine(null);
+        save(); renderAll(); queueSync(); Sound.play('del'); toast('Tout est remis à zéro');
       }
       break;
   }
@@ -1992,27 +1880,28 @@ if(App){
   try{
     App.addListener('backButton', () => {
       if(openEl) closeSheet();
-      else if(cur !== 'today') go('today');
+      else if(runOn()) closeRun();
+      else if(cur !== 'tasks') go('tasks');
       else App.exitApp();
     });
   }catch(e){}
 }
 
 let lastDay = today();
-setInterval(() => { if(today() !== lastDay){ lastDay = today(); renderAll(); } }, 30000);
+setInterval(() => { if(today() !== lastDay){ lastDay = today(); if(S.run && S.run.date !== lastDay){ S.run = null; save(); } renderAll(); } }, 30000);
 document.addEventListener('visibilitychange', () => {
-  if(!document.hidden){ lastDay = today(); renderAll(); if(cur === 'settings') renderSettings(); queueSync(); }
+  if(!document.hidden){ lastDay = today(); renderAll(); if(cur === 'settings') renderSettings(); if(runOn()) tickRun(); queueSync(); }
 });
 
 /* ================= BOOT ================= */
 applyTheme();
-applyOrder();
 renderAll();
 moveInd();
 setTimeout(() => {
   const sp = $('#splash');
   sp.classList.add('out');
   root.classList.add('app-in');
+  if(S.run) go('routine');
   animAll = true; renderAll();
   setTimeout(() => { sp.remove(); moveInd(); firstAsk(); }, 600);
 }, 1250);
