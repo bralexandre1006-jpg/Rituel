@@ -262,6 +262,16 @@ button.ico:active{transform:scale(.82)}
 .h-go.ok svg,.h-go:not(.ok) .pl{animation:goIn .6s .4s var(--spring) both}
 @keyframes goIn{from{transform:scale(.4);opacity:0}}
 
+/* ================= TÂCHES RÉCURRENTES ================= */
+.dwrap{display:flex;align-items:center;gap:6px}
+.dclear{width:36px;height:36px;border-radius:50%;background:var(--s3);display:grid;place-items:center;flex:none;transition:transform .25s var(--spring),opacity .2s}
+.dclear:active{transform:scale(.86)}
+.dclear svg{width:16px;height:16px;fill:none;stroke:var(--ink2);stroke-width:2.6;stroke-linecap:round}
+.dclear[hidden]{display:none}
+#editor .collapse{max-height:110px}
+#editor .collapse.hide{max-height:0}
+.row-meta .rep{color:var(--acc2)}
+
 /* ================= WIDGET ================= */
 .sheet.tall{height:93%}
 .seg{display:flex;gap:4px;background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:4px}
@@ -611,20 +621,18 @@ button.line-row:active{transform:scale(.98)}
       <button class="icon-btn" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="field" id="titleField"><textarea id="fTitle" class="tinput" rows="1" placeholder="Appeler le garage" maxlength="140" autocomplete="off" enterkeyhint="done"></textarea></div>
-    <div class="label">Échéance</div>
-    <div class="chips" id="dateChips" style="margin-top:0">
-      <button class="chip" data-act="dpreset" data-p="none">Quand je veux</button>
-      <button class="chip" data-act="dpreset" data-p="0">Aujourd'hui</button>
-      <button class="chip" data-act="dpreset" data-p="1">Demain</button>
+    <div class="collapse" id="fDateWrap"><div class="line-row">
+      <div><div class="lr-t">Date</div><div class="lr-s" id="fDateHint">Vide : quand je veux</div></div>
+      <div class="dwrap"><input type="date" id="fDate" class="native-input" aria-label="Date"><button class="dclear" data-act="dclear" id="fDateClear" aria-label="Effacer la date"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    </div></div>
+    <div class="label">Répéter</div>
+    <div class="chips" id="repChips" style="margin-top:0">
+      <button class="chip" data-act="rep" data-p="none">Jamais</button>
+      <button class="chip" data-act="rep" data-p="all">Chaque jour</button>
+      <button class="chip" data-act="rep" data-p="week">En semaine</button>
+      <button class="chip" data-act="rep" data-p="we">Week-end</button>
     </div>
-    <div class="line-row"><span>Date</span><input type="date" id="fDate" class="native-input"></div>
-    <div class="line-row">
-      <div class="lr-ico"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg><span class="lr-t">Important</span></div>
-      <button class="switch" id="fImp" data-act="imp" aria-label="Important"></button>
-    </div>
-    <div class="label">Rappel</div>
-    <div class="line-row" style="margin-top:0"><span>Notification</span><button class="switch" id="fRemind" data-act="remind" aria-label="Rappel"></button></div>
-    <div class="collapse" id="timeWrap"><div class="line-row"><span>Heure</span><input type="time" id="fTime" class="native-input" value="09:00"></div></div>
+    <div class="days" id="tDays" style="margin-top:10px"></div>
     <div class="label">Notes</div>
     <div class="field notes-field"><textarea id="fNotes" class="ninput" rows="2" placeholder="- Une idée par ligne"></textarea></div>
     <button class="btn" data-act="save">Enregistrer</button>
@@ -862,15 +870,25 @@ function dayStreak(){
   let n = 0; while(set.has(key(d))){ n++; d = addDays(d,-1); }
   return n;
 }
+const isRec = x => Array.isArray(x.days) && x.days.length > 0;
+const recDue = (x,k) => x.days.includes(fromKey(k).getDay());
+const recDone = (x,k) => S.log.some(l => l.itemId === x.id && l.date === k);
+const isDoneNow = x => isRec(x) ? recDone(x, today()) : !!x.done;
+const doneTs = x => { if(!isRec(x)) return x.doneAt || 0; const l = S.log.find(l => l.itemId === x.id && l.date === today()); return l ? l.ts : 0; };
 function tProgress(){
   const t = today();
-  const doneT = tasks().filter(x => x.done && x.doneAt && key(new Date(x.doneAt)) === t);
-  const left = tasks().filter(x => !x.done && (!x.date || x.date <= t));
+  const doneT = tasks().filter(x => isRec(x) ? recDone(x,t) : (x.done && x.doneAt && key(new Date(x.doneAt)) === t)).map(x => Object.assign({}, x, {doneAt: doneTs(x)}));
+  const left = tasks().filter(x => isRec(x) ? (recDue(x,t) && !recDone(x,t)) : (!x.done && (!x.date || x.date <= t)));
   const total = doneT.length + left.length;
   return {t, doneT, left, total, done: doneT.length, pct: total ? doneT.length / total : 0};
 }
 function toggleTask(id){
   const it = S.items.find(x => x.id === id);
+  if(isRec(it)){
+    const t = today(), i = S.log.findIndex(l => l.itemId === id && l.date === t);
+    if(i >= 0){ S.log.splice(i, 1); return false; }
+    S.log.push({id:uid(), itemId:id, title:it.title, type:'task', date:t, ts:Date.now()}); return true;
+  }
   if(it.done){ it.done = false; it.doneAt = null; S.log = S.log.filter(l => l.itemId !== id); }
   else { it.done = true; it.doneAt = Date.now(); S.log.push({id:uid(), itemId:id, title:it.title, type:'task', date:today(), ts:Date.now()}); }
   return it.done;
@@ -1018,6 +1036,7 @@ const empty = (t, p, extra) => `<div class="empty">${LOGO}<b>${t}</b><p>${p}</p>
 const noteCount = it => (it.notes || '').split('\n').filter(l => l.replace(/^[-•*\s]+/, '').trim()).length;
 const notesMeta = it => { const n = noteCount(it); return n ? `<em>${IC.note}${n} note${n>1?'s':''}</em>` : ''; };
 const timeMeta = it => it.time ? `<em>${IC.bell}${it.time}</em>` : '';
+const recMeta = it => `<em class="rep">${IC.repeat}${schedText(it.days)}</em>`;
 const impMeta = it => it.important ? `<em class="amb">${IC.star}Important</em>` : '';
 const swHint = () => S.settings.swiped ? '' : '<p class="swhint"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Touche le rond ou glisse vers la droite</p>';
 function setRing(el, p, txt){
@@ -1046,8 +1065,9 @@ function renderTasks(){
   $('#tDate').textContent = cap(new Date().toLocaleDateString('fr-BE', {weekday:'long', day:'numeric', month:'long'}));
   $('#hello').textContent = greeting();
   setRing($('#tRing'), p.pct, p.left.length ? p.left.length : (p.done ? '✓' : '0'));
-  const g = {late:[], today:[], none:[], tom:[], later:[]};
-  tasks().filter(x => !x.done).forEach(x => {
+  const g = {late:[], today:[], none:[], tom:[], later:[], rec:[]};
+  tasks().filter(isRec).forEach(x => { if(recDone(x,t)) return; (recDue(x,t) ? g.today : g.rec).push(x); });
+  tasks().filter(x => !isRec(x) && !x.done).forEach(x => {
     if(!x.date) g.none.push(x);
     else if(x.date < t) g.late.push(x);
     else if(x.date === t) g.today.push(x);
@@ -1055,16 +1075,16 @@ function renderTasks(){
     else g.later.push(x);
   });
   let h = '', i = 0;
-  [['late','En retard'],['today',"Aujourd'hui"],['none','Quand je veux'],['tom','Demain'],['later','Plus tard']].forEach(([k,l]) => {
+  [['late','En retard'],['today',"Aujourd'hui"],['none','Quand je veux'],['tom','Demain'],['later','Plus tard'],['rec','Récurrentes']].forEach(([k,l]) => {
     if(!g[k].length) return;
     h += sec(l, g[k].length, k === 'late' ? 'late' : '') + '<div class="list">' + g[k].sort(withOrder(byImp)).map(x => {
       const late = k === 'late' || (k === 'today' && x.time && x.time < now);
-      const meta = (k === 'late' || k === 'later' ? `<em class="${k === 'late' ? 'red' : ''}">${IC.cal}${dateLabel(x.date)}</em>` : '') + timeMeta(x) + impMeta(x);
+      const meta = (isRec(x) ? recMeta(x) : k === 'late' || k === 'later' ? `<em class="${k === 'late' ? 'red' : ''}">${IC.cal}${dateLabel(x.date)}</em>` : '') + timeMeta(x) + impMeta(x);
       return taskRow(x, i++, false, late, meta);
     }).join('') + '</div>';
   });
   if(h) h += swHint();
-  if(p.doneT.length) h += sec('Faites aujourd’hui', p.doneT.length) + '<div class="list dim">' + p.doneT.sort((a,b) => b.doneAt - a.doneAt).map(x => taskRow(x, i++, true, false, '')).join('') + '</div>';
+  if(p.doneT.length) h += sec('Faites aujourd’hui', p.doneT.length) + '<div class="list dim">' + p.doneT.sort((a,b) => b.doneAt - a.doneAt).map(x => taskRow(x, i++, true, false, isRec(x) ? recMeta(x) : '')).join('') + '</div>';
   $('#tasksList').innerHTML = h || empty('Rien à faire', 'Touche + pour ajouter une tâche, avec ou sans date.');
 }
 
@@ -1208,15 +1228,12 @@ let F = null;
 function openEditor(id){
   const it = id ? S.items.find(x => x.id === id) : null;
   if(id && !it) return;
-  F = it ? JSON.parse(JSON.stringify(it)) : {id:null, type:'task', title:'', time:'', date:'', important:false};
+  F = it ? JSON.parse(JSON.stringify(it)) : {id:null, type:'task', title:'', date:''};
   if(F.date === undefined) F.date = '';
-  F.important = !!F.important;
-  F.remind = !!F.time;
-  if(!F.time) F.time = S.settings.defTime || '09:00';
+  F.days = Array.isArray(F.days) ? F.days.slice() : [];
   F.notes = F.notes || '';
   $('#fTitle').value = F.title;
   $('#fNotes').value = F.notes;
-  $('#fTime').value = F.time;
   renderEditor();
   openSheet('#editor');
   requestAnimationFrame(() => { grow($('#fTitle')); grow($('#fNotes')); });
@@ -1225,20 +1242,20 @@ function openEditor(id){
 function renderEditor(){
   const isNew = !F.id;
   $('#edTitle').textContent = isNew ? 'Nouvelle tâche' : 'Modifier';
-  const t = today(), tm = key(addDays(new Date(),1));
-  $('#dateChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
-    (c.dataset.p==='0' && F.date===t) || (c.dataset.p==='1' && F.date===tm) || (c.dataset.p==='none' && !F.date)));
+  const rec = F.days.length > 0, s = [...F.days].sort().join(',');
+  $('#fDateWrap').classList.toggle('hide', rec);
   $('#fDate').value = F.date || '';
-  $('#fImp').classList.toggle('on', F.important);
-  $('#fRemind').classList.toggle('on', F.remind);
-  $('#timeWrap').classList.toggle('hide', !F.remind);
+  $('#fDateClear').hidden = !F.date;
+  $('#fDateHint').textContent = F.date ? dateLabel(F.date, true) : 'Vide : quand je veux';
+  $('#repChips').querySelectorAll('.chip').forEach(c => c.classList.toggle('on',
+    (c.dataset.p==='none' && !rec) || (c.dataset.p==='all' && F.days.length===7) || (c.dataset.p==='week' && s==='1,2,3,4,5') || (c.dataset.p==='we' && s==='0,6')));
+  $('#tDays').innerHTML = DAY_ORDER.map(d => `<button class="day ${F.days.includes(d)?'on':''}" data-act="tday" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
   $('#fDelete').style.display = isNew ? 'none' : '';
 }
 $('#fTitle').addEventListener('input', e => { if(F) F.title = e.target.value.replace(/\n/g, ' '); grow(e.target); });
 $('#fNotes').addEventListener('input', e => { if(F) F.notes = e.target.value; grow(e.target); });
 $('#fTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveItem(); } });
 $('#fDate').addEventListener('change', e => { F.date = e.target.value; renderEditor(); });
-$('#fTime').addEventListener('change', e => { F.time = e.target.value; });
 
 async function saveItem(){
   const title = (F.title || '').trim();
@@ -1246,14 +1263,15 @@ async function saveItem(){
   const old = F.id ? S.items.find(x => x.id === F.id) : null;
   const item = {
     id: F.id || uid(), type: 'task', title,
-    time: F.remind ? (F.time || S.settings.defTime || '09:00') : '',
+    time: old && !F.days.length ? old.time || '' : '',
     createdKey: old ? old.createdKey : today(),
     createdAt: old ? old.createdAt : Date.now(),
     notes: (F.notes || '').replace(/\s+$/, ''),
-    date: F.date || '', important: F.important,
-    done: old ? !!old.done : false, doneAt: old ? old.doneAt : null
+    date: F.days.length ? '' : F.date || '', important: old ? !!old.important : false,
+    done: old && !F.days.length && !isRec(old) ? !!old.done : false, doneAt: old && !F.days.length && !isRec(old) ? old.doneAt : null
   };
   if(old && old.order !== undefined) item.order = old.order;
+  if(F.days.length) item.days = [...F.days].sort();
   if(old){
     S.items[S.items.indexOf(old)] = item;
     S.log.forEach(l => { if(l.itemId === item.id) l.title = title; });
@@ -1285,11 +1303,12 @@ let D = null, notesT = null;
 function renderDetail(){
   const it = S.items.find(x => x.id === D); if(!it) return;
   $('#dTitle').textContent = it.title;
-  $('#dTitle').classList.toggle('done', !!it.done);
-  let m = it.date ? `<em class="${!it.done && it.date < today() ? 'red' : ''}">${IC.cal}${dateLabel(it.date)}</em>` : `<em>${IC.cal}Quand je veux</em>`;
+  const dn = isDoneNow(it);
+  $('#dTitle').classList.toggle('done', dn);
+  let m = isRec(it) ? recMeta(it) : it.date ? `<em class="${!it.done && it.date < today() ? 'red' : ''}">${IC.cal}${dateLabel(it.date)}</em>` : `<em>${IC.cal}Quand je veux</em>`;
   m += impMeta(it) + timeMeta(it);
   $('#dMeta').innerHTML = m;
-  $('#dToggle').textContent = it.done ? 'Décocher' : 'Marquer comme fait';
+  $('#dToggle').textContent = dn ? 'Décocher' : (isRec(it) ? 'Fait pour aujourd’hui' : 'Marquer comme fait');
 }
 function openDetail(id){
   const it = S.items.find(x => x.id === id); if(!it) return;
@@ -1634,7 +1653,7 @@ function wData(){
   if(run){ let c = hm(run.st); for(let i = run.idx; i < n; i++){ times[i] = c; c = addMin(c, steps[i].dur); } }
   else if(r && r.time){ let c = r.time; for(let i = 0; i < n; i++){ times[i] = c; c = addMin(c, steps[i].dur); } }
   const late = x => x.date && x.date < t ? 1 : 0;
-  const pri = tasks().filter(x => !x.done).sort((a,b) => (late(b) - late(a)) || byImp(a,b))[0] || null;
+  const pri = tasks().filter(x => isRec(x) ? recDue(x, today()) && !recDone(x, today()) : !x.done).sort((a,b) => (late(b) - late(a)) || byImp(a,b))[0] || null;
   const mon = (new Date().getDay() + 6) % 7;
   return {r, steps, n, run, doneToday, idx, cur, next, times, total: r ? rTotal(r) : 0, p: tProgress(), pri, last: r ? lastRun(r) : null,
     week: [...Array(7)].map((_,i) => dayScore(key(addDays(new Date(), i - mon)))),
@@ -2005,7 +2024,7 @@ function queueSync(){ clearTimeout(syncT); syncT = setTimeout(syncReminders, 400
 function dayLoad(k, includeLate){
   return {
     r: S.routines.filter(x => x.steps.length && rDue(x,k)),
-    t: tasks().filter(x => !x.done && x.date && (x.date === k || (includeLate && x.date < k)))
+    t: tasks().filter(x => isRec(x) ? recDue(x,k) && !(k === today() && recDone(x,k)) : !x.done && x.date && (x.date === k || (includeLate && x.date < k)))
   };
 }
 function greetingAt(hhmm){ const h = +hhmm.split(':')[0]; return h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir'; }
@@ -2108,7 +2127,7 @@ async function setupNotifActions(){
       const n = ev.notification || {}, ex = n.extra || {}, id = ex.id;
       const it = id ? S.items.find(x => x.id === id) : null;
       if(ev.actionId === 'done' && it){
-        if(!it.done) toggleTask(it.id);
+        if(!isDoneNow(it)) toggleTask(it.id);
         save(); renderAll(); queueSync(); minimize();
       } else if(ev.actionId === 'snooze' && it){
         await ensureChannel();
@@ -2364,12 +2383,9 @@ root.addEventListener('click', e => {
     }
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
-    case 'dpreset': F.date = el.dataset.p === 'none' ? '' : key(addDays(new Date(), +el.dataset.p)); Sound.play('tap'); renderEditor(); break;
-    case 'imp': F.important = !F.important; Sound.play('toggle'); haptic(); renderEditor(); break;
-    case 'remind':
-      F.remind = !F.remind; Sound.play('toggle'); haptic(); renderEditor();
-      if(F.remind) notifState().then(st => { if(st !== 'granted' && st !== 'unavailable' && st !== 'denied') askNotif(); });
-      break;
+    case 'dclear': F.date = ''; Sound.play('tap'); haptic(); renderEditor(); break;
+    case 'rep': F.days = {none:[], all:[0,1,2,3,4,5,6], week:[1,2,3,4,5], we:[0,6]}[el.dataset.p].slice(); Sound.play('tap'); haptic(); renderEditor(); break;
+    case 'tday': { const d = +el.dataset.d; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; Sound.play('tap'); haptic(); renderEditor(); break; }
     case 'save': saveItem(); break;
     case 'delete': { const id = F.id; if(!id) break; closeSheet(true); setTimeout(() => removeItem(id), 250); break; }
     case 'rpick': if(el.dataset.rid !== RID){ pickRoutine(el.dataset.rid); save(); Sound.play('tap'); haptic(); animAll = true; renderRoutine(); animAll = false; } break;
