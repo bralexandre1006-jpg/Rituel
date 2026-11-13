@@ -38,6 +38,11 @@ public class RituelWidget extends AppWidgetProvider {
     }
 
     @Override
+    public void onAppWidgetOptionsChanged(Context c, AppWidgetManager m, int id, android.os.Bundle o) {
+        render(c, m, new int[]{id});
+    }
+
+    @Override
     public void onUpdate(Context c, AppWidgetManager m, int[] a) {
         render(c, m, a);
     }

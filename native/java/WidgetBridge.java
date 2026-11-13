@@ -44,7 +44,13 @@ public class WidgetBridge extends Plugin {
     public void info(PluginCall call) {
         Context c = getContext();
         JSObject r = new JSObject();
-        r.put("count", RituelWidget.ids(c).length);
+        int[] ids = RituelWidget.ids(c);
+        r.put("count", ids.length);
+        if (ids.length > 0) {
+            android.os.Bundle b = AppWidgetManager.getInstance(c).getAppWidgetOptions(ids[0]);
+            r.put("w", b.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+            r.put("h", b.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
+        }
         r.put("canPin", Build.VERSION.SDK_INT >= 26 && AppWidgetManager.getInstance(c).isRequestPinAppWidgetSupported());
         call.resolve(r);
     }
