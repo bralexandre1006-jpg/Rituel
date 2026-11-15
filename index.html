@@ -15,7 +15,7 @@
 :root{
   --bg:#000;--s1:#0B0D12;--s2:#141821;--s3:#1C212C;--line:#161A23;--line2:#252B39;
   --ink:#FFF;--ink2:#8B93A7;--ink3:#4D5466;--paper:#FFF;--void:#000;
-  --acc:#2F7BFF;--acc2:#6EA5FF;--accs:rgba(47,123,255,.15);--late:#FF5D6C;--lates:rgba(255,93,108,.14);
+  --acc:#2F7BFF;--acc2:#6EA5FF;--accs:hsl(var(--h) 100% 59% / .15);--late:#FF5D6C;--lates:rgba(255,93,108,.14);
   --fd:"Unbounded","Manrope",system-ui,sans-serif;
   --fb:"Manrope",system-ui,-apple-system,"Roboto",sans-serif;
   --sat:max(env(safe-area-inset-top),0px);--sab:max(env(safe-area-inset-bottom),0px);
@@ -121,7 +121,7 @@ svg{display:block}
   transition:transform .3s var(--spring),background .3s,color .3s}
 .ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .ico b{font-size:calc(16px * var(--fs));font-weight:800}
-.ico.ghost{background:var(--accs);color:var(--acc2);box-shadow:inset 0 0 0 2px rgba(92,155,255,.35)}
+.ico.ghost{background:var(--accs);color:var(--acc2);box-shadow:inset 0 0 0 2px hsl(var(--h) 100% 68% / .35)}
 button.ico:active{transform:scale(.82)}
 .chk svg{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s .1s var(--ease)}
 .row.done .chk svg{stroke-dashoffset:0}
@@ -177,7 +177,7 @@ button.ico:active{transform:scale(.82)}
 .rchip.new{width:38px;padding:0;display:grid;place-items:center}
 .rchip svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
 .hero{position:relative;overflow:hidden;isolation:isolate;border-radius:28px;padding:20px;margin-bottom:26px;
-  background:radial-gradient(130% 150% at 100% 0%,#2D6BFF 0%,#1238A8 42%,#0A1736 100%);box-shadow:0 18px 44px rgba(30,90,255,.28)}
+  background:radial-gradient(130% 150% at 100% 0%,#2D6BFF 0%,#1238A8 42%,#0A1736 100%);box-shadow:0 18px 44px hsl(var(--h) 100% 56% / .28)}
 .view.active .hero{animation:heroIn .7s .06s var(--soft-spring) both}
 @keyframes heroIn{from{opacity:0;transform:translateY(18px) scale(.97)}}
 .hero::after{content:"";position:absolute;top:0;bottom:0;left:0;width:45%;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,.1),transparent);transform:translateX(-120%) skewX(-12deg);animation:sweep 7s 2s ease-in-out infinite}
@@ -274,14 +274,14 @@ button.ico:active{transform:scale(.82)}
 .run-next{font-size:calc(14.5px * var(--fs));font-weight:700;color:rgba(255,255,255,.62);line-height:1.5}
 .run-next b{color:#fff;font-weight:800}
 .run-go{flex:none;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:64px;border-radius:32px;background:var(--acc);color:#fff;
-  font-size:calc(17px * var(--fs));font-weight:800;box-shadow:0 12px 30px rgba(47,123,255,.45);transition:transform .25s var(--spring)}
+  font-size:calc(17px * var(--fs));font-weight:800;box-shadow:0 12px 30px hsl(var(--h) 100% 59% / .45);transition:transform .25s var(--spring)}
 .run-go:active{transform:scale(.95)}
 .run-go svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .run-skip{flex:none;width:100%;height:50px;margin-top:6px;color:rgba(255,255,255,.6);font-size:calc(15px * var(--fs));font-weight:800}
 
 /* ================= DÉTAILS ================= */
 .ico.emo-i{background:var(--s2);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line2)}
-.row.done .ico.emo-i{background:var(--accs);box-shadow:inset 0 0 0 1.5px rgba(92,155,255,.45)}
+.row.done .ico.emo-i{background:var(--accs);box-shadow:inset 0 0 0 1.5px hsl(var(--h) 100% 68% / .45)}
 .ico .em{font-style:normal;font-size:calc(22px * var(--fs));line-height:1}
 .ico u{position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;background:var(--acc);border:2px solid var(--s1);display:grid;place-items:center;animation:chkPop .45s var(--spring)}
 .ico u svg{width:10px;height:10px;stroke:#fff;stroke-width:3.6}
@@ -371,7 +371,7 @@ button.ico:active{transform:scale(.82)}
 .tab.active svg{animation:tabPop .5s var(--spring)}
 @keyframes tabPop{0%{transform:scale(1)}35%{transform:scale(.75)}100%{transform:scale(1)}}
 .add{position:absolute;right:20px;bottom:calc(var(--sab) + 96px);width:60px;height:60px;border-radius:50%;z-index:21;background:var(--acc);color:#fff;
-  box-shadow:0 10px 28px rgba(47,123,255,.5);display:grid;place-items:center;transform:translateY(300%);transition:transform .8s .06s var(--spring),opacity .3s}
+  box-shadow:0 10px 28px hsl(var(--h) 100% 59% / .5);display:grid;place-items:center;transform:translateY(300%);transition:transform .8s .06s var(--spring),opacity .3s}
 #root.app-in .add{transform:none;transition:transform .35s var(--spring),opacity .3s}
 #root.app-in .add:active{transform:scale(.86) rotate(90deg)}
 #root.app-in .add.off{opacity:0;pointer-events:none;transform:scale(.4)}
@@ -429,7 +429,7 @@ button.line-row:active{transform:scale(.98)}
 .switch.on:active::after{transform:translateX(14px)}
 .collapse{overflow:hidden;transition:max-height .45s var(--ease),opacity .3s;max-height:90px;opacity:1}
 .collapse.hide{max-height:0;opacity:0}
-.btn{width:100%;height:56px;border-radius:28px;background:var(--acc);color:#fff;font-size:calc(16px * var(--fs));font-weight:800;margin-top:24px;box-shadow:0 10px 26px rgba(47,123,255,.35);transition:transform .25s var(--spring)}
+.btn{width:100%;height:56px;border-radius:28px;background:var(--acc);color:#fff;font-size:calc(16px * var(--fs));font-weight:800;margin-top:24px;box-shadow:0 10px 26px hsl(var(--h) 100% 59% / .35);transition:transform .25s var(--spring)}
 .btn:active{transform:scale(.96)}
 .btn-ghost{width:100%;height:50px;margin-top:6px;color:var(--late);font-size:calc(15px * var(--fs));font-weight:800}
 .btn-soft{width:100%;height:52px;margin-top:8px;border-radius:26px;background:var(--s2);font-size:calc(15px * var(--fs));font-weight:800;transition:transform .25s var(--spring)}
@@ -482,10 +482,131 @@ button.line-row:active{transform:scale(.98)}
 .toast.show{transform:translate(-50%,0) scale(1);opacity:1;visibility:visible;pointer-events:auto;transition:transform .45s var(--spring),opacity .2s,visibility 0s}
 .toast button{flex:none;color:#fff;background:var(--acc);font-weight:800;padding:8px 14px;border-radius:16px;margin:-6px 0}
 .confetti{position:absolute;inset:0;width:100%;height:100%;z-index:115;pointer-events:none}
+
+/* ================= DA LIQUID GLASS ================= */
+:root{
+  --bg:#03050A;--s1:rgba(255,255,255,.06);--s2:rgba(255,255,255,.09);--s3:rgba(255,255,255,.14);
+  --line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);
+  --ink:#F4F6FB;--ink2:rgba(232,238,255,.62);--ink3:rgba(232,238,255,.36);
+  --h:216;--acc:hsl(var(--h) 100% 62%);--acc2:hsl(var(--h) 100% 77%);--accs:hsl(var(--h) 100% 62% / .18);
+  --glass:linear-gradient(180deg,rgba(255,255,255,.11) 0%,rgba(255,255,255,.05) 100%);
+  --glass2:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.07) 100%);
+  --rim:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.04),inset 0 0 0 1px rgba(255,255,255,.07);
+  --blue:linear-gradient(180deg,hsl(var(--h) 100% 69%) 0%,hsl(calc(var(--h) + 7) 100% 59%) 100%);
+  --blue-rim:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.15);
+}
+html,body{background:var(--bg)}
+.bgfx{position:absolute;inset:-25%;z-index:0;pointer-events:none;
+  background:radial-gradient(38% 26% at 18% 14%,hsl(var(--h) 100% 62% / .42),transparent 72%),
+    radial-gradient(34% 26% at 88% 36%,hsl(calc(var(--h) + 40) 100% 68% / .26),transparent 72%),
+    radial-gradient(44% 30% at 40% 92%,hsl(calc(var(--h) - 18) 100% 50% / .22),transparent 72%);
+  animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(5%,4%,0) scale(1.06)}}
+.views{z-index:1}
+.tfade{background:linear-gradient(to bottom,rgba(3,5,10,.92) 55%,transparent)}
+.bfade{background:linear-gradient(to bottom,transparent,rgba(3,5,10,.9) 60%)}
+
+/* titres façon iOS */
+.title{font-size:calc(34px * var(--fs));letter-spacing:-.035em}
+.eyebrow{font-size:calc(13px * var(--fs));color:var(--ink2)}
+.sec h3{font-size:calc(20px * var(--fs));letter-spacing:-.025em}
+.sec span{background:rgba(255,255,255,.08);color:var(--ink2);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.sec.late span{background:rgba(255,93,108,.16)}
+.ring{border-radius:50%;background:var(--glass);box-shadow:var(--rim)}
+.ring .bg{stroke:rgba(255,255,255,.08)}
+.ring .fg{stroke:var(--acc2)}
+
+/* lignes en verre */
+.swipe,.sw-bg{border-radius:26px}
+.row{background:var(--glass);border:0;box-shadow:var(--rim);border-radius:26px;min-height:76px}
+.row::before{background:var(--blue)}
+.row.cur{box-shadow:var(--rim),inset 0 0 0 1.5px hsl(var(--h) 100% 77% / .8)}
+.list.dim .row{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02))}
+.ico{background:var(--blue);box-shadow:var(--blue-rim),0 6px 18px hsl(var(--h) 100% 59% / .35)}
+.ico.ghost{background:rgba(255,255,255,.06);color:var(--ink2);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.16),inset 0 1px 0 rgba(255,255,255,.22)}
+.ico.emo-i{background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.08)}
+.pill{background:rgba(255,255,255,.09);color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.pill.done{background:var(--blue);color:#fff;box-shadow:var(--blue-rim)}
+.pill.late{background:rgba(255,93,108,.16);color:#FF8D97;box-shadow:inset 0 1px 0 rgba(255,140,150,.25)}
+.pill.now{background:#fff;color:#08122A}
+.sw-bg{background:rgba(255,70,90,.18)}
+
+/* barre d'onglets flottante + bouton rond, comme iOS 26 */
+.tabbar{left:16px;right:96px;bottom:calc(var(--sab) + 14px);height:66px;border-radius:33px;padding:0 6px;border:0;
+  background:rgba(28,32,44,.55);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  box-shadow:var(--rim),0 12px 34px rgba(0,0,0,.45)}
+.tab-ind{top:6px;bottom:6px;border-radius:27px;background:var(--glass2);box-shadow:var(--rim)}
+.tab{color:var(--ink3)}
+.tab.active{color:#fff}
+.tab.active svg{stroke:var(--acc2)}
+.add{right:16px;bottom:calc(var(--sab) + 14px);width:66px;height:66px;background:var(--blue);
+  box-shadow:var(--blue-rim),0 12px 30px hsl(var(--h) 100% 59% / .5)}
+.view{padding-bottom:calc(var(--sab) + 120px)}
+
+/* feuilles flottantes en verre */
+.backdrop{background:rgba(0,0,0,.5)}
+.sheet{left:8px;right:8px;bottom:8px;border-radius:36px;border:0;padding-bottom:calc(var(--sab) + 18px);
+  background:rgba(22,26,38,.78);-webkit-backdrop-filter:blur(34px) saturate(170%);backdrop-filter:blur(34px) saturate(170%);
+  box-shadow:var(--rim),0 -10px 50px rgba(0,0,0,.5)}
+.grab{background:rgba(255,255,255,.25)}
+.icon-btn{background:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.field,.line-row{background:rgba(255,255,255,.06);border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,255,255,.05)}
+.field:focus-within{box-shadow:inset 0 0 0 1.5px var(--acc2)}
+.chip,.day,.emo,.rchip{background:rgba(255,255,255,.07);border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.05)}
+.chip.on,.day.on,.rchip.on{background:var(--blue);color:#fff;box-shadow:var(--blue-rim)}
+.emo.on{background:var(--accs);box-shadow:inset 0 0 0 1.5px var(--acc2)}
+.seg{background:rgba(255,255,255,.06);border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.seg button.on{background:var(--glass2);color:#fff;box-shadow:var(--rim)}
+.switch{background:rgba(255,255,255,.12)}
+.switch.on{background:var(--blue)}
+.btn{height:58px;border-radius:29px;background:var(--blue);box-shadow:var(--blue-rim),0 10px 26px hsl(var(--h) 100% 59% / .35)}
+.btn-soft{background:rgba(255,255,255,.08);box-shadow:var(--rim)}
+.addstep{border:0;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.1)}
+
+/* carte routine */
+.hero{border-radius:32px;background:linear-gradient(160deg,hsl(var(--h) 100% 66% / .55) 0%,hsl(calc(var(--h) + 8) 67% 47% / .32) 55%,rgba(255,255,255,.06) 100%);
+  box-shadow:var(--rim),0 24px 60px hsl(calc(var(--h) + 8) 82% 43% / .32)}
+.h-week,.h-stat{background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.h-edit{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.h-go{background:rgba(255,255,255,.92);box-shadow:inset 0 1px 0 #fff,0 8px 24px rgba(0,0,0,.25)}
+.h-go.ok{background:rgba(255,255,255,.16);box-shadow:var(--rim)}
+
+/* mode routine */
+.run{background:radial-gradient(70% 45% at 50% 36%,hsl(var(--h) 100% 62% / .35),transparent 70%),radial-gradient(60% 40% at 80% 90%,hsl(calc(var(--h) + 40) 100% 68% / .2),transparent 70%),#03050A}
+.run-top .icon-btn{background:rgba(255,255,255,.1)}
+.dial{border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.08),rgba(255,255,255,.02) 70%);box-shadow:var(--rim)}
+.run-go{border-radius:32px;background:var(--blue);box-shadow:var(--blue-rim),0 14px 34px hsl(var(--h) 100% 59% / .5)}
+
+/* réglages groupés */
+.acc,.wcard{border:0;background:var(--glass);box-shadow:var(--rim);border-radius:26px}
+.acc.open{box-shadow:var(--rim),inset 0 0 0 1px rgba(255,255,255,.1)}
+.acc-ico{background:var(--blue);color:#fff;box-shadow:var(--blue-rim)}
+.acc .line-row{background:transparent;box-shadow:none;border-top:1px solid rgba(255,255,255,.06)}
+
+/* toast en verre */
+.toast{background:rgba(32,36,50,.72);color:#fff;-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--rim),0 12px 30px rgba(0,0,0,.4)}
+.toast button{background:var(--blue);box-shadow:var(--blue-rim)}
+
+/* ===== choix de la couleur ===== */
+.hue-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 16px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.hue-wrap .lr-t{align-self:flex-start}
+.hue{position:relative;width:200px;height:200px;border-radius:50%;touch-action:none;cursor:pointer;
+  background:conic-gradient(from 0deg,hsl(0 100% 62%),hsl(30 100% 62%),hsl(60 100% 62%),hsl(90 100% 62%),hsl(120 100% 62%),hsl(150 100% 62%),hsl(180 100% 62%),hsl(210 100% 62%),hsl(240 100% 62%),hsl(270 100% 62%),hsl(300 100% 62%),hsl(330 100% 62%),hsl(360 100% 62%));
+  -webkit-mask:radial-gradient(circle,transparent 58%,#000 59%);mask:radial-gradient(circle,transparent 58%,#000 59%)}
+.hue-box{position:relative;width:200px;height:200px}
+.hue-knob{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;pointer-events:none;
+  background:var(--acc);box-shadow:0 0 0 4px #fff,0 6px 16px rgba(0,0,0,.5);transition:transform .25s var(--soft-spring)}
+.hue-box.drag .hue-knob{transition:none;scale:1.15}
+.hue-mid{position:absolute;inset:50px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none;
+  background:var(--blue);box-shadow:var(--blue-rim),0 10px 30px hsl(var(--h) 100% 55% / .45)}
+.hue-mid b{font-size:calc(26px * var(--fs));font-weight:800;color:#fff}
+.hue-mid small{font-size:calc(11.5px * var(--fs));font-weight:800;color:rgba(255,255,255,.85)}
+.hue-reset{height:36px;padding:0 14px;border-radius:18px;font-size:calc(13px * var(--fs));font-weight:800;color:var(--ink2);background:rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
 <div id="root">
+  <div class="bgfx" aria-hidden="true"></div>
 
   <!-- SPLASH -->
   <div id="splash">
@@ -581,6 +702,11 @@ button.line-row:active{transform:scale(.98)}
         <div><div class="lr-t">Texte en gras</div><div class="lr-s">Plus épais et un peu plus grand</div></div>
         <button class="switch" data-act="sw" data-k="bold" aria-label="Texte en gras"></button>
       </div>
+      <div class="hue-wrap">
+        <div class="lr-t">Couleur de l'app</div>
+        <div class="hue-box" id="hueBox"><div class="hue" id="hue"></div><div class="hue-knob" id="hueKnob"></div><div class="hue-mid"><b>Aa</b><small id="hueName">Bleu</small></div></div>
+        <button class="hue-reset" data-act="huereset">Remettre le bleu</button>
+      </div>
         </div></div>
       </div>
       <div class="acc" data-acc="xiao" id="xiaomiTips" hidden>
@@ -648,7 +774,7 @@ button.line-row:active{transform:scale(.98)}
     <div class="segs" id="segs"></div>
     <div class="run-body">
       <div class="dial" id="dial">
-        <svg viewBox="0 0 200 200"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DB0FF"/><stop offset="1" stop-color="#2F7BFF"/></linearGradient></defs><circle class="bg" cx="100" cy="100" r="94"/><circle class="fg" cx="100" cy="100" r="94"/></svg>
+        <svg viewBox="0 0 200 200"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--acc2)"/><stop offset="1" style="stop-color:var(--acc)"/></linearGradient></defs><circle class="bg" cx="100" cy="100" r="94"/><circle class="fg" cx="100" cy="100" r="94"/></svg>
         <div class="dial-t"><i class="run-emo" id="runEmo"></i><b id="dialT">0:00</b><small id="dialS">restant</small></div>
       </div>
       <div class="run-step" id="runStep"></div>
@@ -1037,7 +1163,7 @@ function confetti(){
   cv.width = W*dpr; cv.height = H*dpr;
   const c = cv.getContext('2d'); c.scale(dpr, dpr);
   const dark = document.documentElement.dataset.theme === 'dark';
-  const cols = ['#FFFFFF','#2F7BFF','#6EA5FF','#A9C9FF','#1E4FD9'];
+  const hh = +(S.settings.hue || 216), cols = ['#FFFFFF', `hsl(${hh} 100% 62%)`, `hsl(${hh} 100% 77%)`, `hsl(${hh} 100% 87%)`, `hsl(${hh + 7} 85% 48%)`];
   const P = Array.from({length:150}, (_, i) => ({
     x: W/2 + (Math.random()-.5)*80, y: H*.34,
     vx: (Math.random()-.5)*15, vy: -Math.random()*17 - 6,
@@ -2052,7 +2178,31 @@ async function refreshWInfo(){
 /* ================= THEME ================= */
 const mq = window.matchMedia('(prefers-color-scheme: dark)');
 function applyBold(){ document.documentElement.classList.toggle('bold', !!S.settings.bold); }
+const HUE_NAMES = [[15,'Rouge'],[40,'Orange'],[65,'Jaune'],[150,'Vert'],[185,'Turquoise'],[205,'Cyan'],[245,'Bleu'],[295,'Violet'],[320,'Magenta'],[345,'Rose'],[361,'Rouge']];
+function applyHue(h){
+  h = ((Math.round(h) % 360) + 360) % 360;
+  document.documentElement.style.setProperty('--h', h);
+  const a = (h - 90) * Math.PI / 180, R = 83, k = $('#hueKnob');
+  if(k) k.style.transform = `translate(${(Math.cos(a) * R).toFixed(1)}px,${(Math.sin(a) * R).toFixed(1)}px)`;
+  const nm = $('#hueName'); if(nm) nm.textContent = HUE_NAMES.find(([m]) => h < m)[1];
+  return h;
+}
+(() => {
+  const box = $('#hueBox'); if(!box) return;
+  let last = null;
+  const pick = e => {
+    const r = box.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
+    const h = applyHue(Math.atan2(y, x) * 180 / Math.PI + 90);
+    S.settings.hue = h;
+    if(last === null || Math.abs(h - last) >= 12){ last = h; haptic(); Sound.play('tap'); }
+  };
+  box.addEventListener('pointerdown', e => { box.setPointerCapture(e.pointerId); box.classList.add('drag'); last = null; pick(e); });
+  box.addEventListener('pointermove', e => { if(box.classList.contains('drag')) pick(e); });
+  const end = () => { if(!box.classList.contains('drag')) return; box.classList.remove('drag'); save(); };
+  box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+})();
 function applyTheme(){
+  applyHue(S.settings.hue == null ? 216 : S.settings.hue);
   applyBold();
   document.documentElement.dataset.theme = 'dark';
   document.querySelector('meta[name="theme-color"]').content = '#000000';
@@ -2483,6 +2633,7 @@ root.addEventListener('click', e => {
       pushWidget().then(() => WG.pin()).then(() => toast('Choisis où le poser sur ton écran d’accueil')).catch(() => toast('Appui long sur l’écran d’accueil, puis Widgets'));
       haptic('MEDIUM');
       break;
+    case 'huereset': S.settings.hue = 216; applyHue(216); save(); Sound.play('toggle'); haptic(); break;
     case 'undo': { const fn = undoFn; undoFn = null; $('#toast').classList.remove('show'); if(fn) fn(); break; }
     case 'notif': enableNotif(); break;
     case 'exact': if(LN && LN.changeExactNotificationSetting){ LN.changeExactNotificationSetting().then(renderSettings).catch(() => {}); } break;

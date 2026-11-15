@@ -43,7 +43,7 @@
 
 ## Design et UX
 - Interface cohérente, soignée, moderne, accessible et fluide, optimisée pour le Xiaomi 17T Pro (zones sûres, caméra).
-- Respecte la direction artistique existante : noir et blanc, police Manrope, icônes SVG `IC`, sons, vibrations, toasts d'annulation, animations.
+- Respecte la direction artistique existante : « liquid glass » façon iOS (fond sombre à halos, cartes en verre, barre d'onglets flottante), couleur d'accent réglable (teinte `--h`, `S.settings.hue`, défaut 216 = bleu), police Manrope, icônes SVG `IC`, sons, vibrations, toasts d'annulation, animations. Bloc CSS « DA LIQUID GLASS » en fin de `<style>`.
 - Soigne la typographie, les espacements, les états vides et d'erreur, la navigation et les animations raisonnables.
 - Ne refonds pas des écrans non concernés. Demande des références si une refonte majeure est ambiguë.
 
