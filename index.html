@@ -218,6 +218,9 @@ button.ico:active{transform:scale(.82)}
 .h-dial span.t{font-size:calc(19px * var(--fs));font-weight:800}
 .view.active .h-dial span{animation:emoPop .7s .35s var(--spring) both}
 .h-info{flex:1;min-width:0}
+.h-info .h-name{font-size:calc(21px * var(--fs));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rchips{flex-wrap:wrap;overflow:visible;margin:-6px 0 18px;padding:0}
+.rchip{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .h-week{display:flex;justify-content:space-between;margin-top:18px;padding:12px 14px;border-radius:18px;background:rgba(0,0,0,.22)}
 .hw{display:flex;flex-direction:column;align-items:center;gap:6px}
 .hw i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28)}
@@ -1283,22 +1286,22 @@ function renderRoutine(){
   const curS = run ? r.steps[run.idx] : (!doneToday ? r.steps[0] : null);
   const dialEmo = doneToday && !run ? '🏆' : curS && curS.emoji ? curS.emoji : '';
   const dial = `<div class="h-dial"><svg viewBox="0 0 86 86"><circle class="a" cx="43" cy="43" r="37"/><circle class="b" cx="43" cy="43" r="37" style="stroke-dashoffset:${(232.5 * (1 - (n ? dn / n : 0))).toFixed(1)}"/></svg><span class="${dialEmo ? '' : 't'}">${dialEmo || `${dn}/${n}`}</span></div>`;
-  const mon = (new Date().getDay() + 6) % 7;
+  const mon = (new Date().getDay() + 6) % 7, born = key(new Date(r.createdAt || 0));
   const week = DAY_ORDER.map((wd, i) => {
     const k = key(addDays(new Date(), i - mon)), due = rDue(r, k), ok = rDoneOn(r, k);
-    const c = ok ? 'ok' : k > t ? (due ? 'fut' : 'off') : !due ? 'off' : k === t ? 'now' : 'miss';
+    const c = ok ? 'ok' : k > t ? (due ? 'fut' : 'off') : !due || k < born ? 'off' : k === t ? 'now' : 'miss';
     return `<span class="hw ${c} ${k === t ? 'today' : ''}"><i>${ok ? IC.plain : ''}</i><small>${DAY_LETTER[wd]}</small></span>`;
   }).join('');
   const nextLine = !n ? '' : run ? `<div class="h-next">${IC.play}En cours · <b>${curS.emoji ? esc(curS.emoji) + ' ' : ''}${esc(curS.title)}</b></div>`
     : !doneToday ? `<div class="h-next">${IC.play}Pour commencer · <b>${curS.emoji ? esc(curS.emoji) + ' ' : ''}${esc(curS.title)}</b></div>` : '';
   let h = `<div class="hero">
     <div class="h-top">${dial}<div class="h-info"><div class="h-name">${esc(r.name)}</div><div class="h-sub">${sub}</div></div><button class="h-edit" data-act="redit" aria-label="Modifier la routine">${IC.pen}</button></div>
-    <div class="h-week">${week}</div>
+    ${n ? `<div class="h-week">${week}</div>
     <div class="h-stats">
       <div class="h-stat"><b>${fmtDur(total)}</b><small>Prévu</small></div>
-      <div class="h-stat"><b>${last && last.dur ? fmtDur(last.dur) : '—'}</b><small>Dernière fois</small></div>
+      <div class="h-stat"><b>${last && last.dur ? fmtDur(last.dur) : '—'}</b><small>Dernière</small></div>
       <div class="h-stat"><b>${streak} j</b><small>De suite</small></div>
-    </div>
+    </div>` : ''}
     ${nextLine}
     ${btn}
   </div>`;
@@ -1324,7 +1327,7 @@ function renderRoutine(){
     const endAt = clock;
     h += `<div class="tl-end"><span>🏁</span><p>${endAt ? `Fin prévue à <b>${endAt}</b>` : `Durée totale <b>${fmtDur(total)}</b>`}</p></div>`;
   }
-  h += `<button class="addstep" data-act="sadd">${IC.plus}Ajouter une étape</button>`;
+  if(n) h += `<button class="addstep" data-act="sadd">${IC.plus}Ajouter une étape</button>`;
   if(n > 1) h += '<p class="swhint">Appui long pour changer l’ordre · glisse à gauche pour supprimer</p>';
   $('#rBody').innerHTML = h;
 }
