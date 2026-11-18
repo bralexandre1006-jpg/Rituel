@@ -605,6 +605,82 @@ html,body{background:var(--bg)}
 .hue-mid b{font-size:calc(26px * var(--fs));font-weight:800;color:#fff}
 .hue-mid small{font-size:calc(11.5px * var(--fs));font-weight:800;color:rgba(255,255,255,.85)}
 .hue-reset{height:36px;padding:0 14px;border-radius:18px;font-size:calc(13px * var(--fs));font-weight:800;color:var(--ink2);background:rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+
+/* ================= UNSLOP : sans néons ni jeux de lumière ================= */
+:root{--bg:#000;--blue:var(--acc);--blue-rim:none}
+html,body{background:#000}
+.bgfx{display:none}
+.tfade{background:linear-gradient(to bottom,#000 55%,transparent)}
+.bfade{background:linear-gradient(to bottom,transparent,#000 60%)}
+.ico,.add,.btn,.run-go,.pill.done,.chip.on,.day.on,.rchip.on,.toast button,.hue-mid{box-shadow:none}
+.ico:not(.ghost):not(.emo-i),.add,.btn,.run-go,.pill.done,.chip.on,.day.on,.rchip.on,.switch.on,.toast button,.hue-mid{background:var(--acc)}
+.row.cur{box-shadow:var(--rim),inset 0 0 0 1.5px var(--acc)}
+.row.cur .ico::after{display:none}
+.hero{background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.06)}
+.hero::after{display:none}
+.h-week,.h-stat{background:rgba(255,255,255,.05);box-shadow:none}
+.h-go{background:#fff;box-shadow:none}
+.h-go.ok{background:rgba(255,255,255,.1);box-shadow:none}
+.run{background:#000}
+.dial{background:none;box-shadow:none}
+.dial .fg{stroke:var(--acc)}
+.acc-ico{background:rgba(255,255,255,.08);color:var(--acc2);box-shadow:none}
+.wcard{background:var(--glass)}
+.sheet{box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.tabbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.06)}
+.toast{box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.swhint svg{animation:none}
+
+/* ================= ROUTINE SUR UN SEUL ÉCRAN ================= */
+#v-routine{display:flex;flex-direction:column;overflow:hidden;padding-bottom:calc(var(--sab) + 96px)}
+#v-routine>.head,#v-routine>.rchips{flex:none}
+#v-routine>.head{margin-bottom:16px}
+#rBody{flex:1;min-height:0;display:flex;flex-direction:column}
+#rBody>.hero,#rBody>.empty{flex:none}
+.rsteps{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 -16px;padding:2px 16px 12px;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.rsteps::-webkit-scrollbar{display:none}
+.hero.rh{padding:16px;margin-bottom:12px;border-radius:26px}
+.rh .h-top{gap:12px}
+.rh .h-dial{width:58px;height:58px}
+.rh .h-dial circle{stroke-width:8}
+.rh .h-dial span{font-size:calc(24px * var(--fs))}
+.rh .h-dial span.t{font-size:calc(14px * var(--fs))}
+.rh .h-info .h-name{font-size:calc(18px * var(--fs));-webkit-line-clamp:1}
+.rh .h-sub{font-size:calc(12.5px * var(--fs));margin-top:3px}
+.rh .h-edit{width:36px;height:36px}
+.rh .h-week{margin-top:12px;padding:8px 12px;align-items:center;gap:4px}
+.rh .hw{gap:3px}
+.rh .hw i{width:20px;height:20px}
+.rh .hw i svg{width:10px;height:10px}
+.rh .hw small{font-size:calc(9.5px * var(--fs))}
+.hw-streak{margin-left:6px;text-align:right;font-size:calc(11px * var(--fs));font-weight:700;line-height:1.35;color:rgba(255,255,255,.6)}
+.hw-streak b{color:#fff;font-size:calc(15px * var(--fs))}
+.rh .h-go{height:48px;margin-top:12px;border-radius:24px;font-size:calc(15px * var(--fs))}
+.rsteps .list.tl{gap:6px;margin-bottom:0}
+.rsteps .list.tl::before{left:28px;top:28px;bottom:28px}
+.rsteps .swipe,.rsteps .sw-bg{border-radius:20px}
+.rsteps .row{min-height:56px;padding:8px 12px 8px 10px;gap:10px;border-radius:20px}
+.rsteps .ico{width:38px;height:38px}
+.rsteps .ico .em{font-size:calc(19px * var(--fs))}
+.rsteps .ico b{font-size:calc(14px * var(--fs))}
+.rsteps .row-title{font-size:calc(15px * var(--fs))}
+.rsteps .row-meta{margin-top:2px;font-size:calc(12px * var(--fs))}
+.rsteps .pill{height:24px;padding:0 10px;font-size:calc(11px * var(--fs))}
+
+#v-routine>.head{margin-bottom:10px}
+#v-routine .title{font-size:calc(30px * var(--fs))}
+#v-routine .rchips{margin:0 0 12px;gap:6px}
+#v-routine .rchip{height:34px;padding:0 14px;font-size:calc(13px * var(--fs))}
+#v-routine .rchip.new{width:34px;padding:0}
+.hero.rh{padding:14px;margin-bottom:10px}
+.rh .h-dial{width:52px;height:52px}
+.rh .h-week{margin-top:10px;padding:6px 12px}
+.rh .h-go{height:44px;margin-top:10px}
+.rsteps .list.tl{gap:4px}
+.rsteps .row{min-height:52px;padding:6px 12px 6px 10px}
+.rsteps .ico{width:36px;height:36px}
+.rsteps .list.tl::before{left:27px;top:26px;bottom:26px}
+.dial-t small{text-transform:none;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -613,8 +689,7 @@ html,body{background:var(--bg)}
 
   <!-- SPLASH -->
   <div id="splash">
-    <div class="sp-ring" aria-hidden="true"></div>
-    <div class="sp-logo" aria-hidden="true"><i class="sp-p1"></i><i class="sp-p2"></i><i class="sp-p3"></i><i class="sp-shine"></i></div>
+    <div class="sp-logo" aria-hidden="true"><i class="sp-p1"></i><i class="sp-p2"></i><i class="sp-p3"></i></div>
     <div class="word" aria-label="Rituel">
       <span style="animation-delay:1.05s">R</span><span style="animation-delay:1.10s">i</span><span style="animation-delay:1.15s">t</span><span style="animation-delay:1.20s">u</span><span style="animation-delay:1.25s">e</span><span style="animation-delay:1.30s">l</span>
     </div>
@@ -624,7 +699,7 @@ html,body{background:var(--bg)}
   <main class="views">
     <section class="view active" id="v-tasks">
       <header class="head">
-        <div><div class="eyebrow" id="tDate"></div><h1 class="title"><span id="hello">Bonjour</span></h1></div>
+        <div><h1 class="title">Tâches</h1></div>
         <div class="ring" id="tRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
       </header>
       <div id="tasksList"></div>
@@ -632,7 +707,7 @@ html,body{background:var(--bg)}
 
     <section class="view" id="v-routine">
       <header class="head">
-        <div><div class="eyebrow" id="rEyebrow"></div><h1 class="title">Routine</h1></div>
+        <div><h1 class="title">Routine</h1></div>
         <div class="ring" id="rRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
       </header>
       <div class="rchips" id="rChips"></div>
@@ -640,7 +715,7 @@ html,body{background:var(--bg)}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div><div class="eyebrow">Rituel 6.0</div><h1 class="title">Réglages</h1></div></header>
+      <header class="head"><div><h1 class="title">Réglages</h1></div></header>
 
       <button class="wcard" data-act="wopen"><canvas id="wMini" width="600" height="150"></canvas><span class="wcard-t"><b>Widget</b><small>Style, transparence, liquid glass</small></span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
 
@@ -1235,8 +1310,6 @@ function taskRow(x, i, done, late, meta){
 }
 function renderTasks(){
   const t = today(), tm = key(addDays(new Date(),1)), now = nowHM(), p = tProgress();
-  $('#tDate').textContent = cap(new Date().toLocaleDateString('fr-BE', {weekday:'long', day:'numeric', month:'long'}));
-  $('#hello').textContent = greeting();
   setRing($('#tRing'), p.pct, p.left.length ? p.left.length : (p.done ? '✓' : '0'));
   const g = {late:[], today:[], none:[], tom:[], later:[], rec:[]};
   tasks().filter(isRec).forEach(x => { if(recDone(x,t)) return; (recDue(x,t) ? g.today : g.rec).push(x); });
@@ -1257,8 +1330,7 @@ function renderTasks(){
     }).join('') + '</div>';
   });
   if(h) h += swHint();
-  if(p.doneT.length) h += sec('Faites aujourd’hui', p.doneT.length) + '<div class="list dim">' + p.doneT.sort((a,b) => b.doneAt - a.doneAt).map(x => taskRow(x, i++, true, false, isRec(x) ? recMeta(x) : '')).join('') + '</div>';
-  $('#tasksList').innerHTML = h || empty('Rien à faire', 'Touche + pour ajouter une tâche, avec ou sans date.');
+  $('#tasksList').innerHTML = h || (p.done ? empty('Tout est fait', 'Les tâches validées disparaissent de la liste.') : empty('Rien à faire', 'Touche + pour ajouter une tâche, avec ou sans date.'));
 }
 
 function renderRoutine(){
@@ -1267,7 +1339,6 @@ function renderRoutine(){
   $('#rChips').innerHTML = S.routines.map(x => `<button class="rchip ${r && x.id === r.id ? 'on' : ''}" data-act="rpick" data-rid="${x.id}">${esc(x.name)}</button>`).join('')
     + `<button class="rchip new" data-act="rnew" aria-label="Nouvelle routine">${IC.plus}</button>`;
   if(!r){
-    $('#rEyebrow').textContent = 'Étape par étape';
     setRing($('#rRing'), 0, '0');
     $('#rBody').innerHTML = empty('Crée ta routine', 'Ajoute tes étapes dans l’ordre avec le temps que chacune te prend. Lance-la, puis valide chaque étape pour passer à la suivante.', '<button class="btn" data-act="rfirst">Créer ma routine du matin</button>');
     return;
@@ -1275,16 +1346,18 @@ function renderRoutine(){
   const n = r.steps.length, total = rTotal(r), run = S.run && S.run.rid === r.id ? S.run : null;
   const doneToday = rDoneOn(r,t), last = lastRun(r), streak = rStreak(r);
   const dn = run ? run.idx : (doneToday ? n : 0);
-  $('#rEyebrow').textContent = schedText(r.days) + (r.time ? ' · ' + r.time : '');
   setRing($('#rRing'), n ? dn / n : 0, `${dn}/${n}`);
+  let clock = run ? '' : (r.time || '');
+  const times = r.steps.map((s,i) => { if(run && i === run.idx) clock = hm(run.st); const st = clock; if(clock) clock = addMin(clock, s.dur); return st; });
+  const endAt = clock;
   let btn;
   if(!n) btn = `<button class="h-go" data-act="sadd">${IC.plus}Ajouter une première étape</button>`;
   else if(run) btn = `<button class="h-go" data-act="rstart">${IC.play}Reprendre · étape ${run.idx + 1}/${n}</button>`;
   else if(doneToday) btn = `<button class="h-go ok" data-act="rstart">${IC.plain}Faite à ${hm(last.ts)} · Recommencer</button>`;
-  else btn = `<button class="h-go" data-act="rstart">${IC.play}Commencer la routine</button>`;
-  const sub = n ? `${plural(n,'étape')} · ${fmtDur(total)}${r.time ? ` · ${r.time} → ${addMin(r.time, total)}` : ''}` : 'Aucune étape pour l’instant';
+  else btn = `<button class="h-go" data-act="rstart">${IC.play}Commencer</button>`;
+  const sub = n ? [plural(n,'étape'), fmtDur(total), endAt ? (run ? `fin ${endAt}` : `${r.time} → ${endAt}`) : ''].filter(Boolean).join(' · ') : 'Aucune étape pour l’instant';
   const curS = run ? r.steps[run.idx] : (!doneToday ? r.steps[0] : null);
-  const dialEmo = doneToday && !run ? '🏆' : curS && curS.emoji ? curS.emoji : '';
+  const dialEmo = doneToday && !run ? '' : curS && curS.emoji ? curS.emoji : '';
   const dial = `<div class="h-dial"><svg viewBox="0 0 86 86"><circle class="a" cx="43" cy="43" r="37"/><circle class="b" cx="43" cy="43" r="37" style="stroke-dashoffset:${(232.5 * (1 - (n ? dn / n : 0))).toFixed(1)}"/></svg><span class="${dialEmo ? '' : 't'}">${dialEmo || `${dn}/${n}`}</span></div>`;
   const mon = (new Date().getDay() + 6) % 7, born = key(new Date(r.createdAt || 0));
   const week = DAY_ORDER.map((wd, i) => {
@@ -1292,28 +1365,17 @@ function renderRoutine(){
     const c = ok ? 'ok' : k > t ? (due ? 'fut' : 'off') : !due || k < born ? 'off' : k === t ? 'now' : 'miss';
     return `<span class="hw ${c} ${k === t ? 'today' : ''}"><i>${ok ? IC.plain : ''}</i><small>${DAY_LETTER[wd]}</small></span>`;
   }).join('');
-  const nextLine = !n ? '' : run ? `<div class="h-next">${IC.play}En cours · <b>${curS.emoji ? esc(curS.emoji) + ' ' : ''}${esc(curS.title)}</b></div>`
-    : !doneToday ? `<div class="h-next">${IC.play}Pour commencer · <b>${curS.emoji ? esc(curS.emoji) + ' ' : ''}${esc(curS.title)}</b></div>` : '';
-  let h = `<div class="hero">
+  let h = `<div class="hero rh">
     <div class="h-top">${dial}<div class="h-info"><div class="h-name">${esc(r.name)}</div><div class="h-sub">${sub}</div></div><button class="h-edit" data-act="redit" aria-label="Modifier la routine">${IC.pen}</button></div>
-    ${n ? `<div class="h-week">${week}</div>
-    <div class="h-stats">
-      <div class="h-stat"><b>${fmtDur(total)}</b><small>Prévu</small></div>
-      <div class="h-stat"><b>${last && last.dur ? fmtDur(last.dur) : '—'}</b><small>Dernière</small></div>
-      <div class="h-stat"><b>${streak} j</b><small>De suite</small></div>
-    </div>` : ''}
-    ${nextLine}
+    ${n ? `<div class="h-week">${week}<span class="hw-streak"><b>${streak}</b> j de suite</span></div>` : ''}
     ${btn}
   </div>`;
   if(n){
-    let clock = run ? '' : (r.time || '');
     const now = nowHM(), lateOk = !run && !doneToday && rDue(r,t) && !!r.time;
-    h += sec('Étapes', fmtDur(total)) + `<div class="list tl" data-reorder="steps" style="--tp:${(n ? dn / n * 100 : 0).toFixed(1)}%">` + r.steps.map((s,i) => {
-      if(run && i === run.idx) clock = hm(run.st);
-      const st = clock; if(clock) clock = addMin(clock, s.dur);
-      const sDone = run ? i < run.idx : doneToday, isCur = !!run && i === run.idx;
+    h += `<div class="rsteps"><div class="list tl" data-reorder="steps" style="--tp:${(dn / n * 100).toFixed(1)}%">` + r.steps.map((s,i) => {
+      const st = times[i], sDone = run ? i < run.idx : doneToday, isCur = !!run && i === run.idx;
       const late = lateOk && st && addMin(st, s.dur) <= now;
-      const pill = sDone ? '<span class="pill done">Fait</span>' : isCur ? '<span class="pill now">En cours</span>' : late ? '<span class="pill late">En retard</span>' : '<span class="pill">À faire</span>';
+      const pill = sDone ? '<span class="pill done">Fait</span>' : isCur ? '<span class="pill now">En cours</span>' : late ? '<span class="pill late">En retard</span>' : '';
       const a = anim('step', s.id, i);
       return `<div class="swipe ${a.c}" style="${a.s}" data-id="${s.id}" data-kind="step">
         <div class="sw-bg"><span class="sw-r">Supprimer${IC.trash}</span></div>
@@ -1323,12 +1385,8 @@ function renderRoutine(){
           ${pill}
         </div>
       </div>`;
-    }).join('') + '</div>';
-    const endAt = clock;
-    h += `<div class="tl-end"><span>🏁</span><p>${endAt ? `Fin prévue à <b>${endAt}</b>` : `Durée totale <b>${fmtDur(total)}</b>`}</p></div>`;
+    }).join('') + '</div></div>';
   }
-  if(n) h += `<button class="addstep" data-act="sadd">${IC.plus}Ajouter une étape</button>`;
-  if(n > 1) h += '<p class="swhint">Appui long pour changer l’ordre · glisse à gauche pour supprimer</p>';
   $('#rBody').innerHTML = h;
 }
 function flipRender(){
@@ -2128,7 +2186,21 @@ function wDraw(cv, o, d){
 const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
 let wT = null;
 function queueWidget(){ if(!WG) return; clearTimeout(wT); wT = setTimeout(pushWidget, 700); }
-window.__wq = queueWidget;
+let liveT = null, liveSig = '';
+function queueLive(){ if(!WG) return; clearTimeout(liveT); liveT = setTimeout(syncLive, 250); }
+async function syncLive(){
+  const r = runR(), s = r && r.steps[S.run.idx];
+  const sig = s ? `${r.id}|${S.run.idx}|${S.run.st}|${s.title}|${s.dur}` : '';
+  if(sig === liveSig) return;
+  liveSig = sig;
+  try{
+    if(!s){ await WG.liveStop(); return; }
+    const nx = r.steps[S.run.idx + 1];
+    await WG.liveStart({title: `${s.emoji ? s.emoji + ' ' : ''}${s.title}`, text: `Étape ${S.run.idx + 1}/${r.steps.length}${nx ? ' · Ensuite : ' + nx.title : ''}`,
+      end: S.run.st + Math.max(1, +s.dur || 1) * 60000, step: S.run.idx, total: r.steps.length});
+  }catch(e){ console.warn('Île', e); }
+}
+window.__wq = () => { queueWidget(); queueLive(); };
 async function pushWidget(){
   if(!WG) return;
   clearTimeout(wT);
@@ -2446,6 +2518,7 @@ function onToggle(wrap){
   save(); queueSync();
   checkWin(on);
   if(on){
+    toast('Tâche faite', () => { if(isDoneNow(it)) toggleTask(id); save(); queueSync(); flipRender(); Sound.play('uncheck'); });
     setTimeout(() => wrap.classList.add('gone'), 420);
     setTimeout(() => collapse(wrap, flipRender), 680);
   } else setTimeout(flipRender, 420);
@@ -2530,7 +2603,7 @@ root.addEventListener('contextmenu', e => e.preventDefault());
 function startDrag(el, y){
   if(!el.isConnected || el.parentElement.children.length < 2) return;
   if(sw){ if(sw.row) sw.row.classList.remove('dragging'); sw = null; }
-  const list = el.parentElement, items = [...list.children], view = el.closest('.view');
+  const list = el.parentElement, items = [...list.children], view = el.closest('.rsteps') || el.closest('.view');
   drag = {el, items, view, rects: items.map(n => n.getBoundingClientRect()), from: items.indexOf(el), to: items.indexOf(el), y0: y};
   view.style.overflowY = 'hidden';
   document.addEventListener('touchmove', blockMove, {passive:false});
@@ -2684,7 +2757,7 @@ setTimeout(() => {
   root.classList.add('app-in');
   if(S.run) go('routine');
   animAll = true; renderAll();
-  setTimeout(() => { sp.remove(); moveInd(); firstAsk(); pushWidget(); }, 600);
+  setTimeout(() => { sp.remove(); moveInd(); firstAsk(); pushWidget(); queueLive(); }, 600);
 }, 1750);
 })();
 </script>

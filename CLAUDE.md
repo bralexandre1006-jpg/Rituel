@@ -11,7 +11,7 @@
   - `versionName` vaut `4.5.<run_number>` ;
   - la version affichée dans l'app (`index.html`, pied des Réglages) et `package.json` sont en **6.0**.
 - **Données locales** : `localStorage`, clé unique `rituel.v1` → `{items, log, notes, settings, routines, run}` (anciens rituels conservés dans `items`, convertis en routine par `migrate()`) (fonctions `load()` et `save()` dans `index.html`). Il n'y a ni export/import ni versionnage du schéma.
-- **Widget écran d'accueil** : code natif dans `native/` (Java + res), copié par l'étape « Widget écran d'accueil » du workflow (remplace `MainActivity.java`, ajoute receiver + provider au manifeste). L'app dessine le widget en canvas (`wDraw`, 20 styles) et l'envoie via le plugin `RituelWidget` ; réglages dans `S.settings.widget`. `native/java/MainActivity.java` transmet aussi la hauteur du clavier à la page (`window.__kb`) pour remonter les feuilles.
+- **Widget écran d'accueil** : code natif dans `native/` (Java + res), copié par l'étape « Widget écran d'accueil » du workflow (remplace `MainActivity.java`, ajoute receiver + provider au manifeste). L'app dessine le widget en canvas (`wDraw`, 20 styles) et l'envoie via le plugin `RituelWidget` ; réglages dans `S.settings.widget`. `native/java/MainActivity.java` transmet aussi la hauteur du clavier à la page (`window.__kb`) pour remonter les feuilles. Le plugin `RituelWidget` a aussi `liveStart`/`liveStop` : notification en cours avec compte à rebours (Live Update Android 16 / île HyperOS) pendant une routine.
 - **Appareil cible** : Xiaomi 17T Pro (encoche/caméra, zones sûres, `StatusBar.overlaysWebView: true`).
 
 ## Collaboration
@@ -43,7 +43,7 @@
 
 ## Design et UX
 - Interface cohérente, soignée, moderne, accessible et fluide, optimisée pour le Xiaomi 17T Pro (zones sûres, caméra).
-- Respecte la direction artistique existante : « liquid glass » façon iOS (fond sombre à halos, cartes en verre, barre d'onglets flottante), couleur d'accent réglable (teinte `--h`, `S.settings.hue`, défaut 216 = bleu), police Manrope, icônes SVG `IC`, sons, vibrations, toasts d'annulation, animations. Bloc CSS « DA LIQUID GLASS » en fin de `<style>`.
+- Respecte la direction artistique existante : « liquid glass » sobre façon iOS (fond noir uni, cartes en verre, barre d'onglets flottante ; pas de néons, halos, reflets animés ni salutation — bloc CSS « UNSLOP »), couleur d'accent réglable (teinte `--h`, `S.settings.hue`, défaut 216 = bleu), police Manrope, icônes SVG `IC`, sons, vibrations, toasts d'annulation, animations. Bloc CSS « DA LIQUID GLASS » en fin de `<style>`.
 - Soigne la typographie, les espacements, les états vides et d'erreur, la navigation et les animations raisonnables.
 - Ne refonds pas des écrans non concernés. Demande des références si une refonte majeure est ambiguë.
 

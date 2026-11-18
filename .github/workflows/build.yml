@@ -122,6 +122,7 @@ jobs:
               '        <provider android:name=".WidgetImageProvider" android:authorities="${applicationId}.widgetimg" android:exported="true" />\n'
           )
           assert s.count('</application>') == 1
+          s = s.replace('<application', '<uses-permission android:name="android.permission.POST_PROMOTED_NOTIFICATIONS" />\n    <application', 1)
           s = s.replace('</application>', add + '    </application>')
           open(p, 'w').write(s)
           print('Widget ajouté au manifeste')
