@@ -789,7 +789,7 @@ html.bold{--fs:.97}
 .sheet{transition:transform .42s cubic-bezier(.22,1,.36,1)}
 
 /* ================= TÂCHES EN LISTE GROUPÉE ================= */
-.tabbar,#tRing{display:none}
+#tRing{display:none}
 .hbtn{width:38px;height:38px;background:rgba(255,255,255,.08);box-shadow:none}
 .hbtn svg{width:18px;height:18px}
 #v-settings .head{justify-content:flex-start;gap:12px}
@@ -844,7 +844,6 @@ html.bold{--fs:.97}
     <section class="view active" id="v-tasks">
       <header class="head">
         <div><h1 class="title">Tâches</h1></div>
-        <button class="icon-btn hbtn" data-act="tab" data-v="settings" aria-label="Réglages"><svg viewBox="0 0 24 24"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="8.5" cy="17" r="2.5"/></svg></button>
         <div class="ring" id="tRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
       </header>
       <div id="tasksList"></div>
@@ -860,7 +859,7 @@ html.bold{--fs:.97}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><button class="icon-btn hbtn" data-act="tab" data-v="tasks" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div><h1 class="title">Réglages</h1></div></header>
+      <header class="head"><div><h1 class="title">Réglages</h1></div></header>
 
       <div class="stats" id="stats"></div>
       <button class="wcard" data-act="wopen"><canvas id="wMini" width="600" height="150"></canvas><span class="wcard-t"><b>Widget</b><small>Style, transparence, liquid glass</small></span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
