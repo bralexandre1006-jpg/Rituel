@@ -27,13 +27,13 @@ const schedText = days => {
   return DAY_ORDER.filter(d => days.includes(d)).map(d => DS[d]).join(' · ');
 };
 function buckets(){
-  const t = today(), b = {late: [], today: [], none: [], upcoming: [], rec: [], done: []};
+  const t = today(), b = {late: [], today: [], todayN: [], none: [], upcoming: [], rec: [], recAll: [], done: []};
   tasks().forEach(x => {
-    if(isRec(x)){ if(recDone(x, t)) b.done.push(x); else if(recDue(x, t)) b.today.push(x); else b.rec.push(x); return; }
+    if(isRec(x)){ b.recAll.push(x); if(recDone(x, t)) b.done.push(x); else if(recDue(x, t)) b.today.push(x); else b.rec.push(x); return; }
     if(x.done){ b.done.push(x); return; }
     if(!x.date) b.none.push(x);
     else if(x.date < t) b.late.push(x);
-    else if(x.date === t) b.today.push(x);
+    else if(x.date === t){ b.today.push(x); b.todayN.push(x); }
     else b.upcoming.push(x);
   });
   for(const k in b) b[k].sort(bySort);
@@ -47,16 +47,16 @@ function sections(){
   switch(view){
     case 'today': return [['late', 'EN RETARD', f(b.late)], ['', "AUJOURD'HUI", f(b.today)]];
     case 'none': return [['', 'QUAND JE VEUX', f(b.none)]];
-    case 'upcoming': return [['', 'À VENIR', f(b.upcoming)], ['', 'RÉCURRENTES', f(b.rec)]];
-    case 'all': return [['late', 'EN RETARD', f(b.late)], ['', "AUJOURD'HUI", f(b.today)], ['', 'QUAND JE VEUX', f(b.none)], ['', 'À VENIR', f(b.upcoming)], ['', 'RÉCURRENTES', f(b.rec)]];
+    case 'upcoming': return [['', 'À VENIR', f(b.upcoming)], ['', 'RÉCURRENTES', f(b.recAll)]];
+    case 'all': return [['late', 'EN RETARD', f(b.late)], ['', "AUJOURD'HUI", f(b.todayN)], ['', 'QUAND JE VEUX', f(b.none)], ['', 'À VENIR', f(b.upcoming)], ['', 'RÉCURRENTES', f(b.recAll)]];
     case 'done': return [['', 'TERMINÉES', f(b.done).slice(0, 150)]];
   }
   return [];
 }
 function counts(){
   const b = buckets();
-  return {today: b.late.length + b.today.length, none: b.none.length, upcoming: b.upcoming.length + b.rec.length,
-    all: b.late.length + b.today.length + b.none.length + b.upcoming.length + b.rec.length, done: b.done.length};
+  return {today: b.late.length + b.today.length, none: b.none.length, upcoming: b.upcoming.length + b.recAll.length,
+    all: b.late.length + b.todayN.length + b.none.length + b.upcoming.length + b.recAll.length, done: b.done.length};
 }
 function card(x){
   const t = today(), ok = isDoneNow(x), m = [];
@@ -155,7 +155,8 @@ document.addEventListener('click', e => {
   if(ck){
     const c = ck.closest('.card'), id = c.dataset.id, x = D.items.find(i => i.id === id), was = isDoneNow(x);
     c.classList.toggle('ok', !was);
-    setTimeout(() => { if(view !== 'all' || !was) c.classList.add('gone'); }, 260);
+    const stays = isRec(x) && (view === 'all' || view === 'upcoming');
+    setTimeout(() => { if(!stays) c.classList.add('gone'); }, 260);
     setTimeout(() => { toggleTask(id); save(); render(); renderDetail(); }, 480);
     return;
   }

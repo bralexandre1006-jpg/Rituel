@@ -11,7 +11,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input,textarea{font:inherit;color:inherit;user-select:text}
 svg{display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .drag{-webkit-app-region:drag}.nodrag,.drag button,.drag input{-webkit-app-region:no-drag}
-.app{display:grid;grid-template-columns:230px 330px 1fr;height:100%}
+.app{display:grid;grid-template-columns:230px 330px 1fr;grid-template-rows:100%;height:100%}
+.side,.mid,.detail,.settings{min-height:0}
 .app.set{grid-template-columns:230px 1fr}
 
 /* barre latérale */
