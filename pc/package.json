@@ -1,0 +1,45 @@
+{
+  "name": "rituel-pc",
+  "productName": "Rituel",
+  "version": "1.0.0",
+  "description": "Widgets de bureau Rituel, synchronisés avec le téléphone",
+  "author": "Rituel",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "devDependencies": {
+    "electron": "33.2.0",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "be.brun.rituel.pc",
+    "productName": "Rituel",
+    "files": [
+      "main.js",
+      "preload.js",
+      "widget.html",
+      "widget.css",
+      "core.js",
+      "ui.js",
+      "config.js",
+      "fonts.css",
+      "icon.png"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Rituel",
+      "runAfterFinish": true,
+      "artifactName": "Rituel-PC-Setup.${ext}"
+    }
+  }
+}

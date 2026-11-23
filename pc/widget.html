@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://firestore.googleapis.com; font-src data:; img-src data:; style-src 'self' 'unsafe-inline'">
+<title>Rituel</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="widget.css">
+</head>
+<body>
+<div class="win" id="win">
+  <div class="bar">
+    <div class="t" id="title"></div>
+    <span class="n" id="count"></span>
+    <div class="dots"><i class="dot o" data-a="min" title="Réduire"></i><i class="dot g" data-a="col" title="Replier"></i><i class="dot r" data-a="close" title="Fermer"></i></div>
+  </div>
+  <div class="body" id="body"></div>
+</div>
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

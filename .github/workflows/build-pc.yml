@@ -1,0 +1,44 @@
+name: Build PC
+
+on:
+  push:
+    branches: [main]
+    paths: ['pc/**', '.github/workflows/build-pc.yml']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer les dépendances
+        working-directory: pc
+        run: npm install
+
+      - name: Compiler l'installateur Windows
+        working-directory: pc
+        run: npx electron-builder --win nsis --publish never
+
+      - name: Préparer l'installateur
+        shell: bash
+        run: cp pc/dist/Rituel-PC-Setup.exe Rituel-PC-Setup.exe
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rituel-PC
+          path: Rituel-PC-Setup.exe
+
+      - name: Publier l'installateur (lien direct)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete pc-latest --yes --cleanup-tag || true
+          gh release create pc-latest Rituel-PC-Setup.exe --title "Rituel PC – dernière version" --notes "Compilation n°${{ github.run_number }}" --latest=false
