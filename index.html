@@ -681,6 +681,154 @@ html,body{background:#000}
 .rsteps .ico{width:36px;height:36px}
 .rsteps .list.tl::before{left:27px;top:26px;bottom:26px}
 .dial-t small{text-transform:none;letter-spacing:0}
+
+/* ================= DA ÉPURÉE ================= */
+:root{--fs:.9;--soft-spring:cubic-bezier(.22,1,.36,1);
+  --card:rgba(255,255,255,.045);--hair:inset 0 0 0 1px rgba(255,255,255,.06)}
+html.bold{--fs:.97}
+.view{padding:calc(var(--sat) + 14px) 16px calc(var(--sab) + 104px)}
+.head{margin-bottom:14px}
+.title{font-size:calc(30px * var(--fs));letter-spacing:-.03em}
+.ring{width:42px;height:42px;background:none;box-shadow:none}
+.ring circle{stroke-width:4}
+.ring b{font-size:calc(12px * var(--fs))}
+
+/* sections et lignes */
+.sec{margin:0 2px 6px}
+.sec h3{font-size:calc(14px * var(--fs));font-weight:700;letter-spacing:0;color:var(--ink2)}
+.sec.late h3{color:#FF7A86}
+.sec span,.sec.late span{background:none;box-shadow:none;min-width:0;height:auto;padding:0;font-size:calc(12px * var(--fs));color:var(--ink3)}
+.list{gap:6px;margin-bottom:18px}
+.swipe,.sw-bg{border-radius:18px}
+.row{min-height:56px;padding:8px 12px 8px 10px;gap:10px;border-radius:18px;background:var(--card);box-shadow:var(--hair)}
+.row:active:not(.dragging){transform:scale(.99)}
+.row-title{font-size:calc(15.5px * var(--fs));font-weight:700}
+.row-meta{font-size:calc(12px * var(--fs));margin-top:2px;gap:10px}
+.ico{width:34px;height:34px}
+.ico svg{width:16px;height:16px}
+.ico.ghost{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22)}
+.ico.emo-i{background:rgba(255,255,255,.06);box-shadow:none}
+.ico .em{font-size:calc(18px * var(--fs))}
+.ico u{width:16px;height:16px;border-width:1.5px}
+.pill{height:22px;padding:0 9px;font-size:calc(11px * var(--fs));font-weight:700;box-shadow:none}
+.pill:not(.late):not(.done):not(.now){display:none}
+.empty{padding:56px 24px 16px}
+.empty .mlogo{width:64px;height:64px;opacity:.12}
+.empty b{font-size:calc(16px * var(--fs))}
+
+/* barre du bas */
+.tabbar{left:16px;right:84px;height:56px;border-radius:28px;bottom:calc(var(--sab) + 12px)}
+.tab{height:46px;gap:2px}
+.tab svg{width:20px;height:20px}
+.tab span{font-size:calc(10.5px * var(--fs))}
+.tab-ind{top:5px;bottom:5px;border-radius:23px;background:rgba(255,255,255,.1);box-shadow:none}
+.add{width:56px;height:56px;right:16px;bottom:calc(var(--sab) + 12px)}
+.add svg{width:22px;height:22px}
+
+/* routine */
+#v-routine{padding-bottom:calc(var(--sab) + 84px)}
+#v-routine .title{font-size:calc(30px * var(--fs))}
+#v-routine .rchip{height:30px;padding:0 12px;font-size:calc(12.5px * var(--fs))}
+#v-routine .rchip.new{width:30px}
+.hero.rh{padding:12px 14px;border-radius:22px;background:var(--card);box-shadow:var(--hair)}
+.rh .h-dial{width:46px;height:46px}
+.rh .h-dial circle{stroke-width:7}
+.rh .h-dial span{font-size:calc(20px * var(--fs))}
+.rh .h-info .h-name{font-size:calc(16px * var(--fs))}
+.rh .h-edit{width:32px;height:32px;background:rgba(255,255,255,.08);box-shadow:none}
+.rh .h-edit svg{width:15px;height:15px}
+.rh .h-week{background:none;padding:4px 2px 0;margin-top:8px}
+.rh .hw i{width:18px;height:18px}
+.rh .h-go{height:42px;font-size:calc(14px * var(--fs));margin-top:10px}
+.rsteps .row{min-height:50px;padding:6px 12px 6px 8px;border-radius:16px}
+.rsteps .swipe,.rsteps .sw-bg{border-radius:16px}
+.rsteps .ico{width:32px;height:32px}
+.rsteps .list.tl{gap:4px}
+.rsteps .list.tl::before{left:23px;top:24px;bottom:24px;width:1.5px}
+
+/* feuilles et formulaires */
+.sheet{left:6px;right:6px;bottom:6px;border-radius:28px;padding:8px 16px calc(var(--sab) + 16px)}
+.sheet-head{margin-bottom:12px}
+.sheet-head h2{font-size:calc(18px * var(--fs))}
+.icon-btn{width:34px;height:34px}
+.icon-btn svg{width:16px;height:16px}
+.field{border-radius:14px}
+.tinput{min-height:50px;padding:13px 0;font-size:calc(17px * var(--fs))}
+.label{margin:16px 4px 6px;font-size:calc(12px * var(--fs))}
+.line-row{min-height:48px;border-radius:14px;padding:0 14px}
+.chip{height:32px;padding:0 12px}
+.day{height:38px;border-radius:11px}
+.btn{height:48px;border-radius:24px;margin-top:18px;font-size:calc(15px * var(--fs))}
+.btn-ghost{height:42px}
+.switch{width:44px;height:26px}
+.switch::after{width:18px;height:18px}
+.switch.on::after{transform:translateX(18px)}
+.native-input{height:36px}
+
+/* réglages */
+.acc{border-radius:18px;margin-bottom:6px;background:var(--card);box-shadow:var(--hair)}
+.acc-h{min-height:52px;padding:8px 12px;gap:10px}
+.acc-ico{width:30px;height:30px}
+.acc-ico svg{width:15px;height:15px}
+.acc-t b{font-size:calc(15px * var(--fs))}
+.wcard{border-radius:18px;padding:10px 12px;background:var(--card);box-shadow:var(--hair)}
+.wcard canvas{width:110px;height:28px}
+
+/* mode routine */
+.dial{width:min(56vw,230px,30vh)}
+.dial circle{stroke-width:8}
+.dial-t b{font-size:calc(42px * var(--fs))}
+.run-step{font-size:calc(26px * var(--fs))}
+.run-go{height:54px;border-radius:27px;font-size:calc(16px * var(--fs))}
+.run-skip{height:44px}
+
+/* mouvements plus doux */
+.in{animation-duration:.4s}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+.view{transition:opacity .25s var(--ease),transform .35s var(--ease)}
+.sheet{transition:transform .42s cubic-bezier(.22,1,.36,1)}
+
+/* ================= TÂCHES EN LISTE GROUPÉE ================= */
+.tabbar,#tRing{display:none}
+.hbtn{width:38px;height:38px;background:rgba(255,255,255,.08);box-shadow:none}
+.hbtn svg{width:18px;height:18px}
+#v-settings .head{justify-content:flex-start;gap:12px}
+#tasksList .sec{margin:0 4px 6px}
+#tasksList .list{gap:0;background:var(--card);box-shadow:var(--hair);border-radius:18px;overflow:hidden;margin-bottom:22px}
+#tasksList .swipe{border-radius:0}
+#tasksList .sw-bg{border-radius:0}
+#tasksList .swipe+.swipe::before{content:"";position:absolute;left:48px;right:0;top:0;height:1px;background:rgba(255,255,255,.07);z-index:2;pointer-events:none}
+#tasksList .row{background:transparent;box-shadow:none;border-radius:0;min-height:54px;padding:11px 14px 11px 13px;gap:13px}
+#tasksList .ico{width:22px;height:22px;color:#fff;background:transparent;box-shadow:inset 0 0 0 1.6px rgba(255,255,255,.32)}
+#tasksList .ico svg{width:12px;height:12px;stroke-width:3.2}
+#tasksList .row.done .ico{background:var(--acc);box-shadow:none}
+#tasksList .row.inked .ico{background:#fff;color:var(--acc)}
+#tasksList .pill{display:none}
+#tasksList .row-title{font-size:calc(16px * var(--fs));font-weight:700;letter-spacing:-.005em}
+#tasksList .row-meta{margin-top:3px}
+#tasksList .list>.lifted{border-radius:14px;background:#15171d}
+.foot{text-transform:none;letter-spacing:0}
+
+/* ===== statistiques (réglages) ===== */
+.stats{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.st-card{background:var(--card);box-shadow:var(--hair);border-radius:18px;padding:14px 14px 10px}
+.st-head{display:flex;justify-content:space-between;align-items:baseline}
+.st-head b{font-size:calc(15px * var(--fs));font-weight:800}
+.st-head span{font-size:calc(12.5px * var(--fs));font-weight:700;color:var(--ink2)}
+.st-bars{display:flex;justify-content:space-between;align-items:flex-end;height:118px;margin-top:10px;gap:8px}
+.st-d{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}
+.st-d i{display:block;width:100%;max-width:26px;border-radius:7px;background:rgba(255,255,255,.16);transform-origin:bottom}
+.view.active .st-d i{animation:stGrow .6s var(--soft-spring) both}
+@keyframes stGrow{from{transform:scaleY(0)}}
+.st-d.now i{background:var(--acc)}
+.st-d.fut i{background:rgba(255,255,255,.06)}
+.st-d em{font-style:normal;font-size:calc(11px * var(--fs));font-weight:800;color:var(--ink2);min-height:14px}
+.st-d small{font-size:calc(11px * var(--fs));font-weight:800;color:var(--ink3)}
+.st-d.now small,.st-d.now em{color:var(--ink)}
+.st-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.st-tile{background:var(--card);box-shadow:var(--hair);border-radius:16px;padding:12px}
+.st-tile b{display:block;font-size:calc(20px * var(--fs));font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.st-tile small{display:block;margin-top:2px;font-size:calc(11.5px * var(--fs));font-weight:700;color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -696,6 +844,7 @@ html,body{background:#000}
     <section class="view active" id="v-tasks">
       <header class="head">
         <div><h1 class="title">Tâches</h1></div>
+        <button class="icon-btn hbtn" data-act="tab" data-v="settings" aria-label="Réglages"><svg viewBox="0 0 24 24"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="8.5" cy="17" r="2.5"/></svg></button>
         <div class="ring" id="tRing"><svg viewBox="0 0 54 54"><circle class="bg" cx="27" cy="27" r="22"/><circle class="fg" cx="27" cy="27" r="22"/></svg><b></b></div>
       </header>
       <div id="tasksList"></div>
@@ -711,8 +860,9 @@ html,body{background:#000}
     </section>
 
     <section class="view" id="v-settings">
-      <header class="head"><div><h1 class="title">Réglages</h1></div></header>
+      <header class="head"><button class="icon-btn hbtn" data-act="tab" data-v="tasks" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div><h1 class="title">Réglages</h1></div></header>
 
+      <div class="stats" id="stats"></div>
       <button class="wcard" data-act="wopen"><canvas id="wMini" width="600" height="150"></canvas><span class="wcard-t"><b>Widget</b><small>Style, transparence, liquid glass</small></span><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
 
       <div class="acc" data-acc="notif">
@@ -804,7 +954,6 @@ html,body{background:#000}
           <li>Touche le <b>rond</b> ou glisse une tâche <b>vers la droite</b> pour la valider.</li>
           <li>Glisse <b>vers la gauche</b> pour supprimer. Tu as quelques secondes pour annuler.</li>
           <li>Garde le doigt appuyé sur une tâche ou une étape pour la <b>déplacer</b>.</li>
-          <li>Dans <b>Routine</b>, touche <b>Commencer</b> puis <b>Valider</b> à chaque étape pour passer à la suivante.</li>
           <li>Dans un rappel de tâche, touche <b>Fait</b> pour cocher sans ouvrir l'app, ou <b>Dans 10 min</b> pour le reporter.</li>
         </ol>
       </div>
@@ -828,9 +977,6 @@ html,body{background:#000}
     <div class="tab-ind" id="tabInd"></div>
     <button class="tab active" data-act="tab" data-v="tasks">
       <svg viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.3 1.3L7 5"/><path d="M3.5 12l1.3 1.3L7 11"/><path d="M3.5 18l1.3 1.3L7 17"/></svg><span>Tâches</span>
-    </button>
-    <button class="tab" data-act="tab" data-v="routine">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.3 1.7M9.5 2.5h5M12 2.5v3.5M18.5 6.5l1.5-1.5"/></svg><span>Routine</span>
     </button>
     <button class="tab" data-act="tab" data-v="settings">
       <svg viewBox="0 0 24 24"><path d="M4 7h9M18 7h2M4 17h2M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="8.5" cy="17" r="2.5"/></svg><span>Réglages</span>
@@ -1816,7 +1962,22 @@ async function scheduleStepEnd(){
 function cancelStepEnd(){ if(LN){ try{ LN.cancel({notifications:[{id:STEP_NID}]}); }catch(e){} } }
 
 /* ================= SETTINGS ================= */
+function renderStats(){
+  const t = today(), mon = (new Date().getDay() + 6) % 7, done = S.log.filter(l => l.type === 'task');
+  const days = DAY_ORDER.map((wd, i) => { const k = key(addDays(new Date(), i - mon)); return {l: DAY_LETTER[wd], k, n: done.filter(l => l.date === k).length}; });
+  const max = Math.max(1, ...days.map(d => d.n)), week = days.reduce((a, d) => a + d.n, 0), td = days.find(d => d.k === t).n;
+  $('#stats').innerHTML = `<div class="st-card">
+      <div class="st-head"><b>Cette semaine</b><span>${plural(week, 'tâche')} faite${week > 1 ? 's' : ''}</span></div>
+      <div class="st-bars">${days.map(d => `<div class="st-d ${d.k === t ? 'now' : ''} ${d.k > t ? 'fut' : ''}"><em>${d.n || ''}</em><i style="height:${d.n ? Math.max(10, d.n / max * 100) : 4}%"></i><small>${d.l}</small></div>`).join('')}</div>
+    </div>
+    <div class="st-grid">
+      <div class="st-tile"><b>${td}</b><small>Aujourd’hui</small></div>
+      <div class="st-tile"><b>${dayStreak()} j</b><small>Série</small></div>
+      <div class="st-tile"><b>${Math.max(bestStreak(), dayStreak())} j</b><small>Record</small></div>
+    </div>`;
+}
 async function renderSettings(){
+  renderStats();
   const s = S.settings;
   fontsReady.then(() => wDraw($('#wMini'), wset(), wData()));
   $$('[data-act="sw"]').forEach(b => b.classList.toggle('on', !!s[b.dataset.k]));
@@ -1868,7 +2029,7 @@ async function toggleSetting(k){
 /* ================= WIDGET ================= */
 const WG = plugin('RituelWidget');
 const WSTYLES = ['Routine en cours','Tâches du jour','Prochaine étape','Série','Barre d’étapes','Frise du matin','Fin d’étape','Tâche prioritaire','Semaine en barres','Mois en carrés','Montagne','Bouton Commencer','Duo','Début et fin','Liste express','Emojis du jour','Pourcentage géant','Encouragement','Jauge liquide','Routine bouclée'];
-const WDEF = {style:1, alpha:55, glass:'liquid', radius:60, border:true, ink:'white', scale:100};
+const WDEF = {style:15, alpha:55, glass:'liquid', radius:60, border:true, ink:'white', scale:100};
 const wset = () => Object.assign({}, WDEF, S.settings.widget || {});
 function bestStreak(){
   const ds = [...new Set(S.log.map(l => l.date))].sort();
@@ -2304,7 +2465,7 @@ let syncT;
 function queueSync(){ clearTimeout(syncT); syncT = setTimeout(syncReminders, 400); }
 function dayLoad(k, includeLate){
   return {
-    r: S.routines.filter(x => x.steps.length && rDue(x,k)),
+    r: [],
     t: tasks().filter(x => isRec(x) ? recDue(x,k) && !(k === today() && recDone(x,k)) : !x.done && x.date && (x.date === k || (includeLate && x.date < k)))
   };
 }
@@ -2325,7 +2486,7 @@ async function syncReminders(){
         const at = atFor(it.date || t, it.time);
         if(at.getTime() > now) list.push({id:nid++, title:it.title, body: it.important ? 'Tâche importante à faire' : 'Tâche à faire', channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
       }
-      for(const r of S.routines){
+      for(const r of []){
         if(!r.time || !r.steps.length) continue;
         for(let i=0; i<14; i++){
           const k = key(addDays(new Date(), i));
@@ -2751,7 +2912,6 @@ setTimeout(() => {
   const sp = $('#splash');
   sp.classList.add('out');
   root.classList.add('app-in');
-  if(S.run) go('routine');
   animAll = true; renderAll();
   setTimeout(() => { sp.remove(); moveInd(); firstAsk(); pushWidget(); queueLive(); }, 600);
 }, 1750);
