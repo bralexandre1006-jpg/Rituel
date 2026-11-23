@@ -83,10 +83,19 @@ ipcMain.on('win', (e, a) => {
   else if(a === 'max') w.isMaximized() ? w.unmaximize() : w.maximize();
   else w.close();
 });
-ipcMain.handle('state', () => ({widgets: Object.fromEntries(Object.keys(TYPES).map(t => [t, !!cfg.w[t].show])), top: cfg.top, login: app.getLoginItemSettings().openAtLogin}));
+ipcMain.handle('state', () => ({lock: !!cfg.lock, widgets: Object.fromEntries(Object.keys(TYPES).map(t => [t, !!cfg.w[t].show])), top: cfg.top, login: app.getLoginItemSettings().openAtLogin}));
 ipcMain.on('widget', (e, t, on) => { if(!TYPES[t]) return; on ? open(t) : hide(t); });
 ipcMain.on('top', (e, on) => { cfg.top = !!on; saveCfg(); for(const t in wins) wins[t].setAlwaysOnTop(cfg.top); buildMenu(); });
 ipcMain.on('login', (e, on) => { app.setLoginItemSettings({openAtLogin: !!on, args: ['--hidden']}); buildMenu(); });
+ipcMain.on('move', (e, dx, dy) => {
+  const w = BrowserWindow.fromWebContents(e.sender); if(!w || cfg.lock) return;
+  const [x, y] = w.getPosition(); w.setPosition(Math.round(x + dx), Math.round(y + dy));
+});
+ipcMain.on('move-end', e => {
+  const w = BrowserWindow.fromWebContents(e.sender), t = typeOf(w); if(!t) return;
+  const [x, y] = w.getPosition(); Object.assign(cfg.w[t], {x, y}); saveCfg();
+});
+ipcMain.on('lock', (e, on) => { cfg.lock = !!on; saveCfg(); for(const t in wins) wins[t].webContents.send('lock', cfg.lock); });
 ipcMain.on('mouse', (e, ignore) => { const w = BrowserWindow.fromWebContents(e.sender); if(w && !w.isDestroyed()) w.setIgnoreMouseEvents(!!ignore, {forward: true}); });
 ipcMain.on('collapse', (e, on) => {
   const w = BrowserWindow.fromWebContents(e.sender), t = typeOf(w); if(!t) return;

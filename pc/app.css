@@ -3,7 +3,7 @@
 ::-webkit-scrollbar{width:0;height:0;display:none}
 .side,.mid-head,.detail,.settings{-webkit-app-region:drag}
 button,input,textarea,.card,.nav,.search,.items,.d-row,.days,.d-notes,.wcard,.s-row,.code,.wctl{-webkit-app-region:no-drag}
-:root{--acc:#FF9F0A;--acc2:#FFB340;--accs:rgba(255,159,10,.15);
+:root{--acc:#30D158;--acc2:#63E281;--accs:rgba(48,209,88,.15);
   --bg:#000;--side:#0A0A0A;--mid:#050505;--card:#161616;--card2:#1F1F1F;--line:rgba(255,255,255,.07);
   --ink:#F5F5F5;--ink2:rgba(255,255,255,.6);--ink3:rgba(255,255,255,.38);--red:#FF6B6B}
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,"Segoe UI",sans-serif;font-weight:700;-webkit-font-smoothing:antialiased;overflow:hidden;user-select:none}
@@ -82,11 +82,11 @@ svg{display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:ro
 .sw.on{background:var(--acc)}.sw.on::after{transform:translateX(16px)}
 .days{display:flex;gap:6px;margin:4px 0 6px}
 .day{flex:1;height:34px;border-radius:10px;background:var(--card);font-size:12.5px;color:var(--ink2);transition:background .15s}
-.day.on{background:var(--acc);color:#1a1000}
+.day.on{background:var(--acc);color:#03270F}
 .d-notes{width:100%;min-height:160px;resize:vertical;border:0;outline:0;border-radius:12px;background:var(--card);padding:12px 14px;font-size:13.5px;font-weight:700;line-height:1.6}
 .d-notes::placeholder{color:var(--ink3)}
 .d-act{display:flex;gap:8px;margin-top:22px}
-.abtn{height:38px;padding:0 16px;border-radius:19px;background:var(--acc);color:#1a1000;font-size:13px}
+.abtn{height:38px;padding:0 16px;border-radius:19px;background:var(--acc);color:#03270F;font-size:13px}
 .abtn.soft{background:var(--card2);color:var(--ink)}
 .abtn.del{background:none;color:var(--red);margin-left:auto}
 
@@ -126,5 +126,5 @@ svg{display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:ro
 .mini2 b{font-size:10px;text-shadow:0 1px 2px #000}
 .mini2 i{height:14px;border-radius:7px;background:rgba(0,0,0,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 .mini2 i:nth-of-type(2){width:85%}.mini2 i:nth-of-type(3){width:70%}
-.mini2 u{width:16px;height:16px;border-radius:50%;background:var(--acc);color:#1a1000;font-size:12px;text-decoration:none;display:grid;place-items:center}
+.mini2 u{width:16px;height:16px;border-radius:50%;background:var(--acc);color:#03270F;font-size:12px;text-decoration:none;display:grid;place-items:center}
 .wgrid{grid-template-columns:minmax(220px,340px)}

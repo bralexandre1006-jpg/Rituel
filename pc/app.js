@@ -111,6 +111,7 @@ function renderSettings(){
       <div class="s-sec"><h2>WIDGETS DE BUREAU</h2><div class="wgrid">${W.map(([t, n, d]) => `<div class="wcard"><div class="wprev">${mini(t)}</div>
         <div class="wcard-row"><div><b>${n}</b><small>${d}</small></div><button class="wadd ${st.widgets[t] ? 'on' : ''}" data-a="widget" data-t="${t}">${st.widgets[t] ? 'Retirer' : 'Ajouter'}</button></div></div>`).join('')}</div></div>
       <div class="s-sec"><h2>COMPORTEMENT</h2>
+        <div class="s-row"><div><b>Verrouiller la position du widget</b><small>Une fois placé, il ne bouge plus. Désactive pour le déplacer en tirant « Aujourd’hui »</small></div><button class="sw ${st.lock ? 'on' : ''}" data-a="lock"></button></div>
         <div class="s-row"><div><b>Widgets toujours au premier plan</b><small>Restent visibles au-dessus des fenêtres</small></div><button class="sw ${st.top ? 'on' : ''}" data-a="top"></button></div>
         <div class="s-row"><div><b>Lancer au démarrage de Windows</b><small>Les widgets s’affichent dès l’ouverture de session</small></div><button class="sw ${st.login ? 'on' : ''}" data-a="login"></button></div>
       </div>
@@ -169,6 +170,7 @@ document.addEventListener('click', e => {
     case 'del': if(!x) break; D.items = D.items.filter(i => i.id !== x.id); D.log = D.log.filter(l => l.itemId !== x.id); sel = null; newId = null; save(); render(); renderDetail(); break;
     case 'widget': window.rw.widget(a.dataset.t, !a.classList.contains('on')); setTimeout(renderSettings, 300); break;
     case 'top': window.rw.top(!a.classList.contains('on')); a.classList.toggle('on'); break;
+    case 'lock': window.rw.lock(!a.classList.contains('on')); a.classList.toggle('on'); break;
     case 'login': window.rw.login(!a.classList.contains('on')); a.classList.toggle('on'); break;
     case 'pair': { const v = ($('#code').value || '').trim().toLowerCase(); if(v.replace(/-/g, '').length < 24){ $('#code').style.boxShadow = 'inset 0 0 0 1.5px #FF5F57'; break; } D.code = v; D.sync.last = 0; persist(); syncNow().then(renderSettings); break; }
     case 'syncnow': syncNow().then(renderSettings); break;

@@ -29,8 +29,28 @@ document.addEventListener('keydown', e => {
   }
 });
 
+let drag = null;
+const head = document.querySelector('.h');
+head.addEventListener('pointerdown', e => {
+  if(document.body.classList.contains('locked') || e.button !== 0) return;
+  drag = {x: e.screenX, y: e.screenY};
+  head.setPointerCapture(e.pointerId);
+});
+head.addEventListener('pointermove', e => {
+  if(!drag) return;
+  const dx = e.screenX - drag.x, dy = e.screenY - drag.y;
+  if(dx || dy){ window.rw.move(dx, dy); drag.x = e.screenX; drag.y = e.screenY; }
+});
+const endDrag = () => { if(drag){ drag = null; window.rw.moveEnd(); } };
+head.addEventListener('pointerup', endDrag);
+head.addEventListener('pointercancel', endDrag);
+const setLock = on => document.body.classList.toggle('locked', !!on);
+window.rw.state().then(s => setLock(s.lock));
+window.rw.onLock((e, on) => setLock(on));
+
 let ignoring = null;
 document.addEventListener('mousemove', e => {
+  if(drag) return;
   const over = !!e.target.closest('.grp,.add,.h');
   if(ignoring !== !over){ ignoring = !over; window.rw.mouse(ignoring); }
 });
