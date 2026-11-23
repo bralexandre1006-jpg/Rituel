@@ -129,3 +129,11 @@ svg{display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:ro
 .mini2 i:nth-of-type(2){width:85%}.mini2 i:nth-of-type(3){width:70%}
 .mini2 u{width:16px;height:16px;border-radius:50%;background:var(--acc);color:#03270F;font-size:12px;text-decoration:none;display:grid;place-items:center}
 .wgrid{grid-template-columns:minmax(220px,340px)}
+
+.app.nosel:not(.set){grid-template-columns:230px 1fr}
+.app.nosel .detail{display:none}
+.app.nosel .mid{border-right:0}
+.app.nosel .mid-head{padding-right:150px}
+.d-close{position:absolute;top:16px;left:28px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--ink3);transition:background .15s,color .15s}
+.d-close:hover{background:rgba(255,255,255,.07);color:var(--ink)}
+.d-close svg{width:16px;height:16px}

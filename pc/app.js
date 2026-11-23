@@ -85,12 +85,10 @@ function renderList(){
 function renderDetail(){
   const x = D.items.find(i => i.id === sel);
   const d = $('#detail');
-  if(!x){
-    d.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Aucune tâche sélectionnée<button class="pbtn" data-a="new">Nouvelle tâche</button></div>`;
-    return;
-  }
+  document.querySelector('.app').classList.toggle('nosel', !x);
+  if(!x){ d.innerHTML = ''; return; }
   const rec = isRec(x), ok = isDoneNow(x);
-  d.innerHTML = `<input class="d-title" id="dTitle" placeholder="Nouvelle tâche" maxlength="140" value="${esc(x.title)}">
+  d.innerHTML = `<button class="d-close" data-a="unsel" title="Fermer (Échap)"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></button><input class="d-title" id="dTitle" placeholder="Nouvelle tâche" maxlength="140" value="${esc(x.title)}">
     <div class="d-meta">${rec ? schedText(x.days) : x.date ? dateLabel(x.date) : 'Quand je veux'}${ok ? ' · faite' : ''}</div>
     <div class="d-sec"><div class="d-lbl">QUAND</div>
       ${rec ? '' : `<div class="d-row"><span>Date</span><input type="date" id="dDate" value="${x.date || ''}"></div>`}
@@ -160,11 +158,12 @@ document.addEventListener('click', e => {
     setTimeout(() => { toggleTask(id); save(); render(); renderDetail(); }, 480);
     return;
   }
-  const cd = e.target.closest('.card'); if(cd){ if(cd.dataset.id !== newId) dropEmptyNew(); sel = cd.dataset.id; render(); renderDetail(); return; }
+  const cd = e.target.closest('.card'); if(cd){ if(cd.dataset.id !== newId) dropEmptyNew(); sel = sel === cd.dataset.id ? null : cd.dataset.id; render(); renderDetail(); return; }
   const a = e.target.closest('[data-a]'); if(!a) return;
   const x = item();
   switch(a.dataset.a){
     case 'new': newTask(); break;
+    case 'unsel': dropEmptyNew(); sel = null; render(); renderDetail(); break;
     case 'rec': if(!x) break; if(isRec(x)) delete x.days; else { x.days = [0,1,2,3,4,5,6]; x.date = ''; x.done = false; } save(); render(); renderDetail(); break;
     case 'day': { if(!x) break; const d = +a.dataset.d; x.days = x.days.includes(d) ? x.days.filter(v => v !== d) : [...x.days, d]; if(!x.days.length) delete x.days; save(); render(); renderDetail(); break; }
     case 'toggle': if(!x) break; toggleTask(x.id); save(); render(); renderDetail(); break;
@@ -189,6 +188,7 @@ document.addEventListener('change', e => {
 });
 document.addEventListener('keydown', e => {
   if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n'){ e.preventDefault(); newTask(); }
+  if(e.key === 'Escape' && sel && view !== 'settings'){ dropEmptyNew(); sel = null; if(document.activeElement) document.activeElement.blur(); render(); renderDetail(); }
   if(e.key === 'Enter' && e.target.id === 'dTitle'){ e.preventDefault(); e.target.blur(); newId = null; }
   if(e.key === 'Enter' && e.target.id === 'code') document.querySelector('[data-a="pair"]').click();
 });

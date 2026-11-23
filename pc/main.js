@@ -12,6 +12,15 @@ const wins = {};
 let cfg = {}, tray = null, main = null, quitting = false;
 const ICON = path.join(__dirname, 'icon.ico');
 
+const LOGIN_ARGS = ['--hidden'];
+function setLogin(on){
+  cfg.login = !!on; saveCfg();
+  app.setLoginItemSettings({openAtLogin: !!on, path: process.execPath, args: LOGIN_ARGS});
+}
+function loginOn(){
+  if(typeof cfg.login === 'boolean') return cfg.login;
+  return app.getLoginItemSettings({path: process.execPath, args: LOGIN_ARGS}).openAtLogin;
+}
 const cfgFile = () => path.join(app.getPath('userData'), 'widgets.json');
 function loadCfg(){
   let first = false;
@@ -26,7 +35,7 @@ function loadCfg(){
   }
   if(first){
     cfg.w.list.show = true;
-    app.setLoginItemSettings({openAtLogin: true, args: ['--hidden']});
+    setLogin(true);
     saveCfg();
   }
 }
@@ -83,10 +92,10 @@ ipcMain.on('win', (e, a) => {
   else if(a === 'max') w.isMaximized() ? w.unmaximize() : w.maximize();
   else w.close();
 });
-ipcMain.handle('state', () => ({lock: !!cfg.lock, widgets: Object.fromEntries(Object.keys(TYPES).map(t => [t, !!cfg.w[t].show])), top: cfg.top, login: app.getLoginItemSettings().openAtLogin}));
+ipcMain.handle('state', () => ({lock: !!cfg.lock, widgets: Object.fromEntries(Object.keys(TYPES).map(t => [t, !!cfg.w[t].show])), top: cfg.top, login: loginOn()}));
 ipcMain.on('widget', (e, t, on) => { if(!TYPES[t]) return; on ? open(t) : hide(t); });
 ipcMain.on('top', (e, on) => { cfg.top = !!on; saveCfg(); for(const t in wins) wins[t].setAlwaysOnTop(cfg.top); buildMenu(); });
-ipcMain.on('login', (e, on) => { app.setLoginItemSettings({openAtLogin: !!on, args: ['--hidden']}); buildMenu(); });
+ipcMain.on('login', (e, on) => { setLogin(on); buildMenu(); });
 ipcMain.on('move', (e, dx, dy) => {
   const w = BrowserWindow.fromWebContents(e.sender); if(!w || cfg.lock) return;
   const [x, y] = w.getPosition(); w.setPosition(Math.round(x + dx), Math.round(y + dy));
@@ -118,7 +127,7 @@ function buildMenu(){
       cfg.top = m.checked; saveCfg();
       for(const t in wins) wins[t].setAlwaysOnTop(cfg.top);
     }},
-    {label: 'Lancer au démarrage de Windows', type: 'checkbox', checked: app.getLoginItemSettings().openAtLogin, click: m => app.setLoginItemSettings({openAtLogin: m.checked, args: ['--hidden']})},
+    {label: 'Lancer au démarrage de Windows', type: 'checkbox', checked: loginOn(), click: m => setLogin(m.checked)},
     {type: 'separator'},
     {label: 'Quitter Rituel', click: () => { quitting = true; app.quit(); }}
   ]));
@@ -130,6 +139,7 @@ app.on('window-all-closed', () => {});
 app.whenReady().then(() => {
   loadCfg();
   app.setAppUserModelId('be.brun.rituel.pc');
+  if(cfg.login === true) app.setLoginItemSettings({openAtLogin: true, path: process.execPath, args: LOGIN_ARGS});
   tray = new Tray(ICON);
   tray.setToolTip('Rituel');
   tray.on('click', openMain);
