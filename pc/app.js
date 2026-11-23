@@ -103,10 +103,10 @@ function renderDetail(){
 function renderSettings(){
   const s = $('#settings');
   window.rw.state().then(st => {
-    const W = [['list', 'Liste complète', 'Toutes tes tâches, on coche et on ajoute'], ['count', 'Compteur du jour', 'Tâches faites aujourd’hui'], ['short', 'Liste courte', 'Les 4 prochaines tâches']];
+    const W = [['list', 'Aujourd’hui', 'Tes tâches du jour sur le bureau, à cocher et à compléter']];
     const mini = t => t === 'count'
       ? `<div class="mini"><div class="mb"><b>Aujourd'hui</b><i class="o" style="background:#FEBC2E"></i><i style="background:#28C840"></i><i style="background:#FF5F57"></i></div><div style="font-size:20px;font-weight:800;margin-top:10px">2/5</div></div>`
-      : `<div class="mini"><div class="mb"><b>${t === 'list' ? 'Tâches' : 'Prochaine'}</b><i style="background:#FEBC2E"></i><i style="background:#28C840"></i><i style="background:#FF5F57"></i></div><div class="l"></div><div class="l"></div><div class="l"></div></div>`;
+      : `<div class="mini2"><b>Aujourd'hui</b><i></i><i></i><i></i><u>+</u></div>`;
     s.innerHTML = `<h1>Paramètres</h1>
       <div class="s-sec"><h2>WIDGETS DE BUREAU</h2><div class="wgrid">${W.map(([t, n, d]) => `<div class="wcard"><div class="wprev">${mini(t)}</div>
         <div class="wcard-row"><div><b>${n}</b><small>${d}</small></div><button class="wadd ${st.widgets[t] ? 'on' : ''}" data-a="widget" data-t="${t}">${st.widgets[t] ? 'Retirer' : 'Ajouter'}</button></div></div>`).join('')}</div></div>

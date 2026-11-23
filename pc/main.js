@@ -5,9 +5,7 @@ const fs = require('fs');
 if(!app.requestSingleInstanceLock()) app.quit();
 
 const TYPES = {
-  list: {label: 'Liste complète', w: 380, h: 560},
-  count: {label: 'Compteur du jour', w: 300, h: 140},
-  short: {label: 'Liste courte', w: 300, h: 260}
+  list: {label: "Widget Aujourd'hui", w: 320, h: 440}
 };
 const BAR = 40;
 const wins = {};
@@ -16,13 +14,20 @@ const ICON = path.join(__dirname, 'icon.ico');
 
 const cfgFile = () => path.join(app.getPath('userData'), 'widgets.json');
 function loadCfg(){
-  try{ cfg = JSON.parse(fs.readFileSync(cfgFile(), 'utf8')); }catch(e){ cfg = {}; }
+  let first = false;
+  try{ cfg = JSON.parse(fs.readFileSync(cfgFile(), 'utf8')); }catch(e){ cfg = {}; first = true; }
+  if(!cfg.v2){ cfg.v2 = true; cfg.w = {}; first = true; }
   cfg.top = !!cfg.top;
   cfg.w = cfg.w || {};
   let x = 60;
   for(const t in TYPES){
     cfg.w[t] = Object.assign({show: false, x, y: 60, w: TYPES[t].w, h: TYPES[t].h, collapsed: false}, cfg.w[t]);
     x += TYPES[t].w + 30;
+  }
+  if(first){
+    cfg.w.list.show = true;
+    app.setLoginItemSettings({openAtLogin: true, args: ['--hidden']});
+    saveCfg();
   }
 }
 function saveCfg(){ try{ fs.writeFileSync(cfgFile(), JSON.stringify(cfg)); }catch(e){} }
@@ -33,7 +38,7 @@ function open(t){
   if(wins[t]){ wins[t].show(); return; }
   const c = cfg.w[t];
   const w = new BrowserWindow({
-    x: c.x, y: c.y, width: c.w, height: c.collapsed ? BAR : c.h, minWidth: 220, minHeight: BAR,
+    x: c.x, y: c.y, width: c.w, height: c.h, minWidth: 220, minHeight: 120,
     frame: false, transparent: true, resizable: true, skipTaskbar: true, hasShadow: false,
     alwaysOnTop: cfg.top, show: false, title: 'Rituel', icon: ICON,
     webPreferences: {preload: path.join(__dirname, 'preload.js')}
@@ -82,6 +87,7 @@ ipcMain.handle('state', () => ({widgets: Object.fromEntries(Object.keys(TYPES).m
 ipcMain.on('widget', (e, t, on) => { if(!TYPES[t]) return; on ? open(t) : hide(t); });
 ipcMain.on('top', (e, on) => { cfg.top = !!on; saveCfg(); for(const t in wins) wins[t].setAlwaysOnTop(cfg.top); buildMenu(); });
 ipcMain.on('login', (e, on) => { app.setLoginItemSettings({openAtLogin: !!on, args: ['--hidden']}); buildMenu(); });
+ipcMain.on('mouse', (e, ignore) => { const w = BrowserWindow.fromWebContents(e.sender); if(w && !w.isDestroyed()) w.setIgnoreMouseEvents(!!ignore, {forward: true}); });
 ipcMain.on('collapse', (e, on) => {
   const w = BrowserWindow.fromWebContents(e.sender), t = typeOf(w); if(!t) return;
   const c = cfg.w[t]; c.collapsed = !!on; saveCfg();

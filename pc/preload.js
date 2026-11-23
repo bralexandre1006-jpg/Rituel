@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('rw', {
   close: () => ipcRenderer.send('close'),
   collapse: on => ipcRenderer.send('collapse', on),
   onPair: cb => ipcRenderer.on('pair', cb),
+  mouse: ignore => ipcRenderer.send('mouse', ignore),
   win: a => ipcRenderer.send('win', a),
   state: () => ipcRenderer.invoke('state'),
   widget: (t, on) => ipcRenderer.send('widget', t, on),
