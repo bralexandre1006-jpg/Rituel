@@ -1,6 +1,6 @@
 const DP = (() => {
   const MO = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  let pop = null, cb = null, cur = null, sel = '';
+  let pop = null, cb = null, cur = null, sel = '', th = 9, tm = null;
   const label = k => {
     if(!k) return 'Choisir une date';
     if(k === today()) return "Aujourd'hui";
@@ -10,6 +10,7 @@ const DP = (() => {
   };
   function close(){ if(pop){ pop.remove(); pop = null; } document.removeEventListener('pointerdown', out, true); }
   function out(e){ if(pop && !pop.contains(e.target) && !e.target.closest('.dpb')) close(); }
+  const p2 = n => String(n).padStart(2, '0');
   function pick(k){ const f = cb; close(); if(f) f(k); }
   function draw(){
     const y = cur.getFullYear(), m = cur.getMonth(), first = (new Date(y, m, 1).getDay() + 6) % 7, n = new Date(y, m + 1, 0).getDate(), t = today();
@@ -37,8 +38,36 @@ const DP = (() => {
     pop.addEventListener('wheel', e => { e.preventDefault(); cur.setMonth(cur.getMonth() + (e.deltaY > 0 ? 1 : -1)); draw(); }, {passive: false});
     setTimeout(() => document.addEventListener('pointerdown', out, true));
   }
+  function drawT(){
+    const n = new Date(), h1 = new Date(n.getTime() + 36e5), q = `${p2(h1.getHours())}:${p2(Math.floor(h1.getMinutes() / 5) * 5)}`;
+    pop.innerHTML = `<div class="dp-q"><button data-t="${q}">Dans 1 h</button><button data-t="09:00">9:00</button><button data-t="18:00">18:00</button></div>
+      <div class="tp-l">Heure</div><div class="tp-g h">${[...Array(24).keys()].map(h => `<button data-h="${h}" class="${h === th ? 'on' : ''}">${p2(h)}</button>`).join('')}</div>
+      <div class="tp-l">Minutes</div><div class="tp-g m">${[...Array(12).keys()].map(i => `<button data-m="${i * 5}" class="${i * 5 === tm ? 'on' : ''}">${p2(i * 5)}</button>`).join('')}</div>
+      <div class="tp-f"><button class="dp-x" data-t="">Aucun rappel</button><button class="tp-ok" data-ok>OK ${p2(th)}:${p2(tm || 0)}</button></div>`;
+  }
+  function place(anchor){
+    const r = anchor.getBoundingClientRect(), h = pop.offsetHeight, w = pop.offsetWidth;
+    pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.right - w)) + 'px';
+    pop.style.top = (r.bottom + 6 + h > innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + 'px';
+  }
+  function openTime(anchor, value, onPick){
+    close(); cb = onPick;
+    if(value){ const [a, b] = value.split(':').map(Number); th = a; tm = b; } else { th = Math.min(23, new Date().getHours() + 1); tm = 0; }
+    pop = document.createElement('div'); pop.className = 'dp tp';
+    document.body.appendChild(pop); drawT(); place(anchor);
+    pop.addEventListener('click', e => {
+      const b = e.target.closest('button'); if(!b) return;
+      if('t' in b.dataset){ const f = cb; close(); if(f) f(b.dataset.t); return; }
+      if('h' in b.dataset){ th = +b.dataset.h; drawT(); return; }
+      if('m' in b.dataset){ tm = +b.dataset.m; drawT(); }
+      if('m' in b.dataset || 'ok' in b.dataset){ const f = cb, v = `${p2(th)}:${p2(tm || 0)}`; close(); if(f) f(v); }
+    });
+    setTimeout(() => document.addEventListener('pointerdown', out, true));
+  }
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && pop){ e.stopPropagation(); close(); } }, true);
   const btn = (id, k) => `<button class="dpb" id="${id}">${CAL}<span>${label(k)}</span></button>`;
   const CAL = '<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
-  return {open, close, label, btn};
+  const CLK = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
+  const tbtn = (id, v) => `<button class="dpb" id="${id}">${CLK}<span>${v || 'Aucun'}</span></button>`;
+  return {open, openTime, close, label, btn, tbtn};
 })();

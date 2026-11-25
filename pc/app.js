@@ -93,7 +93,7 @@ function renderDetail(){
     <div class="d-meta">${rec ? schedText(x.days) : x.date ? dateLabel(x.date) : 'Quand je veux'}${ok ? ' · faite' : ''}</div>
     <div class="d-sec"><div class="d-lbl">QUAND</div>
       ${rec ? '' : `<div class="d-row"><span>Date</span>${DP.btn('dDate', x.date)}</div>`}
-      <div class="d-row"><span>Rappel</span><div class="tw"><input type="time" id="dTime" value="${x.time || ''}">${x.time ? '<button class="tclr" data-a="tclear" title="Retirer le rappel">✕</button>' : ''}</div></div>
+      <div class="d-row"><span>Rappel</span><div class="tw">${DP.tbtn('dTime', x.time)}${x.time ? '<button class="tclr" data-a="tclear" title="Retirer le rappel">✕</button>' : ''}</div></div>
       <div class="d-row"><span>Récurrente</span><button class="sw ${rec ? 'on' : ''}" data-a="rec"></button></div>
       ${rec ? `<div class="days">${DAY_ORDER.map(dd => `<button class="day ${x.days.includes(dd) ? 'on' : ''}" data-a="day" data-d="${dd}">${DL[dd]}</button>`).join('')}</div>` : ''}
     </div>
@@ -151,6 +151,7 @@ document.addEventListener('click', e => {
   const w = e.target.closest('[data-w]'); if(w){ window.rw.win(w.dataset.w); return; }
   const nav = e.target.closest('.nav'); if(nav){ dropEmptyNew(); view = nav.dataset.v; render(); return; }
   if(e.target.closest('#newBtn')){ newTask(); return; }
+  const tb = e.target.closest('#dTime'); if(tb){ const x = item(); if(x) DP.openTime(tb, x.time, v => { x.time = v; save(); render(); renderDetail(); }); return; }
   const db = e.target.closest('#dDate'); if(db){ const x = item(); if(x) DP.open(db, x.date, k => { x.date = k; save(); render(); renderDetail(); }); return; }
   const ck = e.target.closest('.ck');
   if(ck){
@@ -188,7 +189,6 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('change', e => {
   const x = item(); if(!x) return;
-  if(e.target.id === 'dTime'){ x.time = e.target.value || ''; save(); render(); renderDetail(); }
 });
 document.addEventListener('keydown', e => {
   if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n'){ e.preventDefault(); newTask(); }
