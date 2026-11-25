@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('rw', {
   onLock: cb => ipcRenderer.on('lock', cb),
   lock: on => ipcRenderer.send('lock', on),
   win: a => ipcRenderer.send('win', a),
+  notify: (k, title, body) => ipcRenderer.send('notify', k, title, body),
   state: () => ipcRenderer.invoke('state'),
   widget: (t, on) => ipcRenderer.send('widget', t, on),
   top: on => ipcRenderer.send('top', on),

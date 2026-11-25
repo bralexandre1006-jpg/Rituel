@@ -1032,6 +1032,10 @@ html.bold{--fs:.97}
       <div class="dwrap"><input type="date" id="fDate" class="native-input" aria-label="Date"><button class="dclear" data-act="dclear" id="fDateClear" aria-label="Effacer la date"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     </div></div>
     <div class="line-row">
+      <div class="lr-ico"><svg class="st" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg><span class="lr-t">Rappel</span></div>
+      <div class="dwrap"><input type="time" id="fTime" class="native-input" aria-label="Heure du rappel"><button class="dclear" data-act="tclear" id="fTimeClear" aria-label="Retirer le rappel"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    </div>
+    <div class="line-row">
       <div class="lr-ico"><svg class="st" viewBox="0 0 24 24"><path d="M17 2.5l3 3-3 3"/><path d="M4 11V9.5a4 4 0 0 1 4-4h12"/><path d="M7 21.5l-3-3 3-3"/><path d="M20 13v1.5a4 4 0 0 1-4 4H4"/></svg><span class="lr-t">Récurrente</span></div>
       <button class="switch" id="fRec" data-act="rec" aria-label="Récurrente"></button>
     </div>
@@ -1633,6 +1637,8 @@ function openEditor(id){
   if(F.date === undefined) F.date = '';
   F.days = Array.isArray(F.days) ? F.days.slice() : [];
   F.rec = F.days.length > 0;
+  F.time = F.time || '';
+  $('#fTime').value = F.time;
   F.notes = F.notes || '';
   $('#fTitle').value = F.title;
   $('#fNotes').value = F.notes;
@@ -1647,6 +1653,7 @@ function renderEditor(){
   $('#fDateWrap').classList.toggle('hide', F.rec);
   $('#fDate').value = F.date || '';
   $('#fDateClear').hidden = !F.date;
+  $('#fTimeClear').hidden = !F.time;
   $('#fRec').classList.toggle('on', F.rec);
   $('#tDaysWrap').classList.toggle('hide', !F.rec);
   $('#tDays').innerHTML = DAY_ORDER.map(d => `<button class="day ${F.days.includes(d)?'on':''}" data-act="tday" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
@@ -1656,6 +1663,7 @@ $('#fTitle').addEventListener('input', e => { if(F) F.title = e.target.value.rep
 $('#fNotes').addEventListener('input', e => { if(F) F.notes = e.target.value; grow(e.target); });
 $('#fTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveItem(); } });
 $('#fDate').addEventListener('change', e => { F.date = e.target.value; renderEditor(); });
+$('#fTime').addEventListener('change', e => { F.time = e.target.value; renderEditor(); if(F.time) askIfNeeded(); });
 
 async function saveItem(){
   const title = (F.title || '').trim();
@@ -1665,7 +1673,7 @@ async function saveItem(){
   const old = F.id ? S.items.find(x => x.id === F.id) : null;
   const item = {
     id: F.id || uid(), type: 'task', title,
-    time: old && !F.days.length ? old.time || '' : '',
+    time: F.time || '',
     createdKey: old ? old.createdKey : today(),
     createdAt: old ? old.createdAt : Date.now(),
     notes: (F.notes || '').replace(/\s+$/, ''),
@@ -2579,7 +2587,17 @@ async function syncReminders(){
     const atFor = (k, hhmm) => { const [h,m] = hhmm.split(':').map(Number); const d = fromKey(k); d.setHours(h,m,0,0); return d; };
     if(s.remindItems){
       for(const it of tasks()){
-        if(!it.time || it.done) continue;
+        if(!it.time) continue;
+        if(isRec(it)){
+          for(let i = 0; i < 14; i++){
+            const k = key(addDays(new Date(), i));
+            if(!recDue(it, k) || (i === 0 && recDone(it, k))) continue;
+            const at = atFor(k, it.time);
+            if(at.getTime() > now) list.push({id:nid++, title:it.title, body:'Tâche à faire', channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
+          }
+          continue;
+        }
+        if(it.done) continue;
         const at = atFor(it.date || t, it.time);
         if(at.getTime() > now) list.push({id:nid++, title:it.title, body: it.important ? 'Tâche importante à faire' : 'Tâche à faire', channelId:'rituel', actionTypeId:'ITEM', extra:{id:it.id}, schedule:{at, allowWhileIdle:true}});
       }
@@ -2927,6 +2945,7 @@ root.addEventListener('click', e => {
     }
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
+    case 'tclear': F.time = ''; $('#fTime').value = ''; Sound.play('tap'); haptic(); renderEditor(); break;
     case 'dclear': F.date = ''; Sound.play('tap'); haptic(); renderEditor(); break;
     case 'rec': F.rec = !F.rec; Sound.play('toggle'); haptic(); renderEditor(); break;
     case 'tday': { const d = +el.dataset.d; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; Sound.play('tap'); haptic(); renderEditor(); break; }

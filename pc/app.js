@@ -62,6 +62,7 @@ function card(x){
   const t = today(), ok = isDoneNow(x), m = [];
   if(isRec(x)) m.push(`<span class="rep">${schedText(x.days)}</span>`);
   else if(x.date) m.push(`<span class="${!ok && x.date < t ? 'red' : ''}">${dateLabel(x.date)}</span>`);
+  if(x.time) m.push(`<span>⏰ ${x.time}</span>`);
   const n = (x.notes || '').split('\n').filter(l => l.replace(/^[-•*\s]+/, '').trim()).length;
   if(n) m.push(`<span>${n} note${n > 1 ? 's' : ''}</span>`);
   return `<div class="card ${ok ? 'ok' : ''} ${x.id === sel ? 'sel' : ''}" data-id="${x.id}"><i class="ck">${CHECK}</i><div class="cx"><div class="ct">${esc(x.title || 'Sans titre')}</div>${m.length ? `<div class="cm">${m.join('')}</div>` : ''}</div></div>`;
@@ -92,6 +93,7 @@ function renderDetail(){
     <div class="d-meta">${rec ? schedText(x.days) : x.date ? dateLabel(x.date) : 'Quand je veux'}${ok ? ' · faite' : ''}</div>
     <div class="d-sec"><div class="d-lbl">QUAND</div>
       ${rec ? '' : `<div class="d-row"><span>Date</span><input type="date" id="dDate" value="${x.date || ''}"></div>`}
+      <div class="d-row"><span>Rappel</span><div class="tw"><input type="time" id="dTime" value="${x.time || ''}">${x.time ? '<button class="tclr" data-a="tclear" title="Retirer le rappel">✕</button>' : ''}</div></div>
       <div class="d-row"><span>Récurrente</span><button class="sw ${rec ? 'on' : ''}" data-a="rec"></button></div>
       ${rec ? `<div class="days">${DAY_ORDER.map(dd => `<button class="day ${x.days.includes(dd) ? 'on' : ''}" data-a="day" data-d="${dd}">${DL[dd]}</button>`).join('')}</div>` : ''}
     </div>
@@ -163,6 +165,7 @@ document.addEventListener('click', e => {
   const x = item();
   switch(a.dataset.a){
     case 'new': newTask(); break;
+    case 'tclear': if(!x) break; x.time = ''; save(); render(); renderDetail(); break;
     case 'unsel': dropEmptyNew(); sel = null; render(); renderDetail(); break;
     case 'rec': if(!x) break; if(isRec(x)) delete x.days; else { x.days = [0,1,2,3,4,5,6]; x.date = ''; x.done = false; } save(); render(); renderDetail(); break;
     case 'day': { if(!x) break; const d = +a.dataset.d; x.days = x.days.includes(d) ? x.days.filter(v => v !== d) : [...x.days, d]; if(!x.days.length) delete x.days; save(); render(); renderDetail(); break; }
@@ -185,6 +188,7 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   const x = item(); if(!x) return;
   if(e.target.id === 'dDate'){ x.date = e.target.value || ''; save(); render(); renderDetail(); }
+  if(e.target.id === 'dTime'){ x.time = e.target.value || ''; save(); render(); renderDetail(); }
 });
 document.addEventListener('keydown', e => {
   if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n'){ e.preventDefault(); newTask(); }

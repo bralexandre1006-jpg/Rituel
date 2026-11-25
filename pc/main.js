@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Tray, Menu, ipcMain, nativeImage} = require('electron');
+const {app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, Notification} = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -105,6 +105,17 @@ ipcMain.on('move-end', e => {
   const [x, y] = w.getPosition(); Object.assign(cfg.w[t], {x, y}); saveCfg();
 });
 ipcMain.on('lock', (e, on) => { cfg.lock = !!on; saveCfg(); for(const t in wins) wins[t].webContents.send('lock', cfg.lock); });
+ipcMain.on('notify', (e, k, title, body) => {
+  cfg.fired = cfg.fired || {};
+  if(cfg.fired[k]) return;
+  const now = Date.now();
+  for(const f in cfg.fired) if(now - cfg.fired[f] > 3 * 864e5) delete cfg.fired[f];
+  cfg.fired[k] = now; saveCfg();
+  if(!Notification.isSupported()) return;
+  const n = new Notification({title, body, icon: ICON});
+  n.on('click', openMain);
+  n.show();
+});
 ipcMain.on('mouse', (e, ignore) => { const w = BrowserWindow.fromWebContents(e.sender); if(w && !w.isDestroyed()) w.setIgnoreMouseEvents(!!ignore, {forward: true}); });
 ipcMain.on('collapse', (e, on) => {
   const w = BrowserWindow.fromWebContents(e.sender), t = typeOf(w); if(!t) return;

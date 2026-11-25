@@ -125,3 +125,17 @@ function queueSync(){ clearTimeout(sT); sT = setTimeout(syncNow, 800); }
 window.addEventListener('storage', e => { if(e.key === KEY){ D = load(); snap = null; track(); if(window.render) render(); } });
 window.addEventListener('focus', syncNow);
 setInterval(syncNow, 10000);
+
+function checkReminders(){
+  if(!window.rw || !window.rw.notify) return;
+  const t = today(), n = new Date(), mins = n.getHours() * 60 + n.getMinutes();
+  tasks().forEach(x => {
+    if(!x.time) return;
+    const [h, m] = x.time.split(':').map(Number), tm = h * 60 + m;
+    if(tm > mins || mins - tm > 60) return;
+    const due = isRec(x) ? recDue(x, t) && !recDone(x, t) : !x.done && (x.date || t) === t;
+    if(due) window.rw.notify(`${x.id}|${t}|${x.time}`, x.title, `Tâche à faire · ${x.time}`);
+  });
+}
+setInterval(checkReminders, 20000);
+setTimeout(checkReminders, 3000);
