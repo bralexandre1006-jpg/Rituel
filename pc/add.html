@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://firestore.googleapis.com; font-src data:; img-src data:; style-src 'self' 'unsafe-inline'">
+<title>Nouvelle tâche</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="app.css">
+<style>
+html,body{background:transparent}
+.nw{position:fixed;inset:0;display:flex;flex-direction:column;padding:16px 18px 16px;border-radius:16px;background:#0E0E0E;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);-webkit-app-region:drag}
+.nw-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.nw-h b{font-size:15px}
+.nw-t{width:100%;height:44px;padding:0 14px;border:0;outline:0;border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;margin-bottom:12px;box-shadow:inset 0 0 0 1.5px transparent;transition:box-shadow .15s}
+.nw-t:focus{box-shadow:inset 0 0 0 1.5px var(--acc)}
+.nw-t::placeholder{color:var(--ink3)}
+.nw .d-row,.nw .days{-webkit-app-region:no-drag}
+.nw-a{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+.nw-a .abtn{flex:1}
+.abtn:disabled{opacity:.4}
+</style>
+</head>
+<body>
+<div class="nw">
+  <div class="nw-h"><b>Nouvelle tâche</b></div>
+  <input class="nw-t" id="t" placeholder="Que dois-tu faire ?" maxlength="140" autofocus>
+  <div id="f"></div>
+  <div class="nw-a"><button class="abtn soft" data-a="cancel">Annuler</button><button class="abtn" id="ok" data-a="ok" disabled>Ajouter</button></div>
+</div>
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script src="datepick.js"></script>
+<script src="add.js"></script>
+</body>
+</html>

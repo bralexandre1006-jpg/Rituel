@@ -1205,7 +1205,7 @@ let S = load();
 function load(){
   let s = null;
   try{
-    const d = JSON.parse(localStorage.getItem(STORE));
+    const d = JSON.parse(window.RWBG ? window.RWBG.state() : localStorage.getItem(STORE));
     if(d && Array.isArray(d.items)) s = Object.assign({}, d, {log:d.log||[], notes:d.notes||[], settings:Object.assign({}, DEFAULTS, d.settings)});
   }catch(e){}
   return migrate(s || {items:[], log:[], notes:[], settings:Object.assign({}, DEFAULTS)});
@@ -1303,6 +1303,7 @@ function toggleTask(id){
 
 /* ================= NATIVE ================= */
 const Cap = window.Capacitor;
+const BG = window.RWBG || null;
 const isNative = !!(Cap && Cap.isNativePlatform && Cap.isNativePlatform());
 const pluginCache = {};
 function plugin(name){
@@ -2380,13 +2381,14 @@ async function syncLive(){
 }
 window.__wq = () => { queueWidget(); queueLive(); };
 async function pushWidget(){
-  if(!WG) return;
+  if(!WG && !BG) return;
   clearTimeout(wT);
   try{
     await fontsReady;
     const cv = document.createElement('canvas'); cv.width = 1200; cv.height = 300;
     wDraw(cv, wset(), wData());
-    await WG.update({png: cv.toDataURL('image/png')});
+    if(BG) return BG.png(cv.toDataURL('image/png'));
+    await WG.update({png: cv.toDataURL('image/png'), state: JSON.stringify(S)});
   }catch(e){ console.warn('Widget', e); }
 }
 
@@ -2470,6 +2472,7 @@ const byId = (a, b) => a.id < b.id ? -1 : 1;
 const norm = d => JSON.stringify([(d.items || []).slice().sort(byId), (d.log || []).slice().sort(byId), Object.entries(d.tomb || {}).sort(), Object.entries(d.ltomb || {}).sort()]);
 const syncUrl = () => `https://firestore.googleapis.com/v1/projects/${FB.projectId}/databases/(default)/documents/sync/${S.settings.syncCode}?key=${FB.apiKey}`;
 async function syncNow(manual){
+  if(BG) return;
   if(!syncReady()){ if(manual) toast('Synchro pas encore configurée'); return; }
   if(syncing) return;
   syncing = true;
@@ -3029,6 +3032,22 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* ================= BOOT ================= */
+if(BG){
+  (async () => {
+    try{
+      if(syncReady()){
+        const t = BG.remote(syncUrl());
+        let rem = {}; try{ rem = JSON.parse(JSON.parse(t).fields.data.stringValue); }catch(e){}
+        const m = mergeData(rem);
+        S.items = S.items.filter(x => x.type !== 'task').concat(m.items);
+        S.log = S.log.filter(l => l.type !== 'task').concat(m.log);
+      }
+      await pushWidget();
+    }catch(e){}
+    BG.done();
+  })();
+  return;
+}
 applyTheme();
 renderAll();
 moveInd();

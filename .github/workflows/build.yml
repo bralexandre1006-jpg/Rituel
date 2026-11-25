@@ -119,6 +119,7 @@ jobs:
               '            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>\n'
               '            <meta-data android:name="android.appwidget.provider" android:resource="@xml/rituel_widget_info" />\n'
               '        </receiver>\n'
+              '        <service android:name=".WidgetSync" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false" />\n'
               '        <provider android:name=".WidgetImageProvider" android:authorities="${applicationId}.widgetimg" android:exported="true" />\n'
           )
           assert s.count('</application>') == 1

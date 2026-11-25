@@ -122,7 +122,7 @@ async function syncNow(){
   if(window.renderStatus) renderStatus();
 }
 function queueSync(){ clearTimeout(sT); sT = setTimeout(syncNow, 800); }
-window.addEventListener('storage', e => { if(e.key === KEY){ D = load(); snap = null; track(); if(window.render) render(); } });
+window.addEventListener('storage', e => { if(e.key === KEY){ D = load(); snap = null; track(); if(window.render) render(); queueSync(); } });
 window.addEventListener('focus', syncNow);
 setInterval(syncNow, 10000);
 

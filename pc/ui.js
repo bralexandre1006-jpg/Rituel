@@ -6,26 +6,18 @@ function render(){
   const g = groups();
   const rows = [...g.late.map(x => [x, true]), ...g.today.map(x => [x, false])];
   $('#list').innerHTML = rows.length ? '<div class="grp">' + rows.map(([x, late]) => `<div class="row" data-id="${x.id}"><i class="ck">${CHECK}</i><span class="tt ${late ? 'red' : ''}">${esc(x.title)}</span></div>`).join('') + '</div>' : '';
-  if(!$('#newTask')) $('#addZone').innerHTML = '<label class="add"><b>+</b><input id="newTask" placeholder="Nouvelle tâche" maxlength="140"></label>';
+  if(!$('#newTask')) $('#addZone').innerHTML = '<button class="add" id="newTask"><b>+</b><span>Nouvelle tâche</span></button>';
 }
 function renderStatus(){}
 
 document.addEventListener('click', e => {
+  if(e.target.closest('#newTask')){ window.rw.newTask(); return; }
   const ck = e.target.closest('.ck');
   if(ck && ck.closest('.row[data-id]')){
     const r = ck.closest('.row'), id = r.dataset.id;
     r.classList.add('ok');
     setTimeout(() => r.classList.add('gone'), 260);
     setTimeout(() => { toggleTask(id); save(); render(); }, 480);
-  }
-});
-document.addEventListener('keydown', e => {
-  if(e.target.id !== 'newTask') return;
-  if(e.key === 'Escape'){ e.target.value = ''; e.target.blur(); }
-  if(e.key === 'Enter'){
-    const v = e.target.value.trim();
-    if(v){ D.items.push({id: uid(), type: 'task', title: v, date: today(), done: false, doneAt: null, createdKey: today(), createdAt: Date.now()}); save(); }
-    e.target.value = ''; render();
   }
 });
 

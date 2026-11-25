@@ -105,6 +105,18 @@ ipcMain.on('move-end', e => {
   const [x, y] = w.getPosition(); Object.assign(cfg.w[t], {x, y}); saveCfg();
 });
 ipcMain.on('lock', (e, on) => { cfg.lock = !!on; saveCfg(); for(const t in wins) wins[t].webContents.send('lock', cfg.lock); });
+let addWin = null;
+ipcMain.on('newtask', e => {
+  if(addWin){ addWin.show(); addWin.focus(); return; }
+  const src = BrowserWindow.fromWebContents(e.sender), {screen} = require('electron');
+  const wa = screen.getDisplayMatching(src ? src.getBounds() : screen.getPrimaryDisplay().bounds).workArea, W = 380, H = 470;
+  addWin = new BrowserWindow({width: W, height: H, x: Math.round(wa.x + (wa.width - W) / 2), y: Math.round(wa.y + (wa.height - H) / 2),
+    frame: false, transparent: true, resizable: false, alwaysOnTop: true, skipTaskbar: true, show: false, title: 'Nouvelle tâche', icon: ICON,
+    webPreferences: {preload: path.join(__dirname, 'preload.js')}});
+  addWin.loadFile('add.html');
+  addWin.once('ready-to-show', () => { addWin.show(); addWin.focus(); });
+  addWin.on('closed', () => { addWin = null; });
+});
 ipcMain.on('notify', (e, k, title, body) => {
   cfg.fired = cfg.fired || {};
   if(cfg.fired[k]) return;

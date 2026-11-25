@@ -38,6 +38,9 @@ public class WidgetBridge extends Plugin {
             File img = new File(c.getFilesDir(), "widget.png");
             if (!tmp.renameTo(img)) { call.reject("écriture impossible"); return; }
             RituelWidget.refreshAll(c);
+            String st = call.getString("state");
+            if (st != null) WidgetSync.prefs(c).edit().putString("state", st).apply();
+            WidgetSync.schedule(c);
             JSObject r = new JSObject();
             r.put("count", RituelWidget.ids(c).length);
             call.resolve(r);
