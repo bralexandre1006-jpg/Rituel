@@ -1,6 +1,6 @@
 const DP = (() => {
   const MO = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  let pop = null, cb = null, cur = null, sel = '', th = 9, tm = null;
+  let pop = null, cb = null, cur = null, sel = '', th = 9, tm = null, tcommit = null;
   const label = k => {
     if(!k) return 'Choisir une date';
     if(k === today()) return "Aujourd'hui";
@@ -8,8 +8,8 @@ const DP = (() => {
     const d = fromKey(k), s = d.toLocaleDateString('fr-BE', {weekday: 'short', day: 'numeric', month: 'short', year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined});
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
-  function close(){ if(pop){ pop.remove(); pop = null; } document.removeEventListener('pointerdown', out, true); }
-  function out(e){ if(pop && !pop.contains(e.target) && !e.target.closest('.dpb')) close(); }
+  function close(){ tcommit = null; if(pop){ pop.remove(); pop = null; } document.removeEventListener('pointerdown', out, true); }
+  function out(e){ if(pop && !pop.contains(e.target) && !e.target.closest('.dpb')) tcommit ? tcommit() : close(); }
   const p2 = n => String(n).padStart(2, '0');
   function pick(k){ const f = cb; close(); if(f) f(k); }
   function draw(){
@@ -39,11 +39,16 @@ const DP = (() => {
     setTimeout(() => document.addEventListener('pointerdown', out, true));
   }
   function drawT(){
-    const n = new Date(), h1 = new Date(n.getTime() + 36e5), q = `${p2(h1.getHours())}:${p2(Math.floor(h1.getMinutes() / 5) * 5)}`;
-    pop.innerHTML = `<div class="dp-q"><button data-t="${q}">Dans 1 h</button><button data-t="09:00">9:00</button><button data-t="18:00">18:00</button></div>
-      <div class="tp-l">Heure</div><div class="tp-g h">${[...Array(24).keys()].map(h => `<button data-h="${h}" class="${h === th ? 'on' : ''}">${p2(h)}</button>`).join('')}</div>
-      <div class="tp-l">Minutes</div><div class="tp-g m">${[...Array(12).keys()].map(i => `<button data-m="${i * 5}" class="${i * 5 === tm ? 'on' : ''}">${p2(i * 5)}</button>`).join('')}</div>
-      <div class="tp-f"><button class="dp-x" data-t="">Aucun rappel</button><button class="tp-ok" data-ok>OK ${p2(th)}:${p2(tm || 0)}</button></div>`;
+    const col = (n, k) => `<div class="tpw" data-k="${k}">${[...Array(n).keys()].map(i => `<div data-i="${i}">${p2(i)}</div>`).join('')}</div>`;
+    pop.innerHTML = `<div class="tpr"><div class="tpbar"></div>${col(24, 'h')}<b>:</b>${col(60, 'm')}</div>
+      <div class="tp-f"><button class="dp-x" data-t="">Aucun rappel</button><button class="tp-ok" data-ok>OK</button></div>`;
+    const [hw, mw] = pop.querySelectorAll('.tpw');
+    hw.scrollTop = th * 36; mw.scrollTop = tm * 36;
+    [hw, mw].forEach(w => {
+      let t = null;
+      w.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => { th = Math.round(hw.scrollTop / 36); tm = Math.round(mw.scrollTop / 36); }, 80); }, {passive: true});
+      w.addEventListener('click', e => { const d = e.target.closest('[data-i]'); if(d) w.scrollTo({top: +d.dataset.i * 36, behavior: 'smooth'}); });
+    });
   }
   function place(anchor){
     const r = anchor.getBoundingClientRect(), h = pop.offsetHeight, w = pop.offsetWidth;
@@ -55,12 +60,11 @@ const DP = (() => {
     if(value){ const [a, b] = value.split(':').map(Number); th = a; tm = b; } else { th = Math.min(23, new Date().getHours() + 1); tm = 0; }
     pop = document.createElement('div'); pop.className = 'dp tp';
     document.body.appendChild(pop); drawT(); place(anchor);
+    tcommit = () => { const f = cb, [hw, mw] = pop.querySelectorAll('.tpw'), v = `${p2(Math.round(hw.scrollTop / 36))}:${p2(Math.round(mw.scrollTop / 36))}`; close(); if(f && v !== value) f(v); };
     pop.addEventListener('click', e => {
       const b = e.target.closest('button'); if(!b) return;
       if('t' in b.dataset){ const f = cb; close(); if(f) f(b.dataset.t); return; }
-      if('h' in b.dataset){ th = +b.dataset.h; drawT(); return; }
-      if('m' in b.dataset){ tm = +b.dataset.m; drawT(); }
-      if('m' in b.dataset || 'ok' in b.dataset){ const f = cb, v = `${p2(th)}:${p2(tm || 0)}`; close(); if(f) f(v); }
+      if('ok' in b.dataset) tcommit();
     });
     setTimeout(() => document.addEventListener('pointerdown', out, true));
   }

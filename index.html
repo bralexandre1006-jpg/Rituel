@@ -318,6 +318,18 @@ button.ico:active{transform:scale(.82)}
 .dclear[hidden]{display:none}
 #editor .collapse{max-height:110px}
 #editor .collapse.hide{max-height:0}
+#editor #fTimeWrap{max-height:240px}
+#editor #fTimeWrap.hide{max-height:0}
+.tbtn{min-width:96px;text-align:center;font-variant-numeric:tabular-nums;transition:background .2s,color .2s}
+.tbtn.on{background:var(--acc);color:#fff}
+.tpk{padding:8px 0 2px}
+.tpr{position:relative;display:flex;justify-content:center;align-items:center;gap:6px;height:200px;
+  -webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.tpbar{position:absolute;left:12%;right:12%;top:80px;height:40px;border-radius:12px;background:var(--s3);pointer-events:none}
+.tpr b{position:relative;font-size:calc(22px * var(--fs));color:var(--ink2)}
+.tpw{position:relative;width:84px;height:200px;overflow-y:auto;scroll-snap-type:y mandatory;padding:80px 0;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
+.tpw::-webkit-scrollbar{display:none}
+.tpw div{height:40px;display:grid;place-items:center;scroll-snap-align:center;font-size:calc(22px * var(--fs));font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .row-meta .rep{color:var(--acc2)}
 .lr-ico svg.st{fill:none;stroke:var(--acc2);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -1033,8 +1045,9 @@ html.bold{--fs:.97}
     </div></div>
     <div class="line-row">
       <div class="lr-ico"><svg class="st" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg><span class="lr-t">Rappel</span></div>
-      <div class="dwrap"><input type="time" id="fTime" class="native-input" aria-label="Heure du rappel"><button class="dclear" data-act="tclear" id="fTimeClear" aria-label="Retirer le rappel"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="dwrap"><button id="fTime" class="native-input tbtn" data-act="tpick" aria-label="Heure du rappel">Aucun</button><button class="dclear" data-act="tclear" id="fTimeClear" aria-label="Retirer le rappel"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     </div>
+    <div class="collapse hide" id="fTimeWrap"><div class="tpk" id="tpk"></div></div>
     <div class="line-row">
       <div class="lr-ico"><svg class="st" viewBox="0 0 24 24"><path d="M17 2.5l3 3-3 3"/><path d="M4 11V9.5a4 4 0 0 1 4-4h12"/><path d="M7 21.5l-3-3 3-3"/><path d="M20 13v1.5a4 4 0 0 1-4 4H4"/></svg><span class="lr-t">Récurrente</span></div>
       <button class="switch" id="fRec" data-act="rec" aria-label="Récurrente"></button>
@@ -1611,7 +1624,7 @@ function closeSheet(silent){
 $$('.sheet').forEach(sh => {
   let y0 = null, dy = 0;
   sh.addEventListener('touchstart', e => {
-    if(sh.scrollTop > 0 || e.target.closest('input,textarea,.wstyles')) return;
+    if(sh.scrollTop > 0 || e.target.closest('input,textarea,.wstyles,.tpw')) return;
     y0 = e.touches[0].clientY; dy = 0;
   }, {passive:true});
   sh.addEventListener('touchmove', e => {
@@ -1639,7 +1652,7 @@ function openEditor(id){
   F.days = Array.isArray(F.days) ? F.days.slice() : [];
   F.rec = F.days.length > 0;
   F.time = F.time || '';
-  $('#fTime').value = F.time;
+  F.tpOpen = false;
   F.notes = F.notes || '';
   $('#fTitle').value = F.title;
   $('#fNotes').value = F.notes;
@@ -1655,6 +1668,9 @@ function renderEditor(){
   $('#fDate').value = F.date || '';
   $('#fDateClear').hidden = !F.date;
   $('#fTimeClear').hidden = !F.time;
+  $('#fTime').textContent = F.time || 'Aucun';
+  $('#fTime').classList.toggle('on', !!F.tpOpen);
+  $('#fTimeWrap').classList.toggle('hide', !F.tpOpen);
   $('#fRec').classList.toggle('on', F.rec);
   $('#tDaysWrap').classList.toggle('hide', !F.rec);
   $('#tDays').innerHTML = DAY_ORDER.map(d => `<button class="day ${F.days.includes(d)?'on':''}" data-act="tday" data-d="${d}">${DAY_LETTER[d]}</button>`).join('');
@@ -1664,7 +1680,22 @@ $('#fTitle').addEventListener('input', e => { if(F) F.title = e.target.value.rep
 $('#fNotes').addEventListener('input', e => { if(F) F.notes = e.target.value; grow(e.target); });
 $('#fTitle').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveItem(); } });
 $('#fDate').addEventListener('change', e => { F.date = e.target.value; renderEditor(); });
-$('#fTime').addEventListener('change', e => { F.time = e.target.value; renderEditor(); if(F.time) askIfNeeded(); });
+function renderTp(){
+  const p = n => String(n).padStart(2, '0'), col = (n, k) => `<div class="tpw" data-k="${k}">${[...Array(n).keys()].map(i => `<div>${p(i)}</div>`).join('')}</div>`;
+  $('#tpk').innerHTML = `<div class="tpr"><div class="tpbar"></div>${col(24, 'h')}<b>:</b>${col(60, 'm')}</div>`;
+  const [h, m] = F.time.split(':').map(Number);
+  $$('#tpk .tpw').forEach(w => {
+    w.scrollTop = (w.dataset.k === 'h' ? h : m) * 40;
+    let tm = null;
+    w.addEventListener('scroll', () => {
+      clearTimeout(tm);
+      tm = setTimeout(() => {
+        const [hw, mw] = $$('#tpk .tpw'), v = `${p(Math.round(hw.scrollTop / 40))}:${p(Math.round(mw.scrollTop / 40))}`;
+        if(v !== F.time){ F.time = v; haptic(); $('#fTime').textContent = v; }
+      }, 90);
+    }, {passive: true});
+  });
+}
 
 async function saveItem(){
   const title = (F.title || '').trim();
@@ -2948,7 +2979,12 @@ root.addEventListener('click', e => {
     }
     case 'dtoggle': detailToggle(); break;
     case 'dedit': { const id = D; closeSheet(true); setTimeout(() => openEditor(id), 280); break; }
-    case 'tclear': F.time = ''; $('#fTime').value = ''; Sound.play('tap'); haptic(); renderEditor(); break;
+    case 'tpick':
+      F.tpOpen = !F.tpOpen; Sound.play('tap'); haptic();
+      if(F.tpOpen){ if(!F.time){ const n = new Date(Date.now() + 36e5); F.time = String(n.getHours()).padStart(2, '0') + ':00'; askIfNeeded(); } renderEditor(); renderTp(); setTimeout(() => $('#fTimeWrap').scrollIntoView({block: 'nearest', behavior: 'smooth'}), 120); }
+      else renderEditor();
+      break;
+    case 'tclear': F.time = ''; F.tpOpen = false; Sound.play('tap'); haptic(); renderEditor(); break;
     case 'dclear': F.date = ''; Sound.play('tap'); haptic(); renderEditor(); break;
     case 'rec': F.rec = !F.rec; Sound.play('toggle'); haptic(); renderEditor(); break;
     case 'tday': { const d = +el.dataset.d; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; Sound.play('tap'); haptic(); renderEditor(); break; }
